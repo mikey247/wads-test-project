@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 from django.db import models
 
-from wagtail.wagtailcore.models import Page
+from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailsearch import index
@@ -31,6 +31,12 @@ class BlogPage(Page):
     search_fields = Page.search_fields + [
         index.SearchField('intro'),
         index.SearchField('body'),
+    ]
+
+    api_fields = [
+        'date',
+        'intro',
+        'body',
     ]
 
     content_panels = Page.content_panels + [
