@@ -1,4 +1,5 @@
 ### Django ###
+*~
 *.log
 *.pot
 *.pyc
@@ -7,3 +8,4 @@ mysite/settings/local.py
 local_settings.py
 db.sqlite3
 media
+static
