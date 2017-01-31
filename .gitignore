@@ -7,5 +7,5 @@ __pycache__/
 mysite/settings/local.py
 local_settings.py
 db.sqlite3
-media
-static
+/media
+/static
