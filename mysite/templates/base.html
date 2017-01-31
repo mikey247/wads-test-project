@@ -1,44 +1,50 @@
-{% load static wagtailuserbar %}
+{% extends "html5-bootstrap-skeleton.html" %}
+{% load site_tags cache static wagtailuserbar %}
 
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>
-            {% block title %}
-                {% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}
-            {% endblock %}
-            {% block title_suffix %}
-                {% with self.get_site.site_name as site_name %}
-                    {% if site_name %}- {{ site_name }}{% endif %}
-                {% endwith %}
-            {% endblock %}
-        </title>
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
-
-        {% block extra_css %}
-            {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
-    </head>
-
-    <body class="{% block body_class %}{% endblock %}">
+{% block body-content %}
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
-
-        {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
-
-        {% block extra_js %}
-            {# Override this in templates to add extra javascript #}
+        {% block menu %}
+            {% get_site_root as site_root %}
+            {% top_menu parent=site_root calling_page=self %}
         {% endblock %}
-    </body>
-</html>
+
+        <div class="wrapper">
+
+        <div class="header header-filter" style="background-image: url(&quot;/static/img/bg2.jpeg&quot;); transform: translate3d(0px, 0px, 0px);">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+	        <div class="brand">
+	          <h1>Django Wagtail Test Site</h1>
+		  <h3>A Badass Bootstrap UI Kit based on Material Design.</h3>
+	        </div>
+	      </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="main main-raised">
+	  <div class="section section-basic">
+	    <div class="container">
+              <!--{ % breadcrumbs % }-->
+
+              {% block heading %}
+              <div class="page-header">
+                <h1>{{ self.title }}</h1>
+              </div>
+              {% endblock %}
+
+              {% block content %}{% endblock %}
+
+              <!--{ % include 'demo/includes/prev_next.html' % }-->
+	    </div>
+	  </div>
+        </div>
+
+	</div>
+
+        <!--{ % adverts % }-->
+
+
+{% endblock %}

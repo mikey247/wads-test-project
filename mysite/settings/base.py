@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'mysite',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +79,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(PROJECT_DIR, 'templates'),
+            #os.path.join(PROJECT_DIR, 'templatetags'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -120,9 +123,12 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, 'static'),
-]
+
+# LML: Including this breaks ./manage.py collectstatic as the static files are found 'here' and via mysite as an INSTALLED_APPS leading to duplicates
+# LML: Option is use separate app for project level templates, tags, static or leave like this.
+#STATICFILES_DIRS = [
+#    os.path.join(PROJECT_DIR, 'static'),
+#]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
