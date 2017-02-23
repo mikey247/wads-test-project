@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-articleindexpage{% endblock %}
+
+{% block content %}
+  <div class="intro">{{ page.intro|richtext }}</div>
+
+  {% for post in articles %}
+    {% with post=post.specific %}
+      <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+
+      {% include_block post.body %}
+    {% endwith %}
+  {% endfor %}
+
+{% endblock %}

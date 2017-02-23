@@ -27,6 +27,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'home',
     'blog',
+    'article',
     'search',
 
     'wagtail.wagtailforms',
@@ -128,6 +129,10 @@ STATICFILES_FINDERS = [
 # LML: Option is use separate app for project level templates, tags, static or leave like this.
 #STATICFILES_DIRS = [
 #    os.path.join(PROJECT_DIR, 'static'),
+#]
+
+#STATICFILES_DIRS = [
+#    'home/js/',
 #]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
