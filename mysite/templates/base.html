@@ -1,5 +1,5 @@
 {% extends "html5-bootstrap-skeleton.html" %}
-{% load site_tags cache static wagtailuserbar %}
+{% load menu_tags site_tags cache static wagtailuserbar %}
 
 {% block body-content %}
         {% wagtailuserbar %}
@@ -27,16 +27,25 @@
         <div class="main main-raised">
 	  <div class="section section-basic">
 	    <div class="container">
-              <!--{ % breadcrumbs % }-->
 
-              {% block heading %}
-              <div class="page-header">
-                <h1>{{ self.title }}</h1>
-              </div>
-              {% endblock %}
+	      <!--{ % breadcrumbs % }-->
 
-              {% block content %}{% endblock %}
+	      <div class="row">
+		<div class="col-lg-4">
+		  {% flat_menu 'flat_menu_test' %}
+		  {% children_menu %}
+		</div>
+		<div class="col-lg-8">
+		  {% block heading %}
+		  <div class="page-header">
+                    <h1>{{ self.title }}</h1>
+		  </div>
+		  {% endblock %}
 
+		  {% block content %}{% endblock %}
+		</div>
+		
+	      </div>
               <!--{ % include 'demo/includes/prev_next.html' % }-->
 	    </div>
 	  </div>
@@ -46,5 +55,7 @@
 
         <!--{ % adverts % }-->
 
+<pre> {% filter force_escape %} {% debug %} {% endfilter %} </pre>
 
 {% endblock %}
+
