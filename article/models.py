@@ -40,7 +40,7 @@ class ArticlePage(Page):
     body = StreamField([
         ('heading', blocks.CharBlock(classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
-        #('image', blocks.ImageChooserBlock()),
+        ('image', ImageChooserBlock()),
         #('', blocks.Block()),
     ])
 
