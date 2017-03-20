@@ -28,14 +28,19 @@ def editor_js():
         <script>
             registerHalloPlugin('superscriptbutton');
             registerHalloPlugin('subscriptbutton');
-            registerHalloPlugin('codebutton');
-            registerHalloPlugin('kbdbutton');
-            registerHalloPlugin('varbutton');
-            registerHalloPlugin('sampbutton');
+            registerHalloPlugin('htmlbutton');
         </script>
         """
     )
 
 @hooks.register('insert_editor_css')
 def editor_css():
-    return format_html('<link rel="stylesheet" href="'+settings.STATIC_URL+ 'vendor/font-awesome-4.7.0/css/font-awesome.min.css">')
+    css_files = [
+        'vendor/font-awesome-4.7.0/css/font-awesome.min.css',
+        'css/disable-hallo-features.css',
+    ]
+    css_includes = format_html_join('\n', '<link rel="stylesheet" href="{0}{1}">',
+        ((settings.STATIC_URL, filename) for filename in css_files)
+    )
+    return css_includes
+
