@@ -4,6 +4,7 @@
 *.pot
 *.pyc
 __pycache__/
+migrations/
 sitecore/settings/local.py
 local_settings.py
 db.sqlite3
