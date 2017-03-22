@@ -4,7 +4,7 @@
 *.pot
 *.pyc
 __pycache__/
-mysite/settings/local.py
+sitecore/settings/local.py
 local_settings.py
 db.sqlite3
 /media
