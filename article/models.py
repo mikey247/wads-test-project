@@ -1,13 +1,17 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.db import models
-
+from django.utils.translation import ugettext_lazy as _
+ 
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailsearch import index
+
+from sitecore.fields import ShortcodeRichTextField
+from sitecore import blocks as sitecore_blocks
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
@@ -36,12 +40,15 @@ class ArticlePage(Page):
     author = models.CharField(max_length=255)
     date = models.DateField("Post date")
     tags = ClusterTaggableManager(through=ArticlePageTag, blank=True)
+    intro = ShortcodeRichTextField(blank=True)
 
     body = StreamField([
         ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
+        ('paragraph', sitecore_blocks.ShortcodeRichTextBlock()),
         ('image', ImageChooserBlock()),
-        #('', blocks.Block()),
+        ('email', blocks.EmailBlock()),
+        ('blockquote', sitecore_blocks.BSBlockquoteBlock()),
+        ('code', sitecore_blocks.BSCodeBlock()),
     ])
 
     search_fields = Page.search_fields + [
@@ -60,6 +67,7 @@ class ArticlePage(Page):
             FieldPanel('author'),
             FieldPanel('date'),
             FieldPanel('tags'),
+            FieldPanel('intro'),
         ], heading="Blog Information"),
         StreamFieldPanel('body'),
     ]

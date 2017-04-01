@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load shortcodes wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-articlepage{% endblock %}
 
@@ -11,13 +11,14 @@
     </div>
 
     <article>
+      <small>{{ page.intro|shortcodes|richtext }}</small>
       {% for block in page.body %}
         {% if block.block_type == 'heading' %}
           <h2>{{ block.value }}</h2>
+	{% elif block.block_type == 'paragraph' %}
+	  {{ block.value|safe|shortcodes|safe }}
         {% else %}
-	  <section class="block-{{ block.block_type }}">
-	    {% include_block block %}
-	  </section>
+	  {% include_block block %}
         {% endif %}
       {% endfor %}
     </article>
