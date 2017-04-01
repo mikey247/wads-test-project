@@ -1,0 +1,6 @@
+<blockquote {% if self.reverse %} class="blockquote-reverse"{% endif %}>
+  <p>{{ self.quote }}</p>
+  {% if self.footer or self.cite %}
+    <footer>{{ self.footer }} <cite title="{{ self.cite }}">{{ self.cite }}</cite></footer>
+  {% endif %}
+</blockquote>
