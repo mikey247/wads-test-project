@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'home',
     'blog',
     'article',
+    'sitecore',
     'search',
 
     'wagtail.wagtailforms',
@@ -42,12 +43,14 @@ INSTALLED_APPS = [
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
     'wagtail.contrib.modeladmin',
+    'wagtail.contrib.settings',
     'wagtail.api.v2',
 
     'wagtailmenus',
     'modelcluster',
     'taggit',
     'rest_framework',
+    'bootstrap_themes',
     'shortcodes',
 
     'django.contrib.admin',
@@ -57,7 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'sitecore',
+    'debug_toolbar',
+
+    'siteconfig',
 ]
 
 MIDDLEWARE = [
@@ -70,11 +75,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
 ]
 
-ROOT_URLCONF = 'sitecore.urls'
+ROOT_URLCONF = 'siteconfig.urls'
 
 TEMPLATES = [
     {
@@ -90,13 +97,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'sitecore.wsgi.application'
+WSGI_APPLICATION = 'siteconfig.wsgi.application'
 
 #DATABASES = {
 #    'default': {
@@ -126,7 +134,7 @@ STATICFILES_FINDERS = [
 ]
 
 
-# LML: Including this breaks ./manage.py collectstatic as the static files are found 'here' and via sitecore as an INSTALLED_APPS leading to duplicates
+# LML: Including this breaks ./manage.py collectstatic as the static files are found 'here' and via siteconfig as an INSTALLED_APPS leading to duplicates
 # LML: Option is use separate app for project level templates, tags, static or leave like this.
 #STATICFILES_DIRS = [
 #    os.path.join(PROJECT_DIR, 'static'),
@@ -142,3 +150,5 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'registration/login.html'
+WAGTAIL_FRONTEND_LOGIN_URL = '/login/'

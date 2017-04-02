@@ -1,5 +1,5 @@
-from django.utils.html import format_html, format_html_join
 from django.conf import settings
+from django.utils.html import format_html, format_html_join
 
 from wagtail.wagtailcore.whitelist import attribute_rule, check_url, allow_without_attributes
 from wagtail.wagtailcore import hooks
@@ -43,4 +43,5 @@ def editor_css():
         ((settings.STATIC_URL, filename) for filename in css_files)
     )
     return css_includes
+
 
