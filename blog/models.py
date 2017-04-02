@@ -12,6 +12,8 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFie
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
 
+from article.models import ArticlePage
+
 
 class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
@@ -95,10 +97,12 @@ class BlogTagIndexPage(Page):
         # Filter by tag
         tag = request.GET.get('tag')
         blogpages = BlogPage.objects.filter(tags__name=tag)
-
+        articles = ArticlePage.objects.filter(tags__name=tag)
+        
         # Update template context
         context = super(BlogTagIndexPage, self).get_context(request)
         context['blogpages'] = blogpages
+        context['articles'] = articles
         return context
 
 
