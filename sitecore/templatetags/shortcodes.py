@@ -1,7 +1,7 @@
 import shortcodes
 import html
 from django import template
-#from django.conf import settings
+from sitecore.parsers import ParseShortcodes
 
 ### create shortcodes
 
@@ -20,14 +20,10 @@ def handler(context, content, pargs, kwargs):
 
 parser = shortcodes.Parser(start="[[", end="]]", esc="\\")
 
-### create filter
+# create simple_tag (we need context to get parser settings)
 
 register = template.Library()
 
-@register.filter('shortcodes')
-def shortcodes_filter(value):
-    try:
-        return parser.parse(value, context=None)
-    except shortcodes.InvalidTagError:
-        raise shortcodes.InvalidTagError
-
+@register.simple_tag(takes_context=True)
+def shortcodes(context, value):
+    return ParseShortcodes(value, context)
