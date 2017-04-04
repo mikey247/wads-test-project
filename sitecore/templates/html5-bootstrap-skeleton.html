@@ -1,4 +1,5 @@
-{% load static bootstrap_themes %}
+{% load static cache wagtailsettings_tags bootstrap_themes %}
+{% get_settings %}
 
 <!DOCTYPE html>
 <html lang="{% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% else %}en{% endif %}">
@@ -27,8 +28,10 @@
 	
 	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 	<!--link rel="stylesheet" type="text/css" href="{% static 'css/material-kit.css' %}" -->
-	{% bootstrap_styles theme='paper' type='css' %}
-	<!--link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}" -->
+	{% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
+	  {% bootstrap_styles theme=settings.sitecore.SiteSettings.bootstrap_theme type='css' %}
+        {% endif %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/sitecore.css' %}">
 
 	<link rel="stylesheet" type="text/css" href="{% static 'css/pygment/monokai.css' %}" >
 
@@ -47,22 +50,22 @@
         <!-- Block head extension -->
         {% block head-extension %}{% endblock %}
     </head>
-    <body class="index-page">
+    <body class="{% block body-class %}{% endblock %}">
         <!-- Block body content -->
         {% block body-content %}<h1>html5-bootstrap-skeleton.html / Wagtail block body-content default body text</h1>{% endblock %}
 
         <!-- Block body javascript -->
 	{% block body-javascript %}
 
-	<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+	  <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+	  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
-	{% bootstrap_script use_min=False %}
+	  {% bootstrap_script use_min=False %}
 	
-	<!--script type="text/javascript" src="{% static 'js/material.min.js' %}"></script-->
-	<!--script type="text/javascript" src="{% static 'js/nouislider.min.js' %}"></script-->
-	<!--script type="text/javascript" src="{% static 'js/bootstrap-datepicker.js' %}"></script-->
-	<!--script type="text/javascript" src="{% static 'js/material-kit.js' %}"></script-->
+	  <!--script type="text/javascript" src="{% static 'js/material.min.js' %}"></script-->
+	  <!--script type="text/javascript" src="{% static 'js/nouislider.min.js' %}"></script-->
+	  <!--script type="text/javascript" src="{% static 'js/bootstrap-datepicker.js' %}"></script-->
+	  <!--script type="text/javascript" src="{% static 'js/material-kit.js' %}"></script-->
 	
 	{% endblock %}
     </body>
