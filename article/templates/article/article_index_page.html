@@ -9,9 +9,9 @@
 
   {% for post in articles %}
     {% with post=post.specific %}
-      <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-
-      {% include_block post.body %}
+      <h4><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+      {% include_block post.intro %}
+      <a href="{% pageurl post %}" class="btn btn-primary">Read More</a>
     {% endwith %}
   {% endfor %}
 
