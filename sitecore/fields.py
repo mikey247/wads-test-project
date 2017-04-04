@@ -1,5 +1,5 @@
 from wagtail.wagtailcore.fields import RichTextField
-from sitecore.validators import ValidateShortcodes
+from sitecore.parsers import ParseShortcodes
 
 
 class ShortcodeRichTextField(RichTextField):
@@ -7,10 +7,10 @@ class ShortcodeRichTextField(RichTextField):
         if 'validators' in kwargs:
             validators = kwargs.pop('validators')
             if validators:
-                validators.append(ValidateShortcodes)
+                validators.append(ParseShortcodes)
                 kwargs['validators'] = validators
         else:
-            validators = [ValidateShortcodes]
+            validators = [ParseShortcodes]
             kwargs['validators'] = validators
 
         super(ShortcodeRichTextField, self).__init__(*args, **kwargs)

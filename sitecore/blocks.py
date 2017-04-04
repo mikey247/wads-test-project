@@ -8,7 +8,7 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import get_formatter_by_name
 
-from sitecore.validators import ValidateShortcodes
+from sitecore.parsers import ParseShortcodes
 
 
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
@@ -16,7 +16,7 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
     @cached_property
     def field(self):
         from wagtail.wagtailadmin.rich_text import get_rich_text_editor_widget
-        return forms.CharField(validators=[ValidateShortcodes],widget=get_rich_text_editor_widget(self.editor), **self.field_options)
+        return forms.CharField(validators=[ParseShortcodes],widget=get_rich_text_editor_widget(self.editor), **self.field_options)
 
 
 class BSCodeBlock(blocks.StructBlock):
