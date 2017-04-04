@@ -11,12 +11,12 @@
     </div>
 
     <article>
-      <small>{{ page.intro|shortcodes|richtext }}</small>
+      <small>{% shortcodes page.intro %}</small>
       {% for block in page.body %}
         {% if block.block_type == 'heading' %}
           <h2>{{ block.value }}</h2>
 	{% elif block.block_type == 'paragraph' %}
-	  {{ block.value|safe|shortcodes|safe }}
+	  {% shortcodes block %}
         {% else %}
 	  {% include_block block %}
         {% endif %}
