@@ -82,3 +82,15 @@
     background-color: #0e2a52;
     border-color: transparent;
 }
+
+pre {
+    white-space: pre-wrap;
+    background-color: #171616;
+}
+
+samp {
+    background-color: #e6f2f8;
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #196dab;
+}
