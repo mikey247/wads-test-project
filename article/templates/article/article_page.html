@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load shortcodes wagtailcore_tags wagtailimages_tags %}
+{% load shortcodes site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-articlepage{% endblock %}
 
@@ -17,6 +17,13 @@
           <h2>{{ block.value }}</h2>
 	{% elif block.block_type == 'paragraph' %}
 	  {% shortcodes block %}
+	{% elif block.block_type == 'image' %}
+	  <div class="thumbnail">
+	    {% image block.value width-840 as photo %}
+	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
+	    <div class="caption">
+	      <p class="text-right">{{ photo.alt }}</p>
+	  </div>
         {% else %}
 	  {% include_block block %}
         {% endif %}
@@ -24,12 +31,7 @@
     </article>
 
     {% if page.tags.all.count %}
-        <div class="tags" style="clear: both;">
-	    <h2>Tags</h2>
-	    {% for tag in page.tags.all %}
-	        <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button class="btn btn-primary btn-round btn-sm">{{ tag }}</button></a>
-	    {% endfor %}
-	</div>
+      {% taggit_list page.tags %}
     {% endif %}
 
     <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
