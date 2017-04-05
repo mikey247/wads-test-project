@@ -14,4 +14,9 @@ def ParseShortcodes(value):
             _('Invalid shortcode tag(s) detected, please correct.'),
             params={'value':value},
         )
+    except shortcodes.RenderingError as e:
+        raise ValidationError(
+            _('Invalid shortcode tag(s) detected, please correct. Details: %s' % str(e)),
+            params={'value':value},
+        )
     
