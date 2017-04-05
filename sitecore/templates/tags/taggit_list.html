@@ -1,0 +1,11 @@
+{% load wagtailcore_tags %}
+
+<div>
+  {% for tag in tags.all %}
+    {% if tag|stringformat:"s" == selected %}
+      <a href="{% slugurl 'tags' %}?tag={{ tag }}"><span class="label label-default">{{ tag }}</span></a>
+    {% else %}
+      <a href="{% slugurl 'tags' %}?tag={{ tag }}"><span class="label label-primary">{{ tag }}</span></a>
+    {% endif %}
+  {% endfor %}</p>
+</div>
