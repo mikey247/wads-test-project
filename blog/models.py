@@ -22,6 +22,7 @@ class BlogIndexPage(Page):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(BlogIndexPage, self).get_context(request)
         blogpages = self.get_children().live().order_by('-first_published_at')
+        # http://stackoverflow.com/questions/40365500/pagination-in-wagtail - for pagination
         context['blogpages'] = blogpages
         return context
 
