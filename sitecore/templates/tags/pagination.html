@@ -1,0 +1,18 @@
+<nav aria-label="Page Navigation">
+  <ul class="pagination">
+    {% if res.has_previous %}
+    <li><a href="?page={{ res.previous_page_number }}" aria-label="Previous">
+	<span aria-hidden="true">&laquo;</span>
+    </a></li>
+    {% endif %}
+    {% for page_num in res.paginator.page_range %}
+    <li {% if page_num == res.number %}class="active"{% endif %}><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+    {% endfor %}
+    {% if res.has_next %}
+    <li><a href="?page={{ res.next_page_number }}" aria-label="Next">
+	<span aria-hidden="true">&raquo;</span>
+    </a></li>
+    {% endif %}
+  </ul>
+</nav>
+
