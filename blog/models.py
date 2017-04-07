@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
@@ -21,9 +22,21 @@ class BlogIndexPage(Page):
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(BlogIndexPage, self).get_context(request)
-        blogpages = self.get_children().live().order_by('-first_published_at')
+        all_blogs = self.get_children().live().order_by('-first_published_at')
+
         # http://stackoverflow.com/questions/40365500/pagination-in-wagtail - for pagination
-        context['blogpages'] = blogpages
+        paginator = Paginator(all_blogs, 2) # show 2 per page
+
+        page = request.GET.get('page')
+        try:
+            blogs = paginator.page(page)
+        except PageNotAnInteger:
+            blogs = paginator.page(1)
+        except EmptyPage:
+            blogs = paginator.page(paginator.num_pages)
+
+        context['blogpages'] = blogs
+
         return context
 
     content_panels = Page.content_panels + [
