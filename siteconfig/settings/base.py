@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'blog',
     'article',
     'sitecore',
+    'siteuser',
     'search',
 
     'wagtail.wagtailforms',
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'debug_toolbar',
+    'django_extensions',
 
     'siteconfig',
 ]
@@ -140,10 +142,6 @@ STATICFILES_FINDERS = [
 #    os.path.join(PROJECT_DIR, 'static'),
 #]
 
-#STATICFILES_DIRS = [
-#    'home/js/',
-#]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
@@ -152,3 +150,9 @@ MEDIA_URL = '/media/'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'registration/login.html'
 WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'siteuser.User'
+
+WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
+WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'twitter']
