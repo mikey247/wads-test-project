@@ -8,7 +8,7 @@
 
   {% block menu %}
     {% get_site_root as site_root %}
-    {% top_menu parent=site_root calling_page=self %}
+    {% top_menu parent=site_root calling_page=self transparent=True %}
   {% endblock %}
 
   <div class="wrapper">
@@ -40,7 +40,26 @@
 	      </div>
 	      {% endblock %}
 	      
-	      {% block content %}{{ page.body|richtext }}{% endblock %}
+	      {% block content %}
+	      <article>
+		{% for block in page.body %}
+		  {% if block.block_type == 'heading' %}
+		    {% include_block block %}
+		  {% elif block.block_type == 'paragraph' %}
+		    {% shortcodes block %}
+		  {% elif block.block_type == 'image' %}
+		    <div class="thumbnail">
+		    {% image block.value width-840 as photo %}
+		    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
+		    <div class="caption">
+		      <p class="text-right">{{ photo.alt }}</p>
+		    </div>
+		  {% else %}
+		    {% include_block block %}
+		  {% endif %}
+		{% endfor %}
+	      </article>
+	      {% endblock %}
 	    </div>
 	  </div>
 	</div>
