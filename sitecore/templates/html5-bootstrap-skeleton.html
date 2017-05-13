@@ -9,62 +9,63 @@
 
         <!-- Block head meta -->
 	{% block head-meta %}
-
-	<!-- The following two meta tags *must* come next in the head; any other head content must come *after* these tags -->
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	  <!-- The following two meta tags *must* come next in the head; any other head content must come *after* these tags -->
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
 	{% endblock %}
 
-        <!-- Page title -->
-        <title>{% block head-title %}html5-bootstrap-skeleton.html / Wagtail block body-content default title{% endblock %}</title>
+        {% block head-title %}
+          <title>html5-bootstrap-skeleton.html / Wagtail block body-content default title</title>
+	{% endblock %}
 
         <!-- Block head css -->
 	{% block head-css %}
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 	
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-	<!--link rel="stylesheet" type="text/css" href="{% static 'css/material-kit.css' %}" -->
-	{% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
-	  {% bootstrap_styles theme=settings.sitecore.SiteSettings.bootstrap_theme type='css' %}
-        {% endif %}
-	<link rel="stylesheet" type="text/css" href="{% static 'css/sitecore.css' %}">
+	  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	  {% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
+	    {% bootstrap_styles theme=settings.sitecore.SiteSettings.bootstrap_theme type='css' %}
+          {% endif %}
 
-	<link rel="stylesheet" type="text/css" href="{% static 'css/pygment/monokai.css' %}" >
+	  <link rel="stylesheet" type="text/css" href="{% static 'css/sitecore.css' %}">
+
+	  <link rel="stylesheet" type="text/css" href="{% static 'css/pygment/monokai.css' %}" >
 
 	{% endblock %}
 
         <!-- Block head javascript -->
 	{% block head-javascript %}
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
+	  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	  <!--[if lt IE 9]>
             <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
             <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
+	  <![endif]-->
 	{% endblock %}
 
         <!-- Block head extension -->
         {% block head-extension %}{% endblock %}
     </head>
     <body class="{% block body-class %}{% endblock %}">
-        <!-- Block body content -->
-        {% block body-content %}<h1>html5-bootstrap-skeleton.html / Wagtail block body-content default body text</h1>{% endblock %}
+      <!-- Block body content -->
+      {% block body-content %}
+        <h1>html5-bootstrap-skeleton.html / Wagtail block body-content default body text</h1>
+      {% endblock %}
 
-        <!-- Block body javascript -->
-	{% block body-javascript %}
-
-	  <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-	  {% bootstrap_script use_min=False %}
-	
-	  <!--script type="text/javascript" src="{% static 'js/material.min.js' %}"></script-->
-	  <!--script type="text/javascript" src="{% static 'js/nouislider.min.js' %}"></script-->
-	  <!--script type="text/javascript" src="{% static 'js/bootstrap-datepicker.js' %}"></script-->
-	  <!--script type="text/javascript" src="{% static 'js/material-kit.js' %}"></script-->
-	
-	{% endblock %}
+      <!-- Block body javascript -->
+      {% block body-javascript %}
+        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+        {% bootstrap_script use_min=False %}
+      
+	<!--script type="text/javascript" src="{% static 'js/material.min.js' %}"></script-->
+	<!--script type="text/javascript" src="{% static 'js/nouislider.min.js' %}"></script-->
+	<!--script type="text/javascript" src="{% static 'js/bootstrap-datepicker.js' %}"></script-->
+	<!--script type="text/javascript" src="{% static 'js/material-kit.js' %}"></script-->
+      {% endblock %}
+      
+      {% block body-javascript-extension %}{% endblock %}
     </body>
 </html>
