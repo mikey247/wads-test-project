@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load shortcodes site_tags wagtailcore_tags %}
+
+{% block content %}
+
+  {% if request.GET.tag|length %}
+    <h4>Showing pages tagged "{{ request.GET.tag|upper }}" ({{pages|length}} found)</h4>
+
+    {% for page in pages.specific %}
+      <div class="well">
+        <h4><span class="badge">{{ forloop.counter }}</span> <a href="{% pageurl page %}">{{ page.title }}</a></h4>
+        <small><span class="text-primary">Revised:</span> {{ page.latest_revision_created_at }}</small><br />
+        <small><span class="text-primary">Owner:</span> {{ page.owner }}</small><br />
+        {% if page.author %}
+          <small><span class="text-primary">Author:</span> {{ page.author }}</small>
+        {% endif %}
+        {% if page.intro %}
+          <p>{% shortcodes page.intro %}</p>
+        {% else %}
+          <p class="text-warning">Page has no introductory text.</p>
+        {% endif %}
+        {% if page.tags.all.count %}
+	  {% taggit_list page.tags.all request.GET.tag|stringformat:"s" %}
+        {% endif %}
+      </div>
+    {% empty %}
+      <span class="text-info">No pages found with that tag.</span>
+    {% endfor %}
+  {% endif %}
+
+  <hr>
+  <div>
+    <h4>Tag Cloud</h4>
+    {% taggit_list tags %}
+  </div>
+
+{% endblock %}
