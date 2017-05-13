@@ -1,7 +1,12 @@
 from django.db import models
+
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.wagtailadmin.edit_handlers import TabbedInterface, ObjectList, FieldPanel
+from wagtail.wagtailcore.models import Page, Orderable
 
+from modelcluster.fields import ParentalKey
+from modelcluster.tags import ClusterTaggableManager
+from taggit.models import Tag, TaggedItemBase
 
 @register_setting
 class SiteSettings(BaseSetting):
@@ -45,3 +50,37 @@ class SiteSettings(BaseSetting):
         ObjectList(theme_tab_panel, heading='Theme'),
         ObjectList(social_tab_panel, heading='Social Media'),
     ])
+
+
+class SitePageTags(TaggedItemBase):
+    content_object = ParentalKey('SitePage', related_name='tagged_site_pages')
+
+
+class SitePage(Page):
+    tags = ClusterTaggableManager(through=SitePageTags, blank=True)
+
+    api_fields = Page.search_fields + [
+        'tags',
+    ]
+
+    content_panels = Page.content_panels + [
+        FieldPanel('tags'),
+    ]
+
+
+class TagIndexPage(Page):
+    
+    def get_context(self, request):
+
+        tag = request.GET.get('tag')
+        context = super(TagIndexPage, self).get_context(request)
+
+        pages = SitePage.objects.filter(tags__name=tag)
+        tags = Tag.objects.annotate(num_tags=models.Count('sitecore_sitepagetags_items'))
+
+        context['pages'] = pages
+        context['tags'] = tags
+            
+        return context
+
+
