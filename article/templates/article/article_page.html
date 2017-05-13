@@ -1,15 +1,11 @@
 {% extends "base.html" %}
 
-{% load shortcodes site_tags wagtailcore_tags wagtailimages_tags %}
+{% load shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-articlepage{% endblock %}
+{% block body_class %}article-page{% endblock %}
 
 {% block content %}
-    <div class="meta">
-      <p>{{ page.date }}</p>
-      <p>{{ page.author }}</p>
-    </div>
-
+  {% article_meta page %}
     <article>
       <small>{% shortcodes page.intro %}</small>
       {% for block in page.body %}
@@ -18,12 +14,13 @@
 	{% elif block.block_type == 'paragraph' %}
 	  {% shortcodes block %}
 	{% elif block.block_type == 'image' %}
-	  <div class="thumbnail">
-	    {% image block.value width-840 as photo %}
+	  <div class="thumbnail img-raised">
+	    {% image block.value width-1200 as photo %}
 	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
 	    <div class="caption">
-	      <p class="text-right">{{ photo.alt }}</p>
-	  </div>
+	      <p class="text-primary text-right">{{ photo.alt }}</p>
+	    </div>
+          </div>
         {% else %}
 	  {% include_block block %}
         {% endif %}

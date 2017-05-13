@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags article_tags %}
 
-{% block body_class %}template-articleindexpage{% endblock %}
+{% block body_class %}index-article-page{% endblock %}
 
 {% block content %}
   <div class="intro">{{ page.intro|richtext }}</div>
@@ -10,6 +10,7 @@
   {% for post in articles %}
     {% with post=post.specific %}
       <h4><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+      {% article_meta post %}
       {% include_block post.intro %}
       <a href="{% pageurl post %}" class="btn btn-primary">Read More</a>
     {% endwith %}
