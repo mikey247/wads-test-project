@@ -53,10 +53,11 @@ def top_menu_children(context, parent):
 
 # Renders the page taggit tags as collection of labels
 @register.inclusion_tag('tags/taggit_list.html', takes_context=True)
-def taggit_list(context, page_tags, selected_tag=None): 
+def taggit_list(context, page_tags, selected_tag=None, show_count=False): 
    return {
        'tags': page_tags,
        'selected': selected_tag,
+       'show_count': show_count,
    }
 
 
