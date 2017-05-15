@@ -20,6 +20,9 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
         from wagtail.wagtailadmin.rich_text import get_rich_text_editor_widget
         return forms.CharField(validators=[ParseShortcodes],widget=get_rich_text_editor_widget(self.editor), **self.field_options)
 
+        
+    class Meta:
+        icon = 'pilcrow'
 
 class BSHeadingBlock(blocks.StructBlock):
     """
@@ -45,7 +48,7 @@ class BSHeadingBlock(blocks.StructBlock):
 
 
     class Meta:
-        icon = 'fa fa-title'
+        icon = 'title'
         template = 'bootstrapblocks/heading.html'
         form_template = 'bootstrapblocks/admin/heading.html'
         form_classname = 'heading-block struct-block'
@@ -66,7 +69,7 @@ class BSCodeBlock(blocks.StructBlock):
     line_nums = blocks.BooleanBlock(required=False, help_text='Check to include line numbers')
 
     class Meta:
-        icon = 'fa fa-code'
+        icon = 'doc-full-inverse'
         
 
     def render(self, value, context=None):
@@ -90,7 +93,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
     reverse = blocks.BooleanBlock(required=False, help_text='Check to right-align the quote')
 
     class Meta:
-        icon = 'fa fa-quote-left'
+        icon = 'openquote'
         template = 'bootstrapblocks/blockquote.html'
 
 
@@ -99,7 +102,7 @@ class CoreBlock(blocks.StreamBlock):
     Re-usable core Block for collecting custom streamfield support into one place
     """
     heading = BSHeadingBlock()
-    paragraph = ShortcodeRichTextBlock()
+    paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph')
     blockquote = BSBlockquoteBlock()
 
     image =  ImageChooserBlock()
