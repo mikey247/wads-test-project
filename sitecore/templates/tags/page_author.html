@@ -1,0 +1,9 @@
+<div class="page-author">
+  <small><span class="text-primary">Author:</span> 
+    {% if page.author %}
+      {{ page.author }}
+    {% else %}
+      {% if page.owner.get_full_name %} {{ page.owner.get_full_name }} {% else %} {{ page.owner }} {% endif %}
+    {% endif %}
+  </small><br/>
+</div>  
