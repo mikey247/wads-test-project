@@ -69,3 +69,19 @@ def pagination(context, page_res):
    }
 
 
+# Calls render method for page author using page.author as alias if provided; fallback to owner.get_full_name; fallback to owner (username)
+@register.inclusion_tag('tags/page_author.html', takes_context=True)
+def page_author(context, page):
+    return {
+        'page': page,
+    }
+
+
+# Calls eenders method for page timestamp using creation date and/or modification date
+@register.inclusion_tag('tags/page_date.html', takes_context=True)
+def page_date(context, page):
+    return {
+        'page': page,
+    }
+
+

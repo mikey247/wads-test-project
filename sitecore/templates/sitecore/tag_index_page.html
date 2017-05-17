@@ -9,11 +9,10 @@
     {% for page in pages.specific %}
       <div class="well">
         <h4><a href="{% pageurl page %}"><span class="badge">{{ forloop.counter }}</span> {{ page.title }}</a></h4>
-        <small><span class="text-primary">Revised:</span> {{ page.latest_revision_created_at }}</small><br />
-        <small><span class="text-primary">Owner:</span> {{ page.owner }}</small><br />
-        {% if page.author %}
-          <small><span class="text-primary">Author:</span> {{ page.author }}</small>
-        {% endif %}
+	
+	{% page_date page %}
+	{% page_author page %}
+
         {% if page.intro %}
           <p>{% shortcodes page.intro %}</p>
         {% else %}
