@@ -99,6 +99,21 @@
 pre {
     white-space: pre-wrap;
     background-color: #171616;
+    color: #ecf5fc;
+}
+
+.codehilitetable {
+    width: 100%;
+}
+
+.codehilitetable pre {
+    border: none;
+    border-radius: 0px;
+}
+
+.linenodiv pre {
+    background-color: #333333;
+    text-align: right;
 }
 
 samp {
