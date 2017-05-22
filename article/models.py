@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 
+import datetime
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -54,29 +56,20 @@ class ArticleIndexPage(Page):
     ]
 
 
-#class ArticlePageTag(TaggedItemBase):
-#    content_object = ParentalKey('article.ArticlePage', related_name='tagged_articles')
-
-
 class ArticlePage(SitePage):
-    author = models.CharField(max_length=255)
-    date = models.DateField("Post date")
-#    tags = ClusterTaggableManager(through=PageTag, blank=True)
-    intro = ShortcodeRichTextField(blank=True)
+    author = models.CharField(max_length=255, blank=True, help_text=_('Use this to override the default author/owner name.'))
+    intro = ShortcodeRichTextField(blank=True, help_text=_('Provide introductory text here to summarise the article. Content appears in blog style lists and search result summaries.'))
 
     body = StreamField(sitecore_blocks.CoreBlock)
 
     search_fields = SitePage.search_fields + [
         index.SearchField('author'),
-        index.SearchField('date'),
         index.SearchField('intro'),
         index.SearchField('body'),
     ]
 
     api_fields = SitePage.search_fields + [
         'author',
-        'date',
-#        'tags',
         'intro',
         'body',
     ]
@@ -84,9 +77,9 @@ class ArticlePage(SitePage):
     content_panels = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
-            FieldPanel('date'),
-#            FieldPanel('tags'),
             FieldPanel('intro'),
-        ], heading="Article Information"),
-        StreamFieldPanel('body'),
+        ], heading="Article Overview"),
+        MultiFieldPanel([
+            StreamFieldPanel('body')
+        ], heading="Main body (Streamfield)"),
     ]
