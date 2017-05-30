@@ -5,32 +5,30 @@
 {% block body_class %}article-page{% endblock %}
 
 {% block content %}
-  {% article_meta page %}
-    <article>
-      <small>{% shortcodes page.intro %}</small>
-      {% for block in page.body %}
-        {% if block.block_type == 'heading' %}
-          <h2>{{ block.value }}</h2>
-	{% elif block.block_type == 'paragraph' %}
-	  {% shortcodes block %}
-	{% elif block.block_type == 'image' %}
-	  <div class="thumbnail img-raised">
-	    {% image block.value width-1200 as photo %}
-	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
-	    <div class="caption">
-	      <p class="text-primary text-right">{{ photo.alt }}</p>
-	    </div>
-          </div>
-        {% else %}
-	  {% include_block block %}
-        {% endif %}
-      {% endfor %}
-    </article>
+  <article>
+    {% page_date page %}
+    {% page_author page %}
+    <div class="well">{% shortcodes page.intro %}</div>
 
-    {% if page.tags.all.count %}
-      {% taggit_list page.tags %}
-    {% endif %}
+    {% for block in page.body %}
+      {% if block.block_type == 'image' %}
+        <div class="thumbnail img-raised">
+	  {% image block.value width-1200 as photo %}
+	  <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
+	  <div class="caption">
+	    <p class="text-primary text-right">{{ photo.alt }}</p>
+	  </div>
+        </div>
+      {% else %}
+	{% include_block block %}
+      {% endif %}
+    {% endfor %}
+  </article>
 
-    <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
+  {% if page.tags.all.count %}
+    {% taggit_list page.tags %}
+  {% endif %}
+
+  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
 
 {% endblock %}
