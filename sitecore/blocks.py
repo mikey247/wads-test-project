@@ -1,9 +1,12 @@
 from django import forms
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.wagtailcore import blocks
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
 from pygments import highlight
@@ -11,6 +14,22 @@ from pygments.formatters import get_formatter_by_name
 from pygments.lexers import get_lexer_by_name
 
 from sitecore.parsers import ParseShortcodes
+
+
+class CSVIntListCharBlock(blocks.FieldBlock):
+
+    def __init__(self, required=True, help_text=None, max_length=None, min_length=None, **kwargs):
+        self.field = forms.CharField(
+            required=required,
+            validators=[validate_comma_separated_integer_list],
+            help_text=help_text,
+            max_length=max_length,
+            min_length=min_length
+        )
+        super(CSVIntListCharBlock, self).__init__(**kwargs)
+
+    def get_searchable_content(self, value):
+        return [force_text(value)]
 
 
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
@@ -23,6 +42,7 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
         
     class Meta:
         icon = 'pilcrow'
+
 
 class BSHeadingBlock(blocks.StructBlock):
     """
@@ -66,6 +86,7 @@ class BSCodeBlock(blocks.StructBlock):
 
     lang = blocks.ChoiceBlock(choices=LANGUAGE_CHOICES)
     code = blocks.TextBlock(required=True)
+    hl_lines = CSVIntListCharBlock(required=False)
     line_nums = blocks.BooleanBlock(required=False, help_text='Check to include line numbers')
 
     class Meta:
@@ -78,7 +99,7 @@ class BSCodeBlock(blocks.StructBlock):
         linenos = value['line_nums']
 
         pyg_lexer = get_lexer_by_name(lang)
-        pyg_formatter = get_formatter_by_name('html', linenos=linenos, cssclass='codehilite', style='default', noclasses=False)
+        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=value['hl_lines'].split(','), cssclass='codehilite', style='default', noclasses=False)
         
         return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
 
@@ -106,10 +127,12 @@ class CoreBlock(blocks.StreamBlock):
     blockquote = BSBlockquoteBlock()
 
     image =  ImageChooserBlock()
+    #image =  ImageChooserBlock(template='image.html')
+    docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
 
     email = blocks.EmailBlock()
     code = BSCodeBlock()
-
+    table = TableBlock(template='bootstrapblocks/table.html')
 
     def get_form_context(self, value, prefix='', errors=None):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
