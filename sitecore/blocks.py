@@ -1,3 +1,9 @@
+"""
+Sitecore blocks module to implement several Wagtail Streamfield blocks for page building
+:Authors: Louise Lever <louise.lever@manchester.ac.uk>
+:Copyright: Research IT, IT Services, The University of Manchester
+"""
+
 from django import forms
 from django.core.validators import validate_comma_separated_integer_list
 from django.utils.functional import cached_property
@@ -17,6 +23,11 @@ from sitecore.parsers import ParseShortcodes
 
 
 class CSVIntListCharBlock(blocks.FieldBlock):
+    """
+    Adds the Django forms.CharField WITH the validate_comma_separated_integer_list validator to a StreamField block.
+    This enables the BSCodeBlock below to include a field allowing entry of code lines to be highlighted.
+    Note: The default blocks.CharBlock does not include any validators nor does it allow them to be passed.
+    """
 
     def __init__(self, required=True, help_text=None, max_length=None, min_length=None, **kwargs):
         self.field = forms.CharField(
@@ -33,7 +44,13 @@ class CSVIntListCharBlock(blocks.FieldBlock):
 
 
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
-
+    """
+    Modifies the RichTextBlock so that the main CharField is also passed through the ParseShortcodes validator.
+    Any user embedded shortcodes are checked against the registered codes and exceptions raised as necessary.
+    The Wagtail admin interface will display appropriate exceptions on Save Draft or Publish, forcing the author
+    to update the content.
+    """
+    
     @cached_property
     def field(self):
         from wagtail.wagtailadmin.rich_text import get_rich_text_editor_widget
@@ -76,8 +93,11 @@ class BSHeadingBlock(blocks.StructBlock):
 
 class BSCodeBlock(blocks.StructBlock):
     """
-    Code highlighting block, using pygments library
+    Code highlighting block in, using pygments library wrapped in Bootstrap 3 markup
+    Options include language selection, a comma separated list of integers for lines to be highlighted
+    and a toggle for display of all line numbers or not.
     """
+
     LANGUAGE_CHOICES = (
         ('python', 'Python'),
         ('javascript', 'JavaScript'),
@@ -108,6 +128,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
     """
     Block for supporting full Bootstrap 3 <blockquote> markup
     """
+
     quote = ShortcodeRichTextBlock(required=True)
     footer = blocks.CharBlock(required=False)
     cite = blocks.CharBlock(required=False)
@@ -120,8 +141,9 @@ class BSBlockquoteBlock(blocks.StructBlock):
 
 class CoreBlock(blocks.StreamBlock):
     """
-    Re-usable core Block for collecting custom streamfield support into one place
+    Re-usable core Block for collecting standard and custom streamfield support into one place
     """
+
     heading = BSHeadingBlock()
     paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph')
     blockquote = BSBlockquoteBlock()
