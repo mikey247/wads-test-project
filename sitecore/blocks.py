@@ -26,7 +26,7 @@ class CSVIntListCharBlock(blocks.FieldBlock):
     """
     Adds the Django forms.CharField WITH the validate_comma_separated_integer_list validator to a StreamField block.
     This enables the BSCodeBlock below to include a field allowing entry of code lines to be highlighted.
-    Note: The default blocks.CharBlock does not include any validators nor does it allow them to be passed.
+    Note: The default blocks.CharBlock does not include any validators nor does it allow them to be passed as arguments.
     """
 
     def __init__(self, required=True, help_text=None, max_length=None, min_length=None, **kwargs):
@@ -137,6 +137,33 @@ class BSBlockquoteBlock(blocks.StructBlock):
     class Meta:
         icon = 'openquote'
         template = 'bootstrapblocks/blockquote.html'
+
+
+class CarouselItemBlock(blocks.StructBlock):
+    """
+    Instance of a carousel item, for holding image reference, caption, detail text and link.
+    """
+
+    title = blocks.CharBlock(required=False)
+    image = ImageChooserBlock() # perhaps requires carousel specific renderer?
+    text = blocks.CharBlock(required=False)
+    link_page = blocks.PageChooserBlock(required=False)
+    link_doc = DocumentChooserBlock(required=False, template='bootstrapblocks/document.html')
+    link_external = blocks.URLBlock(required=False)
+
+
+class BSCarouselBlock(blocks.StructBlock):
+    """
+    Instance of an entire carousel slide set. Options are provided for changing the default behaviour. The ListBlock
+    allows multiple carousel items to be added as needed.
+    """
+
+    slide = blocks.BooleanBlock(required=False, help_text='Carousel slide has animation effect when enabled', default=True)
+    interval = blocks.IntegerBlock(required=True, min_value=100, max_value=50000, help_text='Delay (in milliseconds) between each slide', default=5000)
+    pause = blocks.BooleanBlock(required=False, help_text='Carousel pauses with mouse hover when enabled', default=True)
+    wrap = blocks.BooleanBlock(required=False, help_text='Carousel goes through all slides continuously when enabled; stops at last slide otherwise', default=True)
+
+    items = blocks.ListBlock(CarouselItemBlock())
 
 
 class CoreBlock(blocks.StreamBlock):
