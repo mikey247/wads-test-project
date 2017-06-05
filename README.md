@@ -14,7 +14,7 @@ For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.
     apt-get install automake libtool libffi-dev curl git tmux gettext
     apt-get install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6
     apt-get install openjdk-8-jre
-    *apt-get install elasticsearch*
+    apt-get install elasticsearch
     apt-get install redis-server
 
 **Note: Java required for elasticsearch**
