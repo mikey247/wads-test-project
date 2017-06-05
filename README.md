@@ -37,7 +37,7 @@ Create service:
 
 Edit `/etc/elasticsearch/elasticsearch.yml`:
 
-    \+	network.bind_host: 127.0.0.1
+    network.bind_host: 127.0.0.1
 
 Restart service:
 
