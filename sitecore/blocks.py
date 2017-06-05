@@ -6,6 +6,7 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 
 from django import forms
 from django.core.validators import validate_comma_separated_integer_list
+from django.utils.encoding import force_text
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
