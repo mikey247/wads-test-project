@@ -221,48 +221,92 @@ Create local.py and add:
 
 ```
 #!python
+# ---------------
+# Django Settings
+# ---------------
 
-	SECRET_KEY = '*****************************'
+SECRET_KEY = '**************************************'
 
-	DATABASES = {
-		'default': {
-			'ENGINE': 'django.db.backends.postgresql_psycopg2',
-			'NAME': 'wagtail',
-			'USER': 'wagtail',
-			'PASSWORD': '************',
-			'HOST': 'localhost',
-			'PORT': '',
-		}
-	}
+# Security
+# https://docs.djangoproject.com/en/1.10/topics/security/#ssl-https
 
-	ALLOWED_HOSTS = [
-		'<your-host>',
-	]
+#    SECURE_SSL_REDIRECT = True
+#    SESSION_COOKIE_SECURE = True
+#    CSRF_COOKIE_SECURE = True
+#    SECURE_HSTS_SECONDS = 3600 # 1 hour; change to 31536000 for 1 year when in production
 
-	LANGUAGE_CODE = 'en-gb'
-	WAGTAIL_SITE_NAME = "mysite"
-	BASE_URL = 'https://<your-host>'
 
-	# Cache
+# Database
+# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-	CACHES = {
-		'default': {
-			'BACKEND': 'django_redis.cache.RedisCache',
-			'LOCATION': 'localhost:6379',
-			'OPTIONS': {
-				'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-			},
-		},
-	}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'wagtail=',
+        'USER': 'wagtail',
+        'PASSWORD': '**********************',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
-	# (Elastic) Search
+# Hosts
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 
-	WAGTAILSEARCH_BACKENDS = {
-		'default': {
-			'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch',
-			'INDEX': 'wagtail',
-		},
-	}
+ALLOWED_HOSTS = [
+    'your-FQDN-host',
+    'localhost',
+    '127.0.0.1',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+# Language
+
+LANGUAGE_CODE = 'en-gb'
+
+# ----------------
+# Wagtail Settings
+# ----------------
+
+WAGTAIL_SITE_NAME = "=Django/Wagtail Development Test Site"
+
+# Base URL to use when referring to full URLs within the Wagtail admin backend -
+# e.g. in notification emails. Don't include '/admin' or a trailing slash
+
+BASE_URL = '<your-FQDN-host>'
+
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
+}
+
+# (Elastic) Search
+
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch',
+        'INDEX': 'wagtail',
+    },
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 10
+}
+
 
 
 ```
