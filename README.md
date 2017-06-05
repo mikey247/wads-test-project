@@ -18,6 +18,7 @@ For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.
     apt-get install redis-server
 
 **Note: Java required for elasticsearch**
+
 **Note: Specific version of elasticsearch may be required for it to work.
 
     wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb
