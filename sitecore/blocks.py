@@ -120,7 +120,8 @@ class BSCodeBlock(blocks.StructBlock):
         linenos = value['line_nums']
 
         pyg_lexer = get_lexer_by_name(lang)
-        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=value['hl_lines'].split(','), cssclass='codehilite', style='default', noclasses=False)
+        hl_lines = value['hl_lines'].split(',') if value['hl_lines'] else []
+        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=hl_lines, cssclass='codehilite', style='default', noclasses=False)
         
         return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
 
