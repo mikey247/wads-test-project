@@ -338,6 +338,10 @@ Database, search and superuser commands:
 		{overseer/**password**}
 	./manage.py collectstatic
 
+If some initial site data is required, optionally load any fixture data if provided:
+
+	./manage.py load_fixtures [TBC]
+
 Perform initial migration:
 
 	./manage.py migrate
