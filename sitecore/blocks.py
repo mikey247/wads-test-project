@@ -6,14 +6,18 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 
 from django import forms
 from django.core.validators import validate_comma_separated_integer_list
+from django.db import models
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.wagtailcore import blocks
+from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtailsnippets.models import register_snippet
 
 from pygments import highlight
 from pygments.formatters import get_formatter_by_name
@@ -119,7 +123,8 @@ class BSCodeBlock(blocks.StructBlock):
         linenos = value['line_nums']
 
         pyg_lexer = get_lexer_by_name(lang)
-        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=value['hl_lines'].split(','), cssclass='codehilite', style='default', noclasses=False)
+        hl_lines = value['hl_lines'].split(',') if value['hl_lines'] else []
+        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=hl_lines, cssclass='codehilite', style='default', noclasses=False)
         
         return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
 
@@ -139,7 +144,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
         template = 'bootstrapblocks/blockquote.html'
 
 
-class CarouselItemBlock(blocks.StructBlock):
+class CarouselSlideBlock(blocks.StructBlock):
     """
     Instance of a carousel item, for holding image reference, caption, detail text and link.
     """
@@ -152,18 +157,47 @@ class CarouselItemBlock(blocks.StructBlock):
     link_external = blocks.URLBlock(required=False)
 
 
-class BSCarouselBlock(blocks.StructBlock):
+@register_snippet
+class CarouselSnippet(models.Model):
     """
     Instance of an entire carousel slide set. Options are provided for changing the default behaviour. The ListBlock
     allows multiple carousel items to be added as needed.
     """
 
-    slide = blocks.BooleanBlock(required=False, help_text='Carousel slide has animation effect when enabled', default=True)
-    interval = blocks.IntegerBlock(required=True, min_value=100, max_value=50000, help_text='Delay (in milliseconds) between each slide', default=5000)
-    pause = blocks.BooleanBlock(required=False, help_text='Carousel pauses with mouse hover when enabled', default=True)
-    wrap = blocks.BooleanBlock(required=False, help_text='Carousel goes through all slides continuously when enabled; stops at last slide otherwise', default=True)
+    title = models.CharField(help_text='Carousel title - optionally displayed with carousel; used as name in Snippet list', max_length=512)
 
-    items = blocks.ListBlock(CarouselItemBlock())
+    animate = models.BooleanField(help_text='Carousel has sliding animation effect when enabled', default=True)
+    interval = models.IntegerField(help_text='Delay (in milliseconds) between each slide transition', default=5000)
+    pause = models.BooleanField(help_text='Carousel pauses with mouse hover when enabled', default=True)
+    wrap = models.BooleanField(help_text='Carousel goes through all slides continuously when enabled; stops at last slide otherwise', default=True)
+
+    slides = StreamField([
+        ('slide_block', CarouselSlideBlock()),],
+        null=True,
+        blank=True,
+    )
+
+    panels = [
+        FieldPanel('title'),
+        MultiFieldPanel([
+            FieldPanel('animate'),
+            FieldPanel('interval'),
+            FieldPanel('pause'),
+            FieldPanel('wrap'),
+        ],
+        heading='Carousel Options',
+        classname="collapsible collapsed"),
+#        MultiFieldPanel([
+        StreamFieldPanel('slides')
+#        ], heading="Carousel Items (Streamfield)"),
+    ]
+
+    
+    class Meta:
+        verbose_name = 'Carousel Slideshow'
+
+    def __str__(self):
+        return self.title
 
 
 class CoreBlock(blocks.StreamBlock):
