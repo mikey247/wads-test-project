@@ -1,0 +1,27 @@
+{% load wagtailimages_tags %}
+
+<h3>{{ self.title }}</h3>
+{% with prefix="carousel" id=self.title|slugify %}
+  <div id="{{ prefix }}-{{ id }}" class="carousel slide" data-ride="carousel">
+
+    <ol class="carousel-indicators">
+    {% for block in self.slides %}
+      {% with block.value as slide %}
+        <li data-target="#{{ prefix }}-{{ id }}" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
+      {% endwith %}
+    {% endfor %}
+    </ol>
+
+    <div class="carousel-inner" role="listbox">
+    {% for block in self.slides %}
+      {% with block.value as slide %}
+        <div class="item {% if forloop.first %}active{% endif %}">
+          {% image slide.image width-1200 as photo %}
+          <img src="{{ photo.url }}" alt="{{ slide.title }}">
+          <div class="carousel-caption">{{ slide.text }}</div>
+        </div>
+      {% endwith %}
+    {% endfor %}
+    </div>
+  </div>
+{% endwith %}

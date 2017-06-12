@@ -17,6 +17,7 @@ from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
 from wagtail.wagtailsnippets.models import register_snippet
 
 from pygments import highlight
@@ -187,9 +188,7 @@ class CarouselSnippet(models.Model):
         ],
         heading='Carousel Options',
         classname="collapsible collapsed"),
-#        MultiFieldPanel([
         StreamFieldPanel('slides')
-#        ], heading="Carousel Items (Streamfield)"),
     ]
 
     
@@ -216,6 +215,8 @@ class CoreBlock(blocks.StreamBlock):
     email = blocks.EmailBlock()
     code = BSCodeBlock()
     table = TableBlock(template='bootstrapblocks/table.html')
+
+    carousel = SnippetChooserBlock(CarouselSnippet, template='bootstrapblocks/carousel.html')
 
     def get_form_context(self, value, prefix='', errors=None):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
