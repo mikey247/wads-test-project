@@ -154,3 +154,8 @@ samp {
 .thumbnail {
     border-radius: 6px;
 }
+
+.carousel-control span {
+    position: absolute;
+    top: 50%;
+}
