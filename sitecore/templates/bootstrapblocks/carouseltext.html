@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+
+{% for block in self %}
+  {% if block.block_type == 'page' %}
+    <a href="{{ block.value.url }}" class="btn btn-primary btn-lg">{{ block.value }}</a>
+  {% else %}
+    {% include_block block %}
+  {% endif %}
+{% endfor %}

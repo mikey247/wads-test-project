@@ -146,6 +146,24 @@ class BSBlockquoteBlock(blocks.StructBlock):
         template = 'bootstrapblocks/blockquote.html'
 
 
+class CarouselTextBlock(blocks.StreamBlock):
+    """
+    Block embedded inside each carousel slide - allows subset of main streamfield blocks
+    """
+
+    heading = BSHeadingBlock()
+    paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph')
+    blockquote = BSBlockquoteBlock()
+
+    image =  ImageChooserBlock() # perhaps requires carousel specific renderer?
+    docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+    page = blocks.PageChooserBlock()
+    external = blocks.URLBlock()
+
+    class Meta:
+        template = 'bootstrapblocks/carouseltext.html'
+
+
 class CarouselSlideBlock(blocks.StructBlock):
     """
     Instance of a carousel item, for holding image reference, caption, detail text and link.
@@ -153,10 +171,7 @@ class CarouselSlideBlock(blocks.StructBlock):
 
     title = blocks.CharBlock(required=False)
     image = ImageChooserBlock() # perhaps requires carousel specific renderer?
-    text = blocks.CharBlock(required=False)
-    link_page = blocks.PageChooserBlock(required=False)
-    link_doc = DocumentChooserBlock(required=False, template='bootstrapblocks/document.html')
-    link_external = blocks.URLBlock(required=False)
+    text = CarouselTextBlock(required=False)
 
 
 @register_snippet
@@ -212,6 +227,8 @@ class CoreBlock(blocks.StreamBlock):
     image =  ImageChooserBlock()
     #image =  ImageChooserBlock(template='image.html')
     docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+    page = blocks.PageChooserBlock(required=False)
+    external = blocks.URLBlock(required=False)
 
     email = blocks.EmailBlock()
     code = BSCodeBlock()
