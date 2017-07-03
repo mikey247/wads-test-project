@@ -14,7 +14,7 @@ class ShortcodeRichTextField(RichTextField):
     Any user embedded shortcodes are checked against the registered codes and exceptions raised as necessary.
     The Wagtail admin interface will display appropriate exceptions on Save Draft or Publish, forcing the author
     to update the content.
-    Note: Much check if the validator is already in the list, otherwise EVERY migration adds another entry to the
+    Note: Must check if the validator is already in the list, otherwise EVERY migration adds another entry to the
     list of validators.
     """
     def __init__(self, *args, **kwargs):
