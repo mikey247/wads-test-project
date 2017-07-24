@@ -121,6 +121,7 @@ samp {
     padding: 2px 4px;
     font-size: 90%;
     color: #196dab;
+    white-space: pre-wrap;
 }
 
 .page-footer {
