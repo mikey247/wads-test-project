@@ -25,7 +25,7 @@ from pygments import highlight
 from pygments.formatters import get_formatter_by_name
 from pygments.lexers import get_lexer_by_name
 
-from sitecore.parsers import ParseShortcodes
+from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
 
 class CSVIntListCharBlock(blocks.FieldBlock):
@@ -65,6 +65,41 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
         
     class Meta:
         icon = 'pilcrow'
+        template = 'bootstrapblocks/richtext_shortcode.html'
+
+
+class MarkdownAndShortcodeTextBlock(blocks.TextBlock):
+    """
+    Modifies the TextBlock so that the main CharField is also passed through the ParseMarkdownAndShortcodes validator.
+    Any user embedded markdown will be processed first, using the default markdown rules and any enabled extensions.
+    This should remove any markdown notation containing the shortcode delimiters (see config.py but usually [ and ]).
+    Any user embedded shortcodes are checked against the registered codes and exceptions raised as necessary.
+    The Wagtail admin interface will display appropriate exceptions on Save Draft or Publish, forcing the author
+    to update the content.
+    """
+
+    def __init__(self, required=True, help_text=None, rows=1, max_length=None, min_length=None, **kwargs):
+        self.field_options = {
+            'required': required,
+            'help_text': help_text,
+            'max_length': max_length,
+            'min_length': min_length,
+            'validators': [ParseMarkdownAndShortcodes]
+        }
+        self.rows = rows
+        super(MarkdownAndShortcodeTextBlock, self).__init__(**kwargs)
+
+    @cached_property
+    def field(self):
+        from wagtail.wagtailadmin.widgets import AdminAutoHeightTextInput
+        field_kwargs = {'widget': AdminAutoHeightTextInput(attrs={'rows': self.rows})}
+        field_kwargs.update(self.field_options)
+        return forms.CharField(**field_kwargs)
+
+    
+    class Meta:
+        icon = 'pilcrow'
+        template = 'bootstrapblocks/markdown_shortcode.html'
 
 
 class BSHeadingBlock(blocks.StructBlock):
@@ -221,6 +256,7 @@ class CoreBlock(blocks.StreamBlock):
     """
 
     heading = BSHeadingBlock()
+    markdown = MarkdownAndShortcodeTextBlock(label='Markdown Paragraph')
     paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph')
     blockquote = BSBlockquoteBlock()
 
