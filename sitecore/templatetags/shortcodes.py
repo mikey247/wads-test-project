@@ -2,7 +2,8 @@ import shortcodes
 import html
 from django import template
 import sitecore.config as cfg
-from sitecore.parsers import ParseShortcodes
+#from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
+import sitecore.parsers as parsers
 
 ### create shortcodes
 
@@ -62,4 +63,8 @@ register = template.Library()
 
 @register.simple_tag()
 def shortcodes(value):
-    return ParseShortcodes(value)
+    return parsers.ParseShortcodes(value)
+
+@register.simple_tag()
+def markdown_shortcodes(value):
+    return parsers.ParseMarkdownAndShortcodes(value)
