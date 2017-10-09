@@ -1,8 +1,43 @@
-Django>=1.10,<1.11
-wagtail>=1.8,<1.9
-psycopg2
+Django
+Markdown
+Pillow
+PyYAML
+Pygments
+Unidecode
+Willow
+appdirs
+argparse
+beautifulsoup4
+certifi
+chardet
+django-bootstrap-themes
+django-classy-tags
+django-debug-toolbar
+django-extensions
+django-modelcluster
 django-redis
+django-taggit
+django-treebeard
+djangorestframework
 elasticsearch==2.4.0
+html5lib
+idna
+olefile
+packaging
+pip-review
+psycopg2
+pyparsing
+pytz
+redis
+requests
+shortcodes
+six
+sqlparse
+urllib3
+wagtail
+wagtailmenus
+wagtailtinymce
+webencodings
 
 
 
