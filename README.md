@@ -6,17 +6,17 @@ These are required libraries in addition to standard ones such as Apache2 and Py
 
 For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.7 one)
 
-    apt-get install libapache2-mod-wsgi-py3 
-    apt-get install python-letsencrypt-apache
-    apt-get install python-psycopg2
-    apt-get install build-essential binutils-doc autoconf flex bison libjpeg-dev
-    apt-get install libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
-    apt-get install automake libtool libffi-dev curl git tmux gettext
-    apt-get install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6
-    apt-get install openjdk-8-jre
-    apt-get install elasticsearch
-    apt-get install redis-server
-    apt-get install python3-yaml libyaml-dev
+    ~~apt install libapache2-mod-wsgi-py3~~
+    apt install python-letsencrypt-apache
+    apt install python-psycopg2
+    apt install build-essential binutils-doc autoconf flex bison libjpeg-dev
+    apt install libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
+    apt install automake libtool libffi-dev curl git tmux gettext
+    apt install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6 // or closest version
+    apt install openjdk-8-jre
+    ~~apt install elasticsearch~~
+    apt install redis-server
+    apt install python3-yaml libyaml-dev
 
 **Note: Java required for elasticsearch**
 
@@ -29,8 +29,8 @@ For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.
 
 Optional for dev mode and testing of Django/Wagtail default database setting:
 
-    apt-get install sqlite3
-    apt-get install sqlitebrowser
+    apt install sqlite3
+    apt install sqlitebrowser
 
 ## Configure elasticsearch
 
@@ -88,46 +88,48 @@ Create a virtual environment to hold the required version of Python and necessar
     wagtail start siteroot
     cd siteroot
 	
-Edit the `requirements.txt` file and add (as of 2017-06-05)
+Edit the `requirements.txt` file and add (as of 2017-11-16)
 ```
 appdirs==1.4.3
 beautifulsoup4==4.6.0
-certifi==2017.4.17
-chardet==3.0.3
-Django==1.11.2
+certifi==2017.7.27.1
+chardet==3.0.4
+Django==1.11.6
 django-bootstrap-themes==3.3.6
 django-classy-tags==0.8.0
 django-debug-toolbar==1.8
-django-extensions==1.7.9
+django-extensions==1.9.6
 django-modelcluster==3.1
 django-redis==4.8.0
 django-taggit==0.22.1
-django-treebeard==4.1.1
-djangorestframework==3.6.3
+django-treebeard==4.1.2
+djangorestframework==3.7.1
 elasticsearch==2.4.0
 html5lib==0.999999999
-idna==2.5
+idna==2.6
+Markdown==2.6.9
 olefile==0.44
 packaging==16.8
-Pillow==4.1.1
-pip-review==0.5.3
-psycopg2==2.7.1
+Pillow==4.3.0
+pip-review==1.0
+pkg-resources==0.0.0
+psycopg2==2.7.3.2
 Pygments==2.2.0
 pyparsing==2.2.0
-pytz==2017.2
+pytz==2017.3
 PyYAML==3.12
-redis==2.10.5
-requests==2.17.3
+redis==2.10.6
+requests==2.18.4
 shortcodes==2.4.0
-six==1.10.0
-sqlparse==0.2.3
-Unidecode==0.4.20
-urllib3==1.21.1
-wagtail==1.10.1
-wagtailmenus==2.2.2
+six==1.11.0
+sqlparse==0.2.4
+Unidecode==0.4.21
+urllib3==1.22
+wagtail==1.13
+wagtailmenus==2.5.2
 wagtailtinymce==4.2.1.5
 webencodings==0.5.1
-Willow==0.4
+Willow==1.0
 ```
 	
     pip install -r requirements.txt
