@@ -14,7 +14,7 @@ For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.
     apt install automake libtool libffi-dev curl git tmux gettext
     apt install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6 // or closest version
     apt install openjdk-8-jre
-    ~~apt install elasticsearch~~
+    apt install elasticsearch
     apt install redis-server
     apt install python3-yaml libyaml-dev
 
@@ -181,7 +181,33 @@ Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-genera
 
 Edit `/var/www/wagtail/mysite/mysite/settings/base.py` and remove DATABASES, ALLOWED_HOSTS, LANGUAGE_CODE, WAGTAIL_SITE_NAME, BASE_URL
 
-Create local.py and add:
+Using the siteconfig/settings/local.template file, create local.py and edit the required fields to set/confirm:
+
+* SECRET_KEY
+* SECURE_SSL_REDIRECT
+* SESSION_COOKIE_SECURE
+* CSRF_COOKIE_SECURE
+* SECURE_HSTS_SECONDS
+* DATABASE
+  * NAME
+  * USER
+  * PASSWORD
+  * HOST
+* ALLOWED_HOSTS
+* INTERNAL_IPS
+* LANGUAGE_CODE
+* WAGTAIL_SITE_NAME
+* BASE_URL
+* CACHES
+  * BACKEND
+  * LOCATION
+* WAGTAIL_SEARCH_BACKENDS
+  * BACKEND
+  * INDEX
+* REST_FRAMEWORK
+  * DEFAULT_PERMISSION_CLASSES
+  * PAGE_SIZE
+  * DEFAULT_PAGINATION_CLASS
 
 
 ```
