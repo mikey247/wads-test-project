@@ -35,7 +35,7 @@ Create service:
 
     update-rc.d elasticsearch defaults 95 10
 
-** Elastic Search regularly has default settings that cause the service to fail immediately. Typically it attempts to use all available memory which is subsequently not allocated by the system.**
+**Elastic Search regularly has default settings that cause the service to fail immediately. Typically it attempts to use all available memory which is subsequently not allocated by the system.**
 
 Edit `/etc/default/elasticsearch`:
 
@@ -195,12 +195,12 @@ Create `/etc/apache2/sites-available/wagtail.conf` for HTTP redirect
   CustomLog /var/log/apache2/wagtail-access_log common
 
   # RewriteEngine on
-  # RewriteCond %{SERVER_NAME} =scarlett.itservices.manchester.ac.uk
+  # RewriteCond %{SERVER_NAME} =your.fqdn
   # RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 ```
 
-Create the directory /var/www/wagtail/siteroot/static/.well-known to let the SSL certbot place webroot tests.
+Create the directory `/var/www/wagtail/siteroot/static/.well-known` to let the SSL certbot place webroot tests.
 
 ## SSL Certificate
 
@@ -225,7 +225,7 @@ Run certbot to obtain the SSL certificate:
 1. Provide the file system path the directory containing the `.well-known/` directory e.g., `/var/www/wagtail/siteroot/static`
 1. Choose whether or not to redirect HTTP to HTTPS (recommended)
 
-Assuming the challenges succeeded, both of the Apache configurations should have been modified by the certbot script, producing content similar to the commented `SSLCetficate` code and `Rewrite` lines in the configurations above. They should point to newly created certificates in `/etc/letsencrpyt/live/your.fqdn/*`.
+Assuming the challenges succeeded, both of the Apache configurations should have been modified by the certbot script, producing content similar to the commented `SSLCertificate` code and `Rewrite` lines in the configurations above. They should point to newly created certificates in `/etc/letsencrpyt/live/your.fqdn/*`.
 
 ## Django/Wagtail Configuration
 
@@ -253,7 +253,7 @@ Default `/var/www/wagtail/siteroot/siteconfig/wsgi.py` is good as is for develop
 
 ### Configure local settings
 
-Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-generator/ and using the siteconfig/settings/local.template file, create local.py and edit the required fields to set/confirm:
+Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-generator/ and using the `siteconfig/settings/local.template` file, create `siteconfig/settings/local.py` and edit the required fields to set/confirm:
 
 * SECRET_KEY
 * SECURE_SSL_REDIRECT
@@ -288,7 +288,7 @@ Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-genera
 	cd /var/www/wagtail/siteroot
 	./manage.py makemigrations
 	
-** Usually requires `makemigrations` per app: **
+**Usually requires `makemigrations` per app:**
 
 	./manage.py makemigrations siteconfig
 	./manage.py makemigrations sitecore
