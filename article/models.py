@@ -17,6 +17,7 @@ from wagtail.wagtailsearch import index
 from sitecore import blocks as sitecore_blocks
 from sitecore.fields import ShortcodeRichTextField
 from sitecore.models import SitePage
+from sitecore.parsers import ValidateCoreBlocks
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
@@ -60,7 +61,10 @@ class ArticlePage(SitePage):
     author = models.CharField(max_length=255, blank=True, help_text=_('Use this to override the default author/owner name.'))
     intro = ShortcodeRichTextField(blank=True, help_text=_('Provide introductory text here to summarise the article. Content appears in blog style lists and search result summaries.'))
 
-    body = StreamField(sitecore_blocks.CoreBlock)
+    body = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks]
+    )
 
     search_fields = SitePage.search_fields + [
         index.SearchField('author'),

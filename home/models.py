@@ -8,9 +8,13 @@ from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailsearch import index
 
 from sitecore import blocks as sitecore_blocks
+from sitecore.parsers import ValidateCoreBlocks
 
 class HomePage(Page):
-    body = StreamField(sitecore_blocks.CoreBlock)
+    body = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks]
+    )
 
     search_fields = Page.search_fields + [
         index.SearchField('body'),
