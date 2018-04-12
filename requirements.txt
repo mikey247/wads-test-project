@@ -1,9 +1,8 @@
-Django<=1.11
+Django
 Markdown
 Pillow
 PyYAML
 Pygments
-Unidecode
 Willow
 appdirs
 argparse
@@ -19,13 +18,12 @@ django-redis
 django-taggit
 django-treebeard
 djangorestframework
-elasticsearch==2.4.0
-html5lib
+elasticsearch
 idna
 olefile
 packaging
-pip-review
-psycopg2
+#pip-review
+psycopg2-binary
 pyparsing
 pytz
 redis
