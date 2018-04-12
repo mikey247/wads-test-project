@@ -13,13 +13,13 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
-from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
-from wagtail.wagtailsnippets.models import register_snippet
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.core import blocks
+from wagtail.core.fields import StreamField
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail.snippets.models import register_snippet
 
 from pygments import highlight
 from pygments.formatters import get_formatter_by_name
@@ -59,7 +59,7 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
     
     @cached_property
     def field(self):
-        from wagtail.wagtailadmin.rich_text import get_rich_text_editor_widget
+        from wagtail.admin.rich_text import get_rich_text_editor_widget
         return forms.CharField(validators=[ParseShortcodes],widget=get_rich_text_editor_widget(self.editor), **self.field_options)
 
         
@@ -91,7 +91,7 @@ class MarkdownAndShortcodeTextBlock(blocks.TextBlock):
 
     @cached_property
     def field(self):
-        from wagtail.wagtailadmin.widgets import AdminAutoHeightTextInput
+        from wagtail.admin.widgets import AdminAutoHeightTextInput
         field_kwargs = {'widget': AdminAutoHeightTextInput(attrs={'rows': self.rows})}
         field_kwargs.update(self.field_options)
         return forms.CharField(**field_kwargs)

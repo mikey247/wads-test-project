@@ -2,10 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 from django.db import models
 
-from wagtail.wagtailadmin.edit_handlers import StreamFieldPanel
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailsearch import index
+from wagtail.admin.edit_handlers import StreamFieldPanel
+from wagtail.core.models import Page
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.parsers import ValidateCoreBlocks

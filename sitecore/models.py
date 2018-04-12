@@ -8,8 +8,8 @@ a superclass SitePage model to share commonalities, and support for tag indexing
 from django.db import models
 
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.wagtailadmin.edit_handlers import TabbedInterface, ObjectList, FieldPanel
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.admin.edit_handlers import TabbedInterface, ObjectList, FieldPanel
+from wagtail.core.models import Page, Orderable
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager

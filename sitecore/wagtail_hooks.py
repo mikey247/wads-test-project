@@ -7,8 +7,8 @@ Sitecore Wagtail hooks to append/modify default behaviour of the Wagtail system.
 from django.conf import settings
 from django.utils.html import format_html, format_html_join
 
-from wagtail.wagtailcore.whitelist import attribute_rule, check_url, allow_without_attributes
-from wagtail.wagtailcore import hooks
+from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
+from wagtail.core import hooks
 
 @hooks.register('construct_whitelister_element_rules')
 def whitelister_element_rules():
