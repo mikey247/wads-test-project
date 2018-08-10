@@ -1,4 +1,4 @@
-Django
+Django==2.0.8
 Markdown
 Pillow
 PyYAML
@@ -6,7 +6,7 @@ Pygments
 Willow
 appdirs
 argparse
-beautifulsoup4
+beautifulsoup4!=4.6.1,<5.0,>=4.5.1
 certifi
 chardet
 django-bootstrap-themes
@@ -31,8 +31,9 @@ requests
 shortcodes
 six
 sqlparse
+Unidecode<1.0,>=0.04.14
 urllib3
-wagtail
+wagtail==2.1.2
 wagtailmenus
 wagtailtinymce
 webencodings
