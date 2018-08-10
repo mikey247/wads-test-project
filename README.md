@@ -297,6 +297,10 @@ Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-genera
 
 	./manage.py makemigrations home
 	./manage.py makemigrations article
+	
+Perform initial migration:
+
+	./manage.py migrate
 
 Superuser, elasticsearch and static commands:
 
@@ -309,7 +313,7 @@ If some initial site data is required, optionally load any fixture data if provi
 
 	./manage.py load_fixtures [TBC]
 
-Perform initial migration:
+Perform final initial migration:
 
 	./manage.py migrate
 	
