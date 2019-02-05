@@ -1,0 +1,2 @@
+siteconfig/wsgi.py merge=deploy
+siteconfig/wsgi.py diff=nodiff
