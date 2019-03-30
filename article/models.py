@@ -12,6 +12,7 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
@@ -32,6 +33,9 @@ class ArticleIndexPage(Page):
                                                     MaxValueValidator(100)
                                                 ])
 
+    display_title = models.BooleanField(default=True)
+    display_desc = models.BooleanField(default=False)
+    
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
@@ -56,6 +60,13 @@ class ArticleIndexPage(Page):
         FieldPanel('per_page'),
     ]
 
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('display_title'),
+            FieldPanel('display_desc'),
+        ], heading='Page Display Options'),
+    ]
+
 
 class ArticlePage(SitePage):
     author = models.CharField(max_length=255, blank=True, help_text=_('Use this to override the default author/owner name.'))
@@ -66,6 +77,17 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks]
     )
 
+    article_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    
+    display_title = models.BooleanField(default=True)
+    display_desc = models.BooleanField(default=False)
+    
     search_fields = SitePage.search_fields + [
         index.SearchField('author'),
         index.SearchField('intro'),
@@ -76,6 +98,7 @@ class ArticlePage(SitePage):
         'author',
         'intro',
         'body',
+        'article_image',
     ]
 
     content_panels = SitePage.content_panels + [
@@ -87,3 +110,12 @@ class ArticlePage(SitePage):
             StreamFieldPanel('body')
         ], heading="Main body (Streamfield)"),
     ]
+
+    promote_panels = SitePage.promote_panels + [
+        ImageChooserPanel('article_image'),
+        MultiFieldPanel([
+            FieldPanel('display_title'),
+            FieldPanel('display_desc'),
+        ], heading='Page Display Options'),
+    ]
+    
