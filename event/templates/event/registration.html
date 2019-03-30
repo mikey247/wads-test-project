@@ -1,0 +1,80 @@
+{% if view == "summary" %}
+  {% if running %}<span class="badge badge-info">Event is currently running</span>{% endif %}
+  {% if self.closed %}
+    <span class="badge badge-danger">{{ self.closed_text }}</span>
+  {% elif self.closing_soon %}
+    <span class="badge badge-warning">{{ self.closing_soon_text }}</span>
+  {% elif self.is_not_yet_open %}
+    <span class="badge badge-info">{{ self.not_yet_open_text }}</span>
+  {% else %}
+    <span class="badge badge-success">{{ self.open_text }}</span>
+  {% endif %}
+{% else %}
+  <section class="my-4">
+    <ul class="list-group">
+      {% if self.is_not_yet_open %}
+	 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
+      {% elif self.closed %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
+      {% elif self.closing_soon %}
+	 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
+      {% else %}
+	 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
+      {% endif  %}
+            <strong><i class="fas fa-clipboard"></i> Registration</strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	{{ self.details }}
+      </li>
+      {% if self.link or self.email %}
+	{% if self.link %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center">
+	    <a class="btn btn-block my-1 btn-dark {% if self.closed or self.is_not_yet_open %}disabled{% endif %}"
+	       href="{{ self.link }}">
+	      <span class="text-uppercase"><i class="fas fa-external-link-alt"></i> Register</span>
+	    </a>
+	  </li>
+	{% endif %}
+	{% if self.email %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center">
+	    <a class="btn btn-block my-1 btn-dark {% if self.closed or self.is_not_yet_open %}disabled{% endif %}"
+	       href="mailto:{{ self.email }}">
+	      <span class="text-uppercase"><i class="fas fa-envelope"></i> Email</span>
+	    </a>
+	  </li>
+	{% endif %}
+      {% endif  %}
+      {% if self.is_not_yet_open %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
+	  <strong><i class="fas fa-user-clock"></i> Opens</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <h3><i class="fas fa-calendar"></i> {{ self.opening_date }}</h3>
+	</li>
+      {% endif %}
+      {% if self.is_not_yet_open %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
+      {% elif self.closed %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
+      {% elif self.closing_soon %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
+      {% else %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
+      {% endif  %}
+      <strong><i class="fas fa-user-clock"></i> Closing Date</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <h3><i class="fas fa-calendar"></i> {{ self.closing_date }}</h3>
+	</li>
+	{% if self.is_not_yet_open %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info"><strong>{{ self.not_yet_open_text }}</strong></li>
+	{% elif self.closed %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger"><strong>{{ self.closed_text }}</strong></li>
+	{% elif self.closing_soon %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning"><strong>{{ self.closing_soon_text }}</strong></li>
+	{% else %}
+	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success"><strong>{{ self.open_text }}</strong></li>
+	{% endif  %}
+    </ul>
+  </section>
+{% endif %}

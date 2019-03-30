@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags site_tags %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
+
+{% block body-class %}event-index-page{% endblock %}
+
+{% block page-content-main-header %}
+  <header>
+    {% if self.listing_image %}
+      {% image self.listing_image fill-1200x300 as photo %}
+      <div class="my-4">
+	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
+      </div>
+    {% endif %}
+    {% if page.display_title %}
+      <h1 class="my-4">{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}</h1>
+      {% endif %}
+    {% if page.display_desc %}
+      <div class="lead">{{ page.desc|richtext }}</div>
+    {% endif %}
+    {% if not events|length %}
+      <div class="alert alert-info" role="alert">
+	Currently we have no fortcoming events to show you.<br/>However please do look at the actvities in our <a href="past-events" class="alert-link">past events</a> page.
+      </div>
+    {% endif %}  
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+  <article>
+    {% for post in events %}
+      <section>
+      {% with event=post.specific %}
+	<div class="media bg-light mt-0 mb-4 pr-2 ">
+	  <div class="py-0">
+	    <div class="bg-dark px-3 py-4 mr-2 text-light text-center">
+	      <h2><i class="fas fa-calendar"></i></h2>
+	      {% if event.duration == 1 %}
+		<h4>{{ event.start_date|date:'d' }} {{ event.start_date|date:'M'|upper }}</h4>
+	      {% else %}
+		{% if event.in_same_month %}
+		  <h5>{{ event.start_date|date:'d' }} &mdash; {{ event.end_date|date:'d' }}</h5>
+		  <h5>{{ event.start_date|date:'M'|upper }}</h5>
+		{% else %}
+		  <h5>{{ event.start_date|date:'d' }} {{ event.start_date|date:'M'|upper }}<br/>&mdash;<br/>
+		    {{ event.end_date|date:'d' }} {{ event.end_date|date:'M'|upper }}</h5>
+		{% endif %}
+	      {% endif %}
+	      <h2>{{ event.start_date|date:'Y' }}</h2>
+	    </div>
+	  </div>
+	  <div class="media-body py-2">
+	    <h3 class="mt-0">{{ event.title }}</h3>
+	    {% for block in event.event_type %}
+	      {% include_block block with view="summary" running=event.running passed=event.passed %}
+	    {% endfor %}
+	    &nbsp;<span class="badge badge-primary">{{ event.duration }} day event</span>
+	    &nbsp;<span class="text-secondary"><a href="{{ event.location_link }}"><i class="fa fa-map-marker"></i> {{ event.location }}</a></span>
+	    <p>{{ event.intro|richtext }}</p>
+	    <a href="{% pageurl event %}" class="btn btn-sm btn-primary">Read More <i class="fas fa-chevron-right"></i></a>
+	  </div>
+	</section>
+      {% endwith %}
+    {% endfor %}
+  </article>
+{% endblock %}

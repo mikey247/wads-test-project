@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load shortcodes article_tags menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
+
+{% block body-class %}event-page{% endblock %}
+
+{% block page-content-main-header %}
+  <header>
+    {% if page.event_image %}
+      {% image page.event_image fill-1200x300 as photo %}
+      <div class="my-4">
+	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
+      </div>
+    {% endif %}
+    <div class="media my-4">
+      <div class="bg-primary px-4 py-4 mr-2 text-light text-center">
+	<h1><i class="fas fa-calendar"></i></h1>
+	{% if page.duration == 1 %}
+	  <h3>{{ page.start_date|date:'d' }} {{ page.start_date|date:'M'|upper }}</h3>
+	{% else %}
+	  {% if page.in_same_month %}
+	    <h4>{{ page.start_date|date:'d' }} &mdash; {{ page.end_date|date:'d' }}</h4>
+	    <h4>{{ page.start_date|date:'M'|upper }}</h4>
+	  {% else %}
+	    <h4>{{ page.start_date|date:'d' }} {{ page.start_date|date:'M'|upper }}<br/>&mdash;<br/>
+	      {{ page.end_date|date:'d' }} {{ page.end_date|date:'M'|upper }}</h4>
+	  {% endif %}
+	{% endif %}
+	<h1>{{ page.start_date|date:'Y' }}</h1>
+      </div>
+      <div class="media-body pl-2">
+	<h1 class="mt-0">{{ self.title }}</h1>
+	<div class="lead">{{ page.intro|richtext }}</div>
+	<h6 class="text-primary"><i class="fas fa-map-marker"></i> <a href="{{ page.location_link }}">{{ page.location }}</a></h6>
+	{% for block in page.dates %}
+	  {% with block.value as date %}
+	    <h6 class="text-secondary"><i class="fas fa-calendar"></i> {{ date.date }} <i class="fas fa-clock"></i>  {{ date.start_time }} &mdash; {{ date.end_time }}</h6>
+	  {% endwith %} 
+	{% endfor %}
+      </div>
+    </div>
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+  <article>
+    <section>
+      {% for block in page.body %}
+	{% if block.block_type == 'image' %}
+          <div class="thumbnail img-raised">
+	    {% image block.value width-1200 as photo %}
+	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
+	    <div class="caption">
+	      <p class="text-primary text-right">{{ photo.alt }}</p>
+	    </div>
+          </div>
+	{% else %}
+	  {% include_block block %}
+	{% endif %}
+      {% endfor %}
+    </section>
+  </article>
+{% endblock %}
+
+{% block page-content-aside %}
+  {% block page-content-aside-details %}
+    {% if page.running or page.passed %}
+      <section class="my-4">
+	<ul class="list-group">
+	  {% if page.running %}
+	    <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">The event is currently running</li>
+	  {% elif page.passed %}
+	    <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">The event has now passed</li>
+	  {% endif %}
+	</ul>
+      </section>
+    {% endif %}
+
+    {% for block in page.event_type %}
+      {% include_block block %}
+    {% endfor %}
+
+    <section class="my-4">
+      <ul class="list-group">
+	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	  <strong>Page Details</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  {% page_author page %}
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <small>Published: {{ page.first_published_at }}</small>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <small>Revised: {{ page.latest_revision_created_at }}</small>
+	</li>
+      </ul>
+    </section>
+  {% endblock %}
+  {% block page-content-aside-menu %}
+    {% section_menu template='menus/section_menu.html' %}
+  {% endblock %}
+{% endblock %}
+
+{% block page-content-main-footer %}
+  <footer role="tags">
+    {% if page.tags.all.count %}
+      {% taggit_list page.tags %}
+    {% endif %}
+  </footer>
+
+  <p><a href="{{ page.get_parent.url }}">Return to event index</a></p>
+  
+{% endblock %}
