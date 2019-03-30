@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'siteuser',
     'home',
     'article',
+    'event',
     'search',
 
     'wagtail.contrib.forms',
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'bootstrap_themes',
     'shortcodes',
+    'sekizai',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -102,6 +104,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'sekizai.context_processors.sekizai'
             ],
         },
     },
