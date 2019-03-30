@@ -1,0 +1,24 @@
+{% load shortcodes wagtailcore_tags wagtailimages_tags %}
+
+{% if self.dislay_title %}<h3>{{ self.title }}</h3>{% endif %}
+
+<div class="row my-4">
+  {% for block in self.cards %}
+    {% with block.value as card %}
+      <div class="card-group mb-3 {{ card.custom_layout }}">
+	<div class="card {{ self.text_align }} {{ self.bg_colour }} {{ self.text_colour }} {{ self.border_colour }}">
+	  <div class="card-header">
+	    <i class="{{ card.icon }}" style="font-size:{{ self.icon_size }}{{ self.icon_size_unit }};"></i>
+	  </div>
+	  <div class="card-body">
+	    <h5 class="card-title">{{ card.title }}</h5>
+	    <p class="card-text">{{ card.text }}</p>
+	  </div>
+	  <div class="card-footer">
+	    <a href="{{ card.link }}" class="{{ self.button_size }} {{ self.button_colour }}">{{ card.button_text }}</a>
+	</div>
+	</div>
+      </div>
+    {% endwith %}
+  {% endfor %}
+</div>
