@@ -1,20 +1,47 @@
 {% extends "base.html" %}
-
 {% load wagtailcore_tags wagtailimages_tags site_tags %}
 
-{% block body_class %}index-article-page{% endblock %}
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
 
-{% block content %}
-  <div class="intro">{{ page.intro|richtext }}</div>
+{% block body-class %}index-article-page{% endblock %}
 
-  {% for post in articles %}
-    {% with post=post.specific %}
-      <h4><a href="{% pageurl post %}">{{ post.title }}</a></h4>
-      {% page_date post %}
-      {% page_author post %}
-      {% include_block post.intro %}
-      <a href="{% pageurl post %}" class="btn btn-primary">Read More</a>
-    {% endwith %}
-  {% endfor %}
-
+{% block page-content %}
+  <div class="container pb-5 mb-5">
+    <div class="row class="my-4"">
+      <div class="col-lg-3 order-2 order-lg-1">
+      </div>
+      <div class="col-lg-9 order-1 order-lg-2">
+	{% if page.display_title %}
+	  <h1 class="my-4">{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}</h1>
+	{% endif %}
+	{% if page.display_desc %}
+	  <div class="lead">{% if page.desc and page.desc != "<p></p>" %}{{ page.desc|richtext }}{% endif %}</div>
+	{% endif %}
+      </div>
+    </div>
+    
+    {% for post in articles %}
+      {% with post=post.specific %}
+	<div class="row bg-light my-2">
+	  <div class="col-lg-3 order-2 order-lg-1 px-0">
+	    {% if post.article_image %}
+	      {% image post.article_image fill-300x300 as photo %}
+	      <div class="my-2">
+		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid px-2">
+	      </div>
+	    {% endif %}
+	  </div>
+	  <div class="col-lg-9 order-1 order-lg-2 pb-2">
+	    <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+	    {% page_date post %}
+	    {% page_author post %}
+	    <div class="lead">{% include_block post.intro %}</div>
+	    <a href="{% pageurl post %}" class="btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
+	  </div>
+	</div>
+      {% endwith %}
+    {% endfor %}
+  </div>
 {% endblock %}
