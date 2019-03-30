@@ -2,7 +2,16 @@
 
 {% for block in self %}
   {% if block.block_type == 'page' %}
-    <a href="{{ block.value.url }}" class="btn btn-primary btn-lg">{{ block.value }}</a>
+    <div class="d-none d-md-block">
+      <a href="{{ block.value.url }}" class="btn btn-primary btn-sm">
+	{{ block.value }} <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
+    <div class="d-md-none">
+      <a href="{{ block.value.url }}" class="btn btn-primary btn-sm">
+	Read More <i class="fas fa-chevron-right"></i>
+      </a>
+    </div>
   {% else %}
     {% include_block block %}
   {% endif %}
