@@ -1,11 +1,19 @@
 {% load wagtailcore_tags %}
-
-<div>
+<div class="my-2">
   {% for tag in tags.all %}
-    {% if tag|stringformat:"s" == selected %}
-      <a href="{% slugurl 'tags' %}?tag={{ tag }}"><span class="label label-default">{{ tag }}{% if show_count %} ({{ tag.num_tags }}){% endif %}</span></a>
+    {% if show_count %}
+      {% if tag.num_tags %}
+	<a class="btn btn-sm my-1 btn-{% if tag|stringformat:'s' == selected %}outline-{% endif %}primary"
+	  href="{% slugurl 'tags' %}?tag={{ tag }}">
+	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	  <span class="badge badge-light">{{ tag.num_tags }}</span>
+	</a>
+	{% endif %}
     {% else %}
-      <a href="{% slugurl 'tags' %}?tag={{ tag }}"><span class="label label-primary">{{ tag }}{% if show_count %} ({{ tag.num_tags }}){% endif %}</span></a>
+      <a class="btn btn-sm my-1 btn-{% if tag|stringformat:'s' == selected %}outline-{% endif %}primary"
+	 href="{% slugurl 'tags' %}?tag={{ tag }}">
+	<span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+      </a>
     {% endif %}
-  {% endfor %}</p>
+  {% endfor %}
 </div>
