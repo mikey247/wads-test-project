@@ -33,6 +33,21 @@ def handler(context, content, pargs, kwargs):
     content_html = html.escape(content)
     return '<var>%s</var>' % (content_html)
 
+@shortcodes.register("del", "/del")
+def handler(context, content, pargs, kwargs):
+    content_html = html.escape(content)
+    return '<del>%s</del>' % (content_html)
+
+@shortcodes.register("ins", "/ins")
+def handler(context, content, pargs, kwargs):
+    content_html = html.escape(content)
+    return '<ins>%s</ins>' % (content_html)
+
+@shortcodes.register("strike", "/strike")
+def handler(context, content, pargs, kwargs):
+    content_html = html.escape(content)
+    return '<s>%s</s>' % (content_html)
+
 @shortcodes.register("kbd")
 def handler(context, content, pargs, kwargs):
     result = []
@@ -53,6 +68,15 @@ def handler(context, content, pargs, kwargs):
         raise RenderingError
         
     return '<abbr title="%s">%s</abbr>' % (title,abbr)
+
+@shortcodes.register("span", "/span")
+def handler(context, content, pargs, kwargs):
+    try:
+        classes = html.escape(u' '.join(pargs))
+    except:
+        classes = u''
+
+    return '<span class="%s">%s</span>' % (classes,content)
 
 
 # create simple_tag (cleaner processing as we can mark_safe in code rather than a filter chain)
