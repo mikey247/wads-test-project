@@ -1,68 +1,51 @@
 {% extends "base.html" %}
-{% load shortcodes menu_tags site_tags wagtailuserbar wagtailcore_tags wagtailimages_tags %}
+{% load shortcodes menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
 
 {% block body-class %}page-head{% endblock %}
 
-{% block menu %}
-  {% get_site_root as site_root %}
-  {% top_menu parent=site_root calling_page=self transparent=True %}
-{% endblock %}
-
-{% block page-head %}
-  <div class="header header-filter" style="background-image: url(&quot;/static/img/bg2.jpeg&quot;); transform: translate3d(0px, 0px, 0px);">
-    <div class="container">
-      <div class="row">
-	<div class="col-md-8 col-md-offset-2">
-	  <div class="brand">
-	    <h1>Django Wagtail Test Site</h1>
-	    <h3>A Badass Bootstrap UI Kit based on Material Design.</h3>
-	  </div>
-	</div>
-      </div>
-    </div>
-  </div>
-{% endblock %}
-
 {% block page-content %}
-  <div class="main main-raised">
-    <div class="container">
-      <div class="row">
-	<div class="col-lg-10 col-lg-offset-1 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-12">
-	  {% block heading %}
-	  <div class="page-header">
-	    <h1>{{ self.title }}</h1>
-	  </div>
-	  {% endblock %}
-	  
-	  {% block content %}
-	  <article>
-	    {% for block in page.body %}
-	    {% if block.block_type == 'heading' %}
-	    {% include_block block %}
-	    {% elif block.block_type == 'paragraph' %}
-	    {% shortcodes block %}
-	    {% elif block.block_type == 'image' %}
-	    <div class="thumbnail">
-	      {% image block.value width-840 as photo %}
-	      <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
-	      <div class="caption">
-		<p class="text-right">{{ photo.alt }}</p>
-	      </div>
-	      {% else %}
-	      {% include_block block %}
-	      {% endif %}
-	      {% endfor %}
-	  </article>
-          {% endblock %}
+  {% block page-content-banner %}
+    <banner>
+      <div class="container">
+	<div class="jumbotron">
+	  <div class="media">
+	    <div class="media-body">
+	      <img class="img-fluid float-right" src="/media/images/n8cir-logo-v1-margin-498x210_4P9ubem.original.png">
+	    </div>
 	  </div>
 	</div>
       </div>
-    </div>
-    
-  <!--pre> { % filter force_escape % } { % debug % } { % endfilter % } </pre-->
-
-{% endblock %}
-
-
-
-
+    </banner>
+  {% endblock %}
+  
+  {% block page-content-main %}
+    <main class="pb-5 mb-5">
+      {% block page-content-main-header %}{% endblock %}
+      {% block page-content-main-article %}
+	<article>
+	  <div class="container">
+	    {% for block in page.body %}
+	      {% if block.block_type == 'heading' %}
+		{% include_block block %}
+	      {% elif block.block_type == 'paragraph' %}
+		{% shortcodes block %}
+	      {% elif block.block_type == 'image' %}
+		{% image block.value width-1200 as photo %}
+		<figure class="figure">
+		  <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+		  <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+		</figure>
+	      {% else %}
+		{% include_block block %}
+	      {% endif %}
+	    {% endfor %}
+	  </div>
+	</article>
+      {% endblock %}
+    </main>
+  {% endblock %}
+{% endblock %}  
