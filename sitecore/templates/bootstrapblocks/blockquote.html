@@ -1,6 +1,23 @@
-<blockquote {% if self.reverse %} class="blockquote-reverse"{% endif %}>
-  <p>{{ self.quote }}</p>
-  {% if self.footer or self.cite %}
-    <footer>{{ self.footer }} <cite title="{{ self.cite }}">{{ self.cite }}</cite></footer>
-  {% endif %}
-</blockquote>
+{% if self.jumbotron_wrapper %}
+  <div class="jumbotron {{ self.quote_text_colour }} {{ self.bg_colour }} {{ self.border_colour }} my-2">
+    <blockquote class="blockquote {{ self.quote_align }} ">
+      {{ self.quote }}
+      {% if self.footer or self.cite %}
+	<hr class="my-2">
+	<footer class="blockquote-footer {{ self.footer_text_colour }}">
+	  {{ self.footer }} <cite title="{{ self.cite }}">{{ self.cite }}</cite>
+	</footer>
+      {% endif %}
+    </blockquote>
+  </div>
+{% else %}
+  <blockquote class="blockquote {% if self.jumbotron_wrapper %}jumbotron{% endif %} {{ self.quote_align }} {{ self.quote_text_colour }} {{ self.bg_colour }} {{ self.border_colour }}">
+    <p>{{ self.quote }}</p>
+    {% if self.footer or self.cite %}
+      <hr class="my-2">
+      <footer class="blockquote-footer {{ self.footer_text_colour }}">
+	{{ self.footer }} <cite title="{{ self.cite }}">{{ self.cite }}</cite>
+      </footer>
+    {% endif %}
+  </blockquote>
+{% endif %}
