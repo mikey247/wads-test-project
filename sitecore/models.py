@@ -101,13 +101,21 @@ class TagIndexPage(Page):
     """
     
     def get_context(self, request):
-
-        tag = request.GET.get('tag')
         context = super(TagIndexPage, self).get_context(request)
 
-        pages = SitePage.objects.filter(tags__name=tag)
-        tags = Tag.objects.annotate(num_tags=models.Count('sitecore_sitepagetags_items'))
+        # Retrieve requested tag from URL
+        tag = request.GET.get('tag')
 
+        # Retrieve all pages that match tag (if provided)
+        pages = SitePage.objects.live().filter(tags__name=tag)
+
+        # Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
+        # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
+        # TODO: Probably better query to achieve this
+        site_page_tag_ids = [t.tag_id for t in SitePageTags.objects.all()]
+        tags = Tag.objects.filter(pk__in=site_page_tag_ids).annotate(num_tags=models.Count('sitecore_sitepagetags_items'))
+
+        # Return all matching pages and whole tag cloud
         context['pages'] = pages
         context['tags'] = tags
             

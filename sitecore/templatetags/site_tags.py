@@ -40,12 +40,13 @@ def top_menu(context, parent, transparent=False, calling_page=None):
 
 # Retrieves the children of the top menu items for the drop downs
 @register.inclusion_tag('tags/top_menu_children.html', takes_context=True)
-def top_menu_children(context, parent):
+def top_menu_children(context, parent, menu_id):
     menuitems_children = parent.get_children()
     menuitems_children = menuitems_children.live().in_menu()
     return {
-        'parent': parent,
+        'parent': parent,        
         'menuitems_children': menuitems_children,
+        'menu_id': menu_id,
         # required by the pageurl tag that we want to use within this template
         'request': context['request'],
     }
