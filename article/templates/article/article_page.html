@@ -16,7 +16,7 @@
       </div>
     {% endif %}
     <h1 class="my-4">{{ self.title }}</h1>
-    <div class="lead">{{ page.intro|richtext }}</div>
+    <div class="lead richtext_shortcodes">{% shortcodes page.intro|safe %}</div>
   </header>
 {% endblock %}
 
