@@ -61,7 +61,11 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
     @cached_property
     def field(self):
         from wagtail.admin.rich_text import get_rich_text_editor_widget
-        return forms.CharField(validators=[ParseShortcodes],widget=get_rich_text_editor_widget(self.editor), **self.field_options)
+
+        return forms.CharField(
+            widget=get_rich_text_editor_widget(self.editor),
+            **self.field_options
+        )
 
         
     class Meta:
@@ -839,7 +843,7 @@ class CoreBlock(blocks.StreamBlock):
 
     heading = BSHeadingBlock()
     markdown = MarkdownAndShortcodeTextBlock(label='Markdown Paragraph')
-    paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph')
+    paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph', validators=[ParseShortcodes])
     blockquote = BSBlockquoteBlock()
 
     image =  ImageChooserBlock()

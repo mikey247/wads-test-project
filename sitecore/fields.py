@@ -31,6 +31,10 @@ class ShortcodeRichTextField(RichTextField):
         super(ShortcodeRichTextField, self).__init__(*args, **kwargs)
 
 
+    class Meta:
+        template = 'bootstrapblocks/richtext_shortcode.html'
+
+
 class MarkdownShortcodeCharField(CharField):
     """
     Augments the CharField so that the content is also passed through the ParseMarkdownAndShortcodes validator.
