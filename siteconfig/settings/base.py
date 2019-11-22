@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'rest_framework',
-    'bootstrap_themes',
     'shortcodes',
     'sekizai',
     'wagtailimporter',
