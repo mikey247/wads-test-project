@@ -1,8 +1,44 @@
+from pygments.styles import get_all_styles
+
 """
 Sitecore constants module to define several Bootstrap 4, Django and Wagtail constants
 :Authors: Louise Lever <louise.lever@manchester.ac.uk>
 :Copyright: Research IT, IT Services, The University of Manchester
 """
+
+# Theme and code syntax colour choices
+
+BOOTSTRAP4_THEME_CHOICES = [
+    ('default', 'Default Bootstrap 4'),
+] + [
+    (bsw_theme,'Bootswatch: '+bsw_theme) for bsw_theme in
+    ["cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
+     "lux", "materia", "minty", "pulse", "sandstone", "simplex", "sketchy", "slate",
+     "solar", "spacelab", "superhero", "united", "yeti",]
+]
+
+PYGMENTS_THEME_CHOICES = [
+    (pygment_style,pygment_style) for pygment_style in list(get_all_styles())
+]
+
+INITIAL_BOOTSTRAP4_THEME = 'pulse'
+INITIAL_PYGMENTS_THEME = 'monokai'
+
+# Navbar settings
+
+NAVBAR_RESPONSIVE_SIZE_CHOICES = [
+    ('sm','Small'),
+    ('md','Medium'),
+    ('lg','Large'),
+    ('xl','Extra Large'),
+]
+
+NAVBAR_TEXT_COLOUR_MODE = [
+    ("navbar-light", "Light"),
+    ("navbar-dark", "Dark"),
+]
+
+# Text and colour choices
 
 BOOTSTRAP4_TEXT_ALIGN_CHOICES = (
     ('text-justify', 'Justify'),
