@@ -8,12 +8,14 @@ a superclass SitePage model to share commonalities, and support for tag indexing
 from django.db import models
 
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.admin.edit_handlers import TabbedInterface, ObjectList, FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.core.models import Page, Orderable
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import Tag, TaggedItemBase
+
+from sitecore import constants
 
 @register_setting
 class SiteSettings(BaseSetting):
@@ -30,26 +32,55 @@ class SiteSettings(BaseSetting):
     class Meta:
         verbose_name = 'Custom Site Settings'
 
-    # Theme settings
-    DEFAULT = 'default'
-    PAPER = 'paper'
-    THEME_CHOICES = (
-        (DEFAULT, 'Default Bootstrap 3'),
-        (PAPER, 'Bootswatch: Paper'),
-    )
     bootstrap_theme = models.CharField(
-        max_length = 10,
-        choices=THEME_CHOICES,
-        help_text='Select Bootstrap 3 Theme',
-        default=PAPER
+        max_length = 32,
+        choices=constants.BOOTSTRAP4_THEME_CHOICES,
+        help_text='Select a Bootstrap 4 Theme for the site',
+        default=constants.INITIAL_BOOTSTRAP4_THEME
     )
 
+    code_theme = models.CharField(
+        max_length = 32,
+        choices=constants.PYGMENTS_THEME_CHOICES,
+        help_text='Select a Pygments Theme for code blocks',
+        default=constants.INITIAL_PYGMENTS_THEME
+    )
+
+    navbar_expand = models.CharField(
+        max_length = 2,
+        choices=constants.NAVBAR_RESPONSIVE_SIZE_CHOICES,
+        help_text='Select the media size at which the navbar menu collapses',
+        default='lg'
+    )
+
+    navbar_text_colour_mode = models.CharField(
+        max_length = 16,
+        choices=constants.NAVBAR_TEXT_COLOUR_MODE,
+        help_text='Select the text foreground colour mode of the navigation bar',
+        default='navbar-dark'
+    )
+    
+    navbar_background_colour = models.CharField(
+        max_length = 32,
+        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        help_text='Select the background colour of the navigation bar',
+        default='bg-primary'
+    )
+    
     # Social media settings
     twitter = models.URLField(blank=True, help_text='Twitter Account')
 
     # create the panels
     theme_tab_panel = [
-        FieldPanel('bootstrap_theme'),
+        MultiFieldPanel([
+            FieldPanel('bootstrap_theme'),
+            FieldPanel('code_theme'),
+        ], heading="Themes"),
+        MultiFieldPanel([
+            FieldPanel('navbar_expand'),
+            FieldPanel('navbar_text_colour_mode'),
+            FieldPanel('navbar_background_colour'),
+        ], heading="Navbar options"),
     ]
 
     social_tab_panel = [
