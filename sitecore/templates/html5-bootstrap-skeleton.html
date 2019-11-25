@@ -1,4 +1,4 @@
-{% load static cache wagtailsettings_tags bootstrap_themes sekizai_tags %}
+{% load static cache wagtailsettings_tags sekizai_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -8,24 +8,26 @@
       <!-- Required meta tags -->
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     {% endblock %}
     
     {% block head-title %}
-      <title>html5-bootstrap-skeleton.html / Wagtail block body-content default title</title>
+      <title>{{ request.site.name }}</title>
     {% endblock %}
     
     {% block head-css %}
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" type="text/css" href="{% static 'sitecore/bootstrap-4.3.1/css/bootstrap.min.css' %}">
+      <!-- Bootswatch Theme CSS -->
+      {% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'sitecore/bootswatch-4.3.1/'|add:settings.sitecore.SiteSettings.bootstrap_theme|add:'/bootstrap.min.css' %}">
+      {% endif %}
+      <!-- Font Awesome CSS -->
+      <link rel="stylesheet" type="text/css" href="{% static 'sitecore/fontawesome-5.11.2/css/all.css' %}">
 
-      {# % if settings.sitecore.SiteSettings.bootstrap_theme != 'default' % #}
-      {# % bootstrap_styles theme=settings.sitecore.SiteSettings.bootstrap_theme type='css' % #}
-      {# % endif % #}
-      
-      <!-- link rel="stylesheet" type="text/css" href="{% static 'css/sitecore.css' %}" -->
-      <!-- link rel="stylesheet" type="text/css" href="{% static 'css/pygment/monokai.css' %}" -->
+      <!-- Pygment Style CSS -->
+      <link rel="stylesheet" type="text/css"
+	    href="{% static 'sitecore/pygment/'|add:settings.sitecore.SiteSettings.code_theme|add:'.css' %}" -->
     {% endblock %}
 
     {% block head-css-extension %}{% endblock %}
@@ -46,14 +48,11 @@
     {% endblock %}
     
     {% block body-js %}
-      <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-      
-      <!-- script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script -->
-      {# % bootstrap_script use_min=False % #}
+
+      <script src="{% static 'sitecore/bootstrap-4.3.1/js/bootstrap.min.js'></script>
     {% endblock %}
 
     {% block body-js-dynamic-block %}{% endblock %}
