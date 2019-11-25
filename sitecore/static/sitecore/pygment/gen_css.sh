@@ -24,7 +24,8 @@
 #    Append the selector "syntax" to the defined CSS
 
 STYLES=$(pygmentize -L styles | grep -e "^* " | sed -e 's/^\* //g' | sed -e 's/:$//g')
+SELECTOR=".highlight"
 
 for STYLE in ${STYLES}; do
-    echo $(pygmentize -f html -S ${STYLE} -a .syntax) > ${STYLE}.css;
+    pygmentize -f html -S ${STYLE} -a ${SELECTOR} > ${STYLE}.css;
 done
