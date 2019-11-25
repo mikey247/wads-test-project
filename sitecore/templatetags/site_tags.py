@@ -1,6 +1,5 @@
 from datetime import date
 from django import template
-from django.conf import settings
 
 register = template.Library()
 
@@ -16,11 +15,14 @@ def has_menu_children(page):
     return page.get_children().live().in_menu().exists()
 
 
-# Retrieves the top menu items - the immediate children of the parent page
-# The has_menu_children method is necessary because the bootstrap menu requires
-# a dropdown class to be applied to a parent
 @register.inclusion_tag('tags/top_menu.html', takes_context=True)
 def top_menu(context, parent, transparent=False, calling_page=None):
+    """
+    Retrieves the top menu items - the immediate children of the root page.
+    The has_menu_children method is necessary because the bootstrap menu requires
+    a dropdown class to be applied to a parent.
+    """
+
     menuitems = parent.get_children().live().in_menu()
     for menuitem in menuitems:
         menuitem.show_dropdown = has_menu_children(menuitem)
@@ -29,11 +31,21 @@ def top_menu(context, parent, transparent=False, calling_page=None):
         # if the variable passed as calling_page does not exist.
         menuitem.active = (calling_page.url.startswith(menuitem.url)
                            if calling_page else False)
+
+    # build a the navbar configuration for this page
+    site_settings = context['settings']['sitecore']['SiteSettings']
+    
+    navcfg = {
+        'textmode': site_settings.navbar_text_colour_mode,
+        'bg': site_settings.navbar_background_colour,
+        'transparent': transparent,
+    }
+
+    # 'request' is required by the pageurl tag that we want to use within this template
     return {
         'calling_page': calling_page,
         'menuitems': menuitems,
-        'transparent': transparent,
-        # required by the pageurl tag that we want to use within this template
+        'navcfg': navcfg,
         'request': context['request'],
     }
 
