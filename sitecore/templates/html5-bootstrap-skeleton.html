@@ -27,7 +27,9 @@
 
       <!-- Pygment Style CSS -->
       <link rel="stylesheet" type="text/css"
-	    href="{% static 'sitecore/pygment/'|add:settings.sitecore.SiteSettings.code_theme|add:'.css' %}" -->
+	    href="{% static 'sitecore/pygments/linenos.css' %}">
+      <link rel="stylesheet" type="text/css"
+	    href="{% static 'sitecore/pygments/'|add:settings.sitecore.SiteSettings.code_theme|add:'.css' %}">
     {% endblock %}
 
     {% block head-css-extension %}{% endblock %}
