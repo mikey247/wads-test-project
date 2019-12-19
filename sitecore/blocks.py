@@ -12,6 +12,8 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
+from django_select2.forms import Select2Widget
+
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core import blocks
@@ -251,6 +253,124 @@ class BSHeadingBlock(blocks.StructBlock):
         #form_classname = 'heading-block struct-block'
 
 
+class Select2ChoiceBlock(blocks.FieldBlock):
+    """
+    Modifies the ChoiceBlock to specify use of the Select2Widget, to provide autocomplete for
+    overly 'long' choice lists
+    """
+    
+    choices = ()
+
+    def __init__(self, choices=None, default=None, required=True, help_text=None, validators=(), **kwargs):
+        if choices is None:
+            # no choices specified, so pick up the choice defined at the class level
+            choices = self.choices
+
+        if callable(choices):
+            # Support of callable choices. Wrap the callable in an iterator so that we can
+            # handle this consistently with ordinary choice lists;
+            # however, the `choices` constructor kwarg as reported by deconstruct() should
+            # remain as the callable
+            choices_for_constructor = choices
+            choices = CallableChoiceIterator(choices)
+        else:
+            # Cast as a list
+            choices_for_constructor = choices = list(choices)
+
+        # keep a copy of all kwargs (including our normalised choices list) for deconstruct()
+        self._constructor_kwargs = kwargs.copy()
+        self._constructor_kwargs['choices'] = choices_for_constructor
+        if required is not True:
+            self._constructor_kwargs['required'] = required
+        if help_text is not None:
+            self._constructor_kwargs['help_text'] = help_text
+
+        # We will need to modify the choices list to insert a blank option, if there isn't
+        # one already. We have to do this at render time in the case of callable choices - so rather
+        # than having separate code paths for static vs dynamic lists, we'll _always_ pass a callable
+        # to ChoiceField to perform this step at render time.
+
+        # If we have a default choice and the field is required, we don't need to add a blank option.
+        callable_choices = self.get_callable_choices(choices, blank_choice=not(default and required))
+
+        self.field = forms.ChoiceField(
+            choices=callable_choices,
+            required=required,
+            help_text=help_text,
+            validators=validators,
+            widget=Select2Widget,
+        )
+        super().__init__(default=default, **kwargs)
+
+    def get_callable_choices(self, choices, blank_choice=True):
+        """
+        Return a callable that we can pass into `forms.ChoiceField`, which will provide the
+        choices list with the addition of a blank choice (if blank_choice=True and one does not
+        already exist).
+        """
+        def choices_callable():
+            # Variable choices could be an instance of CallableChoiceIterator, which may be wrapping
+            # something we don't want to evaluate multiple times (e.g. a database query). Cast as a
+            # list now to prevent it getting evaluated twice (once while searching for a blank choice,
+            # once while rendering the final ChoiceField).
+            local_choices = list(choices)
+
+            # If blank_choice=False has been specified, return the choices list as is
+            if not blank_choice:
+                return local_choices
+
+            # Else: if choices does not already contain a blank option, insert one
+            # (to match Django's own behaviour for modelfields:
+            # https://github.com/django/django/blob/1.7.5/django/db/models/fields/__init__.py#L732-744)
+            has_blank_choice = False
+            for v1, v2 in local_choices:
+                if isinstance(v2, (list, tuple)):
+                    # this is a named group, and v2 is the value list
+                    has_blank_choice = any([value in ('', None) for value, label in v2])
+                    if has_blank_choice:
+                        break
+                else:
+                    # this is an individual choice; v1 is the value
+                    if v1 in ('', None):
+                        has_blank_choice = True
+                        break
+
+            if not has_blank_choice:
+                return BLANK_CHOICE_DASH + local_choices
+
+            return local_choices
+        return choices_callable
+
+    def deconstruct(self):
+        """
+        Always deconstruct Select2ChoiceBlock instances as if they were plain Select2ChoiceBlocks with their
+        choice list passed in the constructor, even if they are actually subclasses. This allows
+        users to define subclasses of Select2ChoiceBlock in their models.py, with specific choice lists
+        passed in, without references to those classes ending up frozen into migrations.
+        """
+        return ('sitecore.blocks.Select2ChoiceBlock', [], self._constructor_kwargs)
+
+    def get_searchable_content(self, value):
+        # Return the display value as the searchable value
+        text_value = force_str(value)
+        for k, v in self.field.choices:
+            if isinstance(v, (list, tuple)):
+                # This is an optgroup, so look inside the group for options
+                for k2, v2 in v:
+                    if value == k2 or text_value == force_str(k2):
+                        return [force_str(k), force_str(v2)]
+            else:
+                if value == k or text_value == force_str(k):
+                    return [force_str(v)]
+        return []  # Value was not found in the list of choices
+
+    class Meta:
+        # No icon specified here, because that depends on the purpose that the
+        # block is being used for. Feel encouraged to specify an icon in your
+        # descendant block type
+        icon = "placeholder"
+
+
 class BSCodeBlock(blocks.StructBlock):
     """
     Code highlighting block in, using pygments library wrapped in Bootstrap 3 markup
@@ -259,13 +379,16 @@ class BSCodeBlock(blocks.StructBlock):
     """
 
     LANGUAGE_CHOICES = (
-        ('python', 'Python'),
+        ('', 'Please select a language for syntax highlighting'),
+        ('python3', 'Python'),
         ('javascript', 'JavaScript'),
         ('bash', 'Bash'),
     )
 
-    lang = blocks.ChoiceBlock(
-        choices=LANGUAGE_CHOICES
+    lang = Select2ChoiceBlock(
+        choices=LANGUAGE_CHOICES,
+        required=True,
+        default=''
     )
 
     code = blocks.TextBlock(
@@ -292,7 +415,7 @@ class BSCodeBlock(blocks.StructBlock):
 
         pyg_lexer = get_lexer_by_name(lang)
         hl_lines = value['hl_lines'].split(',') if value['hl_lines'] else []
-        pyg_formatter = get_formatter_by_name('html', linenos=linenos, hl_lines=hl_lines, cssclass='codehilite', style='default', noclasses=False)
+        pyg_formatter = get_formatter_by_name('html', hl_lines=hl_lines, linespans="line-num", cssclass='highlight', style='default', noclasses=False, wrapcode=True)
         
         return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
 
