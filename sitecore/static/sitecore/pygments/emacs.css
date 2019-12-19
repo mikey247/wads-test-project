@@ -3,6 +3,7 @@
 .highlight .c { color: #008800; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #FF0000 } /* Error */
 .highlight .k { color: #AA22FF; font-weight: bold } /* Keyword */
+.highlight .n { color: #FF0000 } /* Name */
 .highlight .o { color: #666666 } /* Operator */
 .highlight .ch { color: #008800; font-style: italic } /* Comment.Hashbang */
 .highlight .cm { color: #008800; font-style: italic } /* Comment.Multiline */
@@ -38,6 +39,8 @@
 .highlight .nf { color: #00A000 } /* Name.Function */
 .highlight .nl { color: #A0A000 } /* Name.Label */
 .highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nx { color: #FF0000 } /* Name.Other */
+.highlight .py { color: #FF0000 } /* Name.Property */
 .highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
 .highlight .nv { color: #B8860B } /* Name.Variable */
 .highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
