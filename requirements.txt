@@ -4,6 +4,7 @@ wagtail==2.7
 django-bootstrap-themes==3.3.6
 django-classy-tags==0.9.0
 django-sekizai==1.0.0
+django-select2==7.1.2
 wagtailmenus==3.0
 Markdown==3.1.1
 Pygments==2.4.2
