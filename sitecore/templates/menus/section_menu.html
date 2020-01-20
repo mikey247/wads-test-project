@@ -1,6 +1,6 @@
 {% load menu_tags %}
 {% if menu_items %}
-  <nav class="nav-section my-4" role="navigation">
+  <nav class="nav-section" role="navigation">
     <ul class="nav flex-column nav-pills">
       {% if show_section_root and section_root %}
         <a class="nav-link border border-primary {{ section_root.active_class }}" href="{{ section_root.href }}" section_root">{{ section_root.text }}</a>
