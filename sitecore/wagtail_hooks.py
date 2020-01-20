@@ -5,6 +5,7 @@ Sitecore Wagtail hooks to append/modify default behaviour of the Wagtail system.
 """
 
 from django.conf import settings
+from django.templatetags.static import static
 from django.utils.html import format_html, format_html_join
 
 from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
@@ -33,7 +34,6 @@ def editor_js():
     file and the additional inline js to register each new plugin.
     """
     js_files = [
-        'js/hallo-plugins/hallo-custom.js',
     ]
     js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
         ((settings.STATIC_URL, filename) for filename in js_files)
@@ -48,20 +48,17 @@ def editor_js():
         """
     )
 
-@hooks.register('insert_editor_css')
-def editor_css():
+@hooks.register('insert_global_admin_css')
+def global_admin_css():
     """
-    This hook inserts additional CSS for the admin/editor page, specifically support for Font Awesome
-    and some custom code (disable-hallo-features.css) to disable some of the default Rich Text Editor
-    functionality (no <h1-6> tags for example).
+    This hook inserts additional CSS for the admin/editor page, specifically support for Font Awesome.
     """
     css_files = [
-        'vendor/font-awesome-4.7.0/css/font-awesome.min.css',
-        'css/disable-hallo-features.css',
+        'sitecore/fontawesome-5.11.2/css/fontawesome.min.css',
     ]
-    css_includes = format_html_join('\n', '<link rel="stylesheet" href="{0}{1}">',
-        ((settings.STATIC_URL, filename) for filename in css_files)
+    css_includes = format_html_join(
+        '\n', '<link rel="stylesheet" href="{0}">',
+        ((static(filename),) for filename in css_files)
     )
+
     return css_includes
-
-
