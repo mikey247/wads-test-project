@@ -964,24 +964,57 @@ class CoreBlock(blocks.StreamBlock):
     Re-usable core Block for collecting standard and custom streamfield support into one place
     """
 
-    heading = BSHeadingBlock()
-    markdown = MarkdownAndShortcodeTextBlock(label='Markdown Paragraph')
-    paragraph = ShortcodeRichTextBlock(label='Rich Text Paragraph', validators=[ParseShortcodes])
-    blockquote = BSBlockquoteBlock()
+    paragraph = ShortcodeRichTextBlock(
+        label='Rich Text Paragraph',
+        validators=[ParseShortcodes],
+        #group='1. Structured Content',
+    )
+    markdown = MarkdownAndShortcodeTextBlock(
+        label='Markdown Paragraph',
+        #group='1. Structured Content',
+    )
+    # heading = BSHeadingBlock()
+    # blockquote = BSBlockquoteBlock()
 
-    image =  ImageChooserBlock()
-    #image =  ImageChooserBlock(template='image.html')
-    docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
-    page = blocks.PageChooserBlock(required=False)
-    external = blocks.URLBlock(required=False)
+    image =  ImageChooserBlock(
+        #group='2. Linked Content',
+        #template='boostrapblocks/image.html'
+    )
+    docs = DocumentChooserBlock(
+        #group='2. Linked Content',
+        template='bootstrapblocks/document.html'
+    )
+    page = blocks.PageChooserBlock(
+        required=False,
+        #group='2. Linked Content',
+    )
+    # external = blocks.URLBlock(required=False)
 
-    email = blocks.EmailBlock()
-    code = BSCodeBlock()
-    table = TableBlock(template='bootstrapblocks/table.html')
+    #email = blocks.EmailBlock()
 
-#    jumbotron = BSJumbotronContainerBlock()
-    carousel = SnippetChooserBlock(CarouselSnippet, template='bootstrapblocks/carousel.html')
-    icon_card_deck = SnippetChooserBlock(IconCardDeckSnippet, template='bootstrapblocks/icon_card_deck.html')
+    code = BSCodeBlock(
+        #group='3. Embedded Content',
+    )
+#    table = TableBlock(
+#        group='Embedded Content',
+#        template='bootstrapblocks/table.html'
+#    )
+
+    carousel = SnippetChooserBlock(
+        CarouselSnippet,
+        #group='3. Embedded Content',
+        template='bootstrapblocks/carousel.html'
+    )
+    icon_card_deck = SnippetChooserBlock(
+        IconCardDeckSnippet,
+        #group='3. Embedded Content',
+        template='bootstrapblocks/icon_card_deck.html'
+    )
+
+    #    jumbotron = BSJumbotronContainerBlock()
+
+
+    # Override methods
 
     def get_form_context(self, value, prefix='', errors=None):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
