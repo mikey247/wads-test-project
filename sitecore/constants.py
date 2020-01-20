@@ -38,10 +38,10 @@ NAVBAR_TEXT_COLOUR_MODE = [
     ("navbar-dark", "Dark"),
 ]
 
-NAVBAR_OUTER_CLASS_DEFAULT = ''
+NAVBAR_OUTER_CLASS_DEFAULT = 'container'
 NAVBAR_OUTER_CLASS = [
-    (NAVBAR_OUTER_CLASS_DEFAULT, 'None'),
-    ('container', 'container'),
+    ('None', 'None'),
+    (NAVBAR_OUTER_CLASS_DEFAULT, 'container'),
     ('container-fluid', 'container-fluid'),
 ]
 
