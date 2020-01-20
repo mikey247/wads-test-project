@@ -7,9 +7,10 @@ a superclass SitePage model to share commonalities, and support for tag indexing
 
 from django.db import models
 
-from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
+from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core.models import Page, Orderable
+from wagtail.images.edit_handlers import ImageChooserPanel
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
@@ -46,25 +47,55 @@ class SiteSettings(BaseSetting):
         default=constants.INITIAL_PYGMENTS_THEME
     )
 
+    brand_logo = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text='Provide an image for the navigation bar logo (preferably small).',
+    )
+    
+    brand_icon = models.CharField(
+        max_length=64,
+        default='fa fa-home',
+        blank=True,
+        help_text='Provide the name of a Font Awesome icon (as an alternative to a logo image) to be used as the logo in the main navigation bar.',
+    )
+
+    brand_name = models.CharField(
+        max_length=64,
+        blank=True,
+        help_text='Provide some text for the brand name next to the logo in the main navigation bar.',
+    )
+
     navbar_expand = models.CharField(
         max_length = 2,
         choices=constants.NAVBAR_RESPONSIVE_SIZE_CHOICES,
         help_text='Select the media size at which the navbar menu collapses',
-        default='lg'
+        default='lg',
     )
 
     navbar_text_colour_mode = models.CharField(
         max_length = 16,
         choices=constants.NAVBAR_TEXT_COLOUR_MODE,
         help_text='Select the text foreground colour mode of the navigation bar',
-        default='navbar-dark'
+        default='navbar-dark',
     )
     
     navbar_background_colour = models.CharField(
         max_length = 32,
         choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
         help_text='Select the background colour of the navigation bar',
-        default='bg-primary'
+        default='bg-primary',
+    )
+    
+    navbar_outer_class = models.CharField(
+        max_length = 32,
+        choices=constants.NAVBAR_OUTER_CLASS,
+        help_text='Select the class of the div that encloses the navbar (container for now; none for full width)',
+        default=constants.NAVBAR_OUTER_CLASS_DEFAULT,
+        blank=True,
     )
     
     # Social media settings
@@ -75,11 +106,17 @@ class SiteSettings(BaseSetting):
         MultiFieldPanel([
             FieldPanel('bootstrap_theme'),
             FieldPanel('code_theme'),
-        ], heading="Themes"),
+        ], heading="Site Themes"),
+        MultiFieldPanel([
+            ImageChooserPanel('brand_logo'),
+            FieldPanel('brand_icon'),
+            FieldPanel('brand_name'),
+        ], heading="Navbar Brand"),
         MultiFieldPanel([
             FieldPanel('navbar_expand'),
             FieldPanel('navbar_text_colour_mode'),
             FieldPanel('navbar_background_colour'),
+            FieldPanel('navbar_outer_class'),
         ], heading="Navbar options"),
     ]
 

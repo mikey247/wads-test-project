@@ -1,38 +1,57 @@
-{% load site_tags wagtailcore_tags %}
+{% load site_tags static wagtailcore_tags wagtailimages_tags %}
 {% get_site_root as site_root %}
-<!-- navbar-inverse {% if transparent %}navbar-transparent{% endif %}" -->
 
-<nav class="navbar navbar-expand-lg {{ navcfg.textmode }} {{ navcfg.bg }}">
-  <div class="container">
-    
-    <a style="width: 100px" class="navbar-brand" href="{% pageurl site_root %}" title="{{ site_root.title }}">
-      <img style="width: 100px" class="img-responsive" src="/static/bootstrap/image/n8cir-logo-v1-cropped-224x63.png">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="navbar-nav mr-auto">
-	<li class="nav-item{% if request.path == '/' %} active{% endif %}">
-	  <a class="nav-link" href="{% pageurl site_root %}" title="{{ site_root.title }}">Home{% if request.path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
-	</li>
-	{% for menuitem in menuitems %}
-	  <li class="nav-item{% if menuitem.show_dropdown %} dropdown{% endif %}{% if menuitem.active %} active{% endif %}">
-            {% if menuitem.show_dropdown %}
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ forloop.counter0 }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menuitem.title }}</a>
-              {% top_menu_children parent=menuitem menu_id="navbarDropdown{{ forloop.counter0 }}" %}
-            {% else %}
-              <a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}{% if menuitem.active %} <span class="sr-only">(current)</span>{% endif %}</a>
-            {% endif %}
-	  </li>       
-	{% endfor %}
-      </ul>
-      <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
-	<input class="form-control mr-sm-2" type="search" placeholder="Search" value="{{ search_query }}" aria-label="Search">
-	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+<div class="container p-0 my-4 h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-lg-3">
+      {% if navcfg.brand_logo %}
+	{% image navcfg.brand_logo max-206x86 as photo %}
+	<img src="{{ photo.url }}" alt="{{ photo.alt }}">
+      {% endif %}
+    </div>
+    <div class="col-lg-6">
+      {% if navcfg.brand_name %}<h1>{{ navcfg.brand_name }}</h1>{% endif %}
+    </div>
+    <div class="col-lg-3">
+      <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% url 'search' %}" method="get">
+	<input class="form-control mr-sm-2" style="text-align: right" type="search" placeholder="Search" value="{{ search_query }}" aria-label="Search">
       </form>
     </div>
   </div>
-</nav>
+</div>
+
+<div class="mt-4">
+  <nav
+      {% if navcfg.transparent is True %}class="navbar nav-fill navbar-expand-lg navbar-dark {{ navcfg.bg }} navbar-transparent"
+      {% else %}class="navbar navbar-expand-lg {{ navcfg.textmode }} {{ navcfg.bg }}"
+      {% endif %}>
+  
+    <div class="{{ navcfg.outerclass }} p-0">
+      <a style="width: auto" class="navbar-brand" href="{% pageurl site_root %}" title="{{ site_root.title }}">
+	{% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% endif %}
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+	<span class="sr-only">Toggle navigation</span>
+	<span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarContent">
+	<ul class="navbar-nav mr-auto">
+	  <li class="nav-item{% if request.path == '/' %} active{% endif %}">
+	    <a class="nav-link" href="{% pageurl site_root %}" title="{{ site_root.title }}">Home{% if request.path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
+	  </li>
+	  {% for menuitem in menuitems %}
+	    <li class="nav-item{% if menuitem.show_dropdown %} dropdown{% endif %}{% if menuitem.active %} active{% endif %}">
+              {% if menuitem.show_dropdown %}
+		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ forloop.counter0 }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menuitem.title }}</a>
+		{% top_menu_children parent=menuitem menu_id="navbarDropdown{{ forloop.counter0 }}" %}
+              {% else %}
+		<a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}{% if menuitem.active %} <span class="sr-only">(current)</span>{% endif %}</a>
+              {% endif %}
+	    </li>       
+	  {% endfor %}
+	</ul>
+      </div>
+    </div>
+  </nav>
+</div>

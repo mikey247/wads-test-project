@@ -36,9 +36,13 @@ def top_menu(context, parent, transparent=False, calling_page=None):
     site_settings = context['settings']['sitecore']['SiteSettings']
     
     navcfg = {
+        'brand_logo': site_settings.brand_logo,
+        'brand_icon': site_settings.brand_icon,
+        'brand_name': site_settings.brand_name,
         'textmode': site_settings.navbar_text_colour_mode,
         'bg': site_settings.navbar_background_colour,
         'transparent': transparent,
+        'outerclass': site_settings.navbar_outer_class,
     }
 
     # 'request' is required by the pageurl tag that we want to use within this template
