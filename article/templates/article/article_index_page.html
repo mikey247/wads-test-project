@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sitecore/base_default.html" %}
 {% load wagtailcore_tags wagtailimages_tags site_tags %}
 
 {% block head-title %}
@@ -7,7 +7,11 @@
 
 {% block body-class %}index-article-page{% endblock %}
 
-{% block page-content %}
+{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
+
+{% block page-content-main-header %}{% endblock %}
+{% block page-content-main-article %}
   <div class="container pb-5 mb-5">
     <div class="row class="my-4"">
       <div class="col-lg-3 order-2 order-lg-1">
@@ -26,7 +30,12 @@
       {% with post=post.specific %}
 	<div class="row bg-light my-2">
 	  <div class="col-lg-3 order-2 order-lg-1 px-0">
-	    {% if post.article_image %}
+	    {% if post.thumbnail_image %}
+	      {% image post.thumbnail_image fill-300x300 as photo %}
+	      <div class="my-2">
+		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid px-2">
+	      </div>
+	    {% elif post.article_image %}
 	      {% image post.article_image fill-300x300 as photo %}
 	      <div class="my-2">
 		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid px-2">
@@ -44,4 +53,8 @@
       {% endwith %}
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block page-content-aside-slot-2 %}
+  <h4> Showing articles for {{ year }}/{{month}}/{{day}}</h4>
 {% endblock %}
