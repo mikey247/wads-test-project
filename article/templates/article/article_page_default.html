@@ -1,0 +1,69 @@
+{% extends "sitecore/base_default.html" %}
+{% load shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
+
+{% block body-class %}article-page{% endblock %}
+
+{% block page-content-main-header %}
+  <header>
+    {% if self.article_image %}
+      {% image self.article_image fill-1200x300 as photo %}
+      <div class="mb-4">
+	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
+      </div>
+    {% endif %}
+    <h1 class="mb-4">{{ self.title }}</h1>
+    <div class="lead richtext_shortcodes">{% shortcodes page.intro|safe %}</div>
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+  <article>
+    <section>
+      {% for block in page.body %}
+	{% if block.block_type == 'image' %}
+	  {% image block.value width-1200 as photo %}
+	  <figure class="figure">
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+	  </figure>
+	{% else %}
+	  {% include_block block %}
+	{% endif %}
+      {% endfor %}
+    </section>
+  </article>
+{% endblock %}
+
+{% block page-content-aside-slot-1 %}
+  <section>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	<strong>Article Details</strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	{% page_author page %}
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	<small>Published: {{ page.first_published_at }}</small>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	<small>Revised: {{ page.latest_revision_created_at }}</small>
+      </li>
+    </ul>
+  </section>
+{% endblock %}
+
+{% block page-content-main-footer %}
+  <footer role="tags">
+    {% if page.tags.all.count %}
+      {% taggit_list page.tags %}
+    {% endif %}
+  </footer>
+
+  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
+  
+{% endblock %}
