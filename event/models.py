@@ -95,9 +95,11 @@ class EventIndexPage(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    
+
     display_title = models.BooleanField(default=True)
     display_desc = models.BooleanField(default=False)
+
+    no_listing_text = ShortcodeRichTextField(blank=True)
 
     
     def get_context(self, request):
@@ -159,6 +161,7 @@ class EventIndexPage(Page):
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_desc'),
+            FieldPanel('no_listing_text', classname="full"),
         ], heading='Page Display Options'),
     ]
     

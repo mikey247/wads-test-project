@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "sitecore/base_default.html" %}
 {% load shortcodes article_tags menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block head-title %}
@@ -11,11 +11,11 @@
   <header>
     {% if page.event_image %}
       {% image page.event_image fill-1200x300 as photo %}
-      <div class="my-4">
+      <div class="mb-4">
 	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
       </div>
     {% endif %}
-    <div class="media my-4">
+    <div class="media mb-4">
       <div class="bg-primary px-4 py-4 mr-2 text-light text-center">
 	<h1><i class="fas fa-calendar"></i></h1>
 	{% if page.duration == 1 %}
@@ -65,45 +65,47 @@
   </article>
 {% endblock %}
 
-{% block page-content-aside %}
-  {% block page-content-aside-details %}
-    {% if page.running or page.passed %}
-      <section class="my-4">
-	<ul class="list-group">
-	  {% if page.running %}
-	    <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">The event is currently running</li>
-	  {% elif page.passed %}
-	    <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">The event has now passed</li>
-	  {% endif %}
-	</ul>
-      </section>
-    {% endif %}
+{% block page-content-aside-slot-2-order %}order-1{% endblock %}
+{% block page-content-aside-slot-3-order %}order-2{% endblock %}
+{% block page-content-aside-slot-1-order %}order-3{% endblock %}
 
-    {% for block in page.event_type %}
-      {% include_block block %}
-    {% endfor %}
-
-    <section class="my-4">
+{% block page-content-aside-slot-2 %}
+  {% if page.running or page.passed %}
+    <section>
       <ul class="list-group">
-	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	  <strong>Page Details</strong>
-	</li>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  {% page_author page %}
-	</li>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <small>Published: {{ page.first_published_at }}</small>
-	</li>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <small>Revised: {{ page.latest_revision_created_at }}</small>
-	</li>
+	{% if page.running %}
+	  <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">The event is currently running</li>
+	{% elif page.passed %}
+	  <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">The event has now passed</li>
+	{% endif %}
       </ul>
     </section>
-  {% endblock %}
-  {% block page-content-aside-menu %}
-    {% section_menu template='menus/section_menu.html' %}
-  {% endblock %}
-{% endblock %}
+  {% endif %}
+  
+  {% for block in page.event_type %}
+    {% include_block block %}
+  {% endfor %}
+
+{% endblock page-content-aside-slot-2 %}
+
+{% block page-content-aside-slot-3 %}
+  <section>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	<strong>Page Details</strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	{% page_author page %}
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	<small>Published: {{ page.first_published_at }}</small>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	<small>Revised: {{ page.latest_revision_created_at }}</small>
+      </li>
+    </ul>
+  </section>
+{% endblock page-content-aside-slot-3 %}
 
 {% block page-content-main-footer %}
   <footer role="tags">
