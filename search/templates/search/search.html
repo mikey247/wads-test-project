@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "sitecore/base_default.html" %}
 {% load static wagtailcore_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
 {% block title %}Search{% endblock %}
 
-{% block content %}
+{% block page-content-main-article %}
     <h1>Search</h1>
 
     <form action="{% url 'search' %}" method="get">
