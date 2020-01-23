@@ -148,6 +148,9 @@ class SitePage(Page):
     Note: while this is not an abstract class (as that breaks the tag functionality) this page
     model would not normally be instanced as itself.
     """
+
+    is_creatable = False
+    
     tags = ClusterTaggableManager(through=SitePageTags, blank=True)
 
     api_fields = Page.search_fields + [
