@@ -481,6 +481,8 @@ class EventPage(SitePage):
     # - These fields are only modified on save() by this form - so it's not possible to refer to live values e.g., today()
 
     base_form_class = EventPageForm
+
+    parent_page_types = ['event.EventIndexPage']
     
     # get_context:
     # Include additional values to the EventPage template context upon live rendering.
