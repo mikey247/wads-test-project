@@ -6,6 +6,7 @@ from django import forms
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -35,6 +36,21 @@ logger = logging.getLogger(__name__)
 
 
 class ArticleIndexPage(RoutablePageMixin, Page):
+    """
+    This model represents Article Index Page, for use within the Django/Wagtail sites.
+    The index page will list any child pages in a "blog" style list, using content from the child page.
+    e.g., thumbnail_image (or thumbnail of article_image) from the ArticlePage model
+          the title, published/revised dates, author and intro fields
+
+    By default the index is presented in reverse first_published_at date order i.e., newest first.
+
+    The ArticleIndexPage only considers all immediate child pages and no further descendants.
+
+    The ArticleIndexByDatePage class below extends th functionality of this class by forcing all child page
+    urls to conform to a yyyy/mm/dd/slug format. 
+    
+    """
+    
     desc = ShortcodeRichTextField(blank=True)
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 validators=[
@@ -45,9 +61,60 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     display_title = models.BooleanField(default=True)
     display_desc = models.BooleanField(default=False)
     
-    def get_context(self, request, year=None, month=None, day=None):
+    def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
+        all_articles = self.get_children().live().order_by('-first_published_at')
+
+        paginator = Paginator(all_articles, self.per_page) 
+
+        page = request.GET.get('page')
+        try:
+            articles = paginator.page(page)
+        except PageNotAnInteger:
+            articles = paginator.page(1)
+        except EmptyPage:
+            articles= paginator.page(paginator.num_pages)
+
+        context['articles'] = articles
+        
+        return context
+
+    content_panels = Page.content_panels + [
+        FieldPanel('desc', classname="full"),
+        FieldPanel('per_page'),
+    ]
+
+    promote_panels = Page.promote_panels + [
+        MultiFieldPanel([
+            FieldPanel('display_title'),
+            FieldPanel('display_desc'),
+        ], heading='Page Display Options'),
+    ]
+
+
+
+class ArticleIndexByDatePage(ArticleIndexPage):
+    """
+    This model represents Article Index By Date Page, and extends the ArticleIndexPage class above,
+    for use within the Django/Wagtail sites.
+
+    The index page will list any child pages in a "blog" style list, using content from the child page.
+    e.g., thumbnail_image (or thumbnail of article_image) from the ArticlePage model
+          the title, published/revised dates, author and intro fields
+
+    By default the index is presented in reverse first_published_at date order i.e., newest first.
+
+    The ArticleIndexPage only considers all immediate child pages and no further descendants.
+
+    This ArticleIndexByDatePage class below extends the functionality of the parent ArticleIndexPage
+    class by forcing all child page urls to conform to a yyyy/mm/dd/slug format. 
+    
+    """
+
+    def get_context(self, request, year=None, month=None, day=None):
+        # Update content to include only published posts; ordered by reverse-chronological
+        context = super(ArticleIndexByDatePage, self).get_context(request)
         all_articles = self.get_children().live().order_by('-first_published_at')
 
         if year:
@@ -74,18 +141,6 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         
         return context
 
-    content_panels = Page.content_panels + [
-        FieldPanel('desc', classname="full"),
-        FieldPanel('per_page'),
-    ]
-
-    promote_panels = Page.promote_panels + [
-        MultiFieldPanel([
-            FieldPanel('display_title'),
-            FieldPanel('display_desc'),
-        ], heading='Page Display Options'),
-    ]
-
 
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
@@ -93,7 +148,8 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     @route(r'^(?P<year>[0-9]{4})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/?$')
-    def article_index_by_year(self, request, year, month=None, day=None, name='article-index-by-date'):
+    def article_index_by_date(self, request, year, month=None, day=None, name='article-index-by-date'):
+        print("article_index_by_date()")
         return TemplateResponse(
             request,
             self.get_template(request),
@@ -104,15 +160,27 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/(?P<slug>[\w-]+)/?$')
     def article_page_by_date(self, request, year, month, day, slug, name='article-by-date'):
         """Serve a single article page at URL (eg. .../2018/01/23/my-title/)"""
+
+        # try:
+        #     article_page = self.get_children().live().specific().get(
+        #         first_published_at__year=year,
+        #         first_published_at__month=month,
+        #         first_published_at__day=day,
+        #         slug=slug)
+        # except Page.DoesNotExist as e:
+        #     raise Http404("Article does not exist")
+        
         article_page = get_object_or_404(
-            ArticlePage,
+            self.get_children().live().specific(),
             first_published_at__year=year,
             first_published_at__month=month,
             first_published_at__day=day,
             slug=slug
         )
+
         return article_page.serve(request)
             
+
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/(?P<slug>[\w-]+)/(?P<sub>[/\w-]+)/?$')
     def sub_article_page_by_date(self, request, year, month, day, slug, sub, name='sub-article-by-date'):
         """Serve a single sub article page at URL (eg. .../2018/01/23/my-title/sub-article)"""
@@ -127,9 +195,13 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         # TODO: improve for multiple children and consider query set first accessor?
         sub_article_page = article_page.get_children().live().specific().filter(slug=sub.strip("/"))
         return sub_article_page[0].serve(request)
-            
 
-    # Speficies that only BlogPage objects can live under this index page
+
+    # Control what child pages can be created under this index page
+    # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
+    #   as this may produce odd urls e.g., /articles/2020/01/01/other-index/2020/01/04
+    # Speficies that only ArticlePage objects can live under this index page
+    
     subpage_types = ['ArticlePage']
     
 
@@ -325,8 +397,8 @@ class ArticlePage(SitePage):
         # initially set the attribute self.url_path using the normal operation
         super().set_url_path(parent=parent)
 
-        # only modify url if page is a child of an ArticleIndexPage
-        if isinstance(parent.specific,ArticleIndexPage):
+        # only modify url if page is a child of an ArticleIndexByDatePage
+        if isinstance(parent.specific,ArticleIndexByDatePage):
             if self.first_published_at:
                 self.url_path = self.url_path.replace(
                     self.slug, '{:%Y/%m/%d/}'.format(self.first_published_at) + self.slug

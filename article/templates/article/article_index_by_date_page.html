@@ -7,8 +7,8 @@
 
 {% block body-class %}index-article-page{% endblock %}
 
-{% block page-content-main-col-size %}col-lg-12{% endblock %}
-{% block page-content-aside %}{% endblock %}
+{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
 
 {% block page-content-main-header %}{% endblock %}
 {% block page-content-main-article %}
@@ -53,4 +53,36 @@
       {% endwith %}
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block page-content-aside-slot-2 %}
+  <section>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	<strong>Articles Filtered by:</strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	{% if day %}
+	  <span>{{ year }} / {{ month }} / {{ day }}</span>
+	{% elif month %}
+	  <span>{{ year }} / {{ month }}</span>
+	{% elif year %}
+	  <span>{{ year }}</span>
+	{% else %}
+	  <span>Showing All</span>
+	{% endif %}
+      </li>
+    </ul>
+  </section>
+{% endblock page-content-aside-slot-2 %}
+
+{% block page-content-main-footer %}
+  <footer role="tags">
+    {% if page.tags.all.count %}
+      {% taggit_list page.tags %}
+    {% endif %}
+  </footer>
+
+  <p><a href="{{ page.get_parent.url }}">Return to event index</a></p>
+  
 {% endblock %}
