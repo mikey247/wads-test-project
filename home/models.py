@@ -27,3 +27,5 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
     ]
+
+    parent_page_types = ['wagtailcore.Page']
