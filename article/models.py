@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
  
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, ObjectList, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PublishingPanel, StreamFieldPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
@@ -229,13 +229,19 @@ class ArticlePage(SitePage):
         - Expiry date/time
     """
 
+    RENDER_TEMPLATE_DEFAULT='article_page_default'
     RENDER_TEMPLATE_CHOICES = (
-        ('article_page_default.html', 'Default (Left-hand Sidebar)'),
-        ('article_page_default_right.html', 'Default (Right-hand Sidebar)'),
-        ('article_page_default_none.html', 'Default (No Sidebar)'),
-        ('article_page_splash.html', 'Splash (Full width banner image'),
+        ('article_page_default', 'Default (Basic article layout)'),
+        ('article_page_splash', 'Splash (Full-width banner image/content; overlay box'),
     )
 
+    SIDEBAR_PLACEMENT_DEFAULT='left'
+    SIDEBAR_PLACEMENT_CHOICES = (
+        ('left', 'Single sidebar (To left of main content'),
+        ('right', 'Single sidebar (To right of main content'),
+        ('none', 'No sidebars'),
+    )
+    
     # meta panel fields
 
     # includes Page:title
@@ -294,13 +300,17 @@ class ArticlePage(SitePage):
     )
 
     render_template = models.CharField(
-        # widget=forms.RadioSelect,
-        # required=True,
         max_length=128,
-        default='article_page_default_left.html',
+        default='article_page_default',
         choices=RENDER_TEMPLATE_CHOICES,
     )
 
+    sidebar_placement = models.CharField(
+        max_length=128,
+        default='left',
+        choices=SIDEBAR_PLACEMENT_CHOICES,
+    )
+    
     splash_content = StreamField(
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
@@ -374,7 +384,10 @@ class ArticlePage(SitePage):
             FieldPanel('display_title'),
         ], heading='Page Display Options'),
         MultiFieldPanel([
-            FieldPanel('render_template'),
+            FieldRowPanel([
+                FieldPanel('render_template'),
+                FieldPanel('sidebar_placement'),
+            ]),
             StreamFieldPanel('splash_content'),
         ], heading='Theme and Layout Options'),
     ]
@@ -390,7 +403,7 @@ class ArticlePage(SitePage):
 
 
     def get_template(self, request):
-        return 'article/'+self.render_template
+        return f'article/{self.render_template}_{self.sidebar_placement}.html'
 
 
     def set_url_path(self, parent):
