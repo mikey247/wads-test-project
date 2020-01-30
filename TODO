@@ -1,0 +1,23 @@
+# Wagtail Admin
+1) Wagtail admin needs an update where events and articles can be managed better. 
+It's hard to manage a great deal of items when there are so many.
+wagtail modeladmin has support for redoing index view pages, though it would be under a different main menu item.
+
+# Front End Pagination
+2) Front end pagination as a single page app/dynamic update/Ajax thing. Would allow lists of articles/events to be sorted, filtered on fields.
+
+# Fixed Menus
+3) Better handling of fixed menus. It's not at obvious to make a flat menu called uom_footer.
+
+# Sidebar Content Chooser
+4) Some way of letting users pick sidebar content for pages. Either directly or with Snippets. 
+It would be nice if sidebar selection was inherited from a parent e.g., specify what appears in ArticleIndexPage, 
+then all child articles inherit the same set. (This requires changes to modeladmin (think) it's the only way to get default streamfield content. 
+It's easy to say for example that "correct_message" has default text, but an "intro" streamfield simply starts out empty and the user has to add a block from the types. 
+Would be nice to a) have a default block and b) have multiple blocks with content.)
+
+# Container Block
+5) Look at a Container block that let's people put content inside some other container. So from CoreBlocks pick a Container, then select a type/theme. 
+Or perhaps it needs a couple of blocks to support. Not sure how to handle number of columns, as if num_cols is a drop down of 1, 2, 3 or 4, 
+it then requires 1-4 content streamfields. Define and show them all, or hack the modeladmin React.js to hide things!? If we have 1-col, 2-col,... 
+block types defined it's very difficult to add/del a column. Just feels like the wagtail admin could be a lot friendlier and dynamic some times.
