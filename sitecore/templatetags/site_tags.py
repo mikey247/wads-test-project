@@ -80,9 +80,10 @@ def taggit_list(context, page_tags, selected_tag=None, show_count=False):
 
 # Renders the page pagination block based on the paginator resource
 @register.inclusion_tag('tags/pagination.html', takes_context=True)
-def pagination(context, page_res): 
+def pagination(context, page_res, page_range): 
    return {
-       'res': page_res,
+       'page_res': page_res,
+       'page_range': page_range,
    }
 
 
