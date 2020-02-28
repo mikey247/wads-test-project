@@ -5,7 +5,7 @@
   <title>{{ self.title }}</title>
 {% endblock %}
 
-{% block body-class %}index-article-page{% endblock %}
+{% block body-class %}article-index-page{% endblock %}
 
 {% block page-content-main-col-size %}col-lg-12{% endblock %}
 {% block page-content-aside %}{% endblock %}
@@ -13,7 +13,7 @@
 {% block page-content-main-header %}{% endblock %}
 {% block page-content-main-article %}
   <div class="container pb-5 mb-5">
-    <div class="row class="my-4"">
+    <div class="row my-4"">
       <div class="col-lg-3 order-2 order-lg-1">
       </div>
       <div class="col-lg-9 order-1 order-lg-2">
@@ -33,12 +33,12 @@
 	    {% if post.thumbnail_image %}
 	      {% image post.thumbnail_image fill-300x300 as photo %}
 	      <div class="my-2">
-		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid px-2">
+		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block">
 	      </div>
 	    {% elif post.article_image %}
 	      {% image post.article_image fill-300x300 as photo %}
 	      <div class="my-2">
-		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid px-2">
+		<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block">
 	      </div>
 	    {% endif %}
 	  </div>
@@ -46,8 +46,8 @@
 	    <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
 	    {% page_date post %}
 	    {% page_author post %}
-	    <div class="lead">{% include_block post.intro %}</div>
-	    <a href="{% pageurl post %}" class="btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
+	    <div class="my-2 lead">{% include_block post.intro %}</div>
+	    <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
 	  </div>
 	</div>
       {% endwith %}
