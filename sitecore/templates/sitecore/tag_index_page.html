@@ -9,14 +9,14 @@
 
 {% block page-content-aside-slot-1 %}
   <section>
-    {% if request.GET.tag|length %}
+    {% if slug %}
       {% if pages.specific|length %}
 	<ul class="list-group">
 	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
 	    <strong>Showing articles tagged:</strong>
 	  </li>
 	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-primary text-lowercase"><i class="fa fa-tag"></i> {{ request.GET.tag|lower }}</span>
+	    <span class="btn btn-sm my-1 btn-outline-primary text-lowercase"><i class="fa fa-tag"></i> {{ slug }}</span>
 	  </li>
 	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
 	    <strong>Found:</strong>
@@ -31,7 +31,7 @@
 	    <strong>No articles tagged</strong>
 	  </li>
 	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ request.GET.tag|lower }}</span>
+	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ slug }}</span>
 	  </li>
 	</ul>
       {% endif %}
@@ -50,7 +50,7 @@
 
 {% block page-content-main-header %}
   <header>
-    {% if request.GET.tag|length %}
+    {% if slug %}
       <h1 class="my-4">Tag Query Results</h1>
     {% else %}
       <h1 class="my-4">Tag Cloud</h1>
@@ -59,7 +59,7 @@
 {% endblock %}
 
 {% block page-content-main-article %}
-  {% if request.GET.tag|length %}
+  {% if slug %}
     <article>
       {% for page in pages.specific %}
 	<div class="bg-light px-2 my-4 {% if not forloop.last %}border-bottom border-secondary{% endif %}">
@@ -79,15 +79,15 @@
 	  {% include_block page.event_type with view="summary" %}
 	  <hr>
 	  {% if page.search_description %}
-	    <div class="lead">{% shortcodes page.search_description %}</div>
+	    <div class="lead">{{ page.search_description }}</div>
 	  {% elif page.intro != "<p></p>" %}
-	    <div class="lead">{% shortcodes page.intro %}</div>
+	    <div class="lead">{% include_block page.intro %}</div>
 	  {% else %}
 	    <p class="text-warning">Page has no introductory text or search description.</p>
 	  {% endif %}
 	  
 	  {% if page.tags.all.count %}
-	    {% taggit_list page.tags.all request.GET.tag|stringformat:"s" %}
+	    {% taggit_list page.tags.all slug %}
 	  {% endif %}
 	</div>
       {% empty %}
@@ -100,7 +100,7 @@
 
 {% block page-content-main-footer %}
   <footer class="my-4" role="tag cloud">
-    {% if request.GET.tag|length %}
+    {% if slug %}
       <h4>Tag Cloud</h4>
     {% endif %}
     {% taggit_list tags show_count=True %}
