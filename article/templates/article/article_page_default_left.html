@@ -10,20 +10,21 @@
 {% block page-content-main-header %}
   <header>
     {% if self.article_image %}
-      {% image self.article_image fill-1200x300 as photo %}
+      {% if self.article_image_resize == 'fill-1200x300' %}
+	{% image self.article_image fill-1200x300 as photo %}
+      {% elif self.article_image_resize == 'fill-1200x150' %}
+	{% image self.article_image fill-1200x150 as photo %}
+      {% else %}
+	{% image self.article_image max-1200x300 as photo %}
+      {% endif %}
+      
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
+	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.title }}</h1>
-    <div class="lead richtext_shortcodes">{% shortcodes page.intro|safe %}</div>
-  </header>
-{% endblock %}
-
-{% block page-content-main-article %}
-  <article>
-    <section>
-      {% for block in page.body %}
+    <div class="lead mb-4">
+      {% for block in page.intro %}
 	{% if block.block_type == 'image' %}
 	  {% image block.value width-1200 as photo %}
 	  <figure class="figure">
@@ -34,7 +35,25 @@
 	  {% include_block block %}
 	{% endif %}
       {% endfor %}
-    </section>
+    </div>
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+  <article>
+    {% for block in page.body %}
+      <div class="mb-4">
+	{% if block.block_type == 'image' %}
+	  {% image block.value width-1200 as photo %}
+	  <figure class="figure">
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+	  </figure>
+	{% else %}
+	  {% include_block block %}
+	{% endif %}
+      </div>
+    {% endfor %}
   </article>
 {% endblock %}
 

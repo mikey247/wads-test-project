@@ -51,7 +51,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     
     """
     
-    desc = ShortcodeRichTextField(blank=True)
+    desc = RichTextField(blank=True)
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 validators=[
                                                     MinValueValidator(1),
@@ -124,23 +124,38 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         if day:
             all_articles = all_articles.filter(first_published_at__day=day)
 
+        # get the paginator obj and the current page number
         paginator = Paginator(all_articles, self.per_page) 
-
         page = request.GET.get('page')
+        index = int(page)-1 if page is not None else 0
+        
+        # get list of articles for the desired page
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
             articles = paginator.page(1)
         except EmptyPage:
-            articles= paginator.page(paginator.num_pages)
+            articles = paginator.page(paginator.num_pages)
 
+        # limit page_range of the paginator (hard-coded to 3 pages both ways)
+        max_index = len(paginator.page_range)
+        start_index = max(0, index - 3)
+        end_index = min(max_index, start_index + 7)
+
+        # build new page range from calculated range but also include first/last pages if not in range
+        context['page_range'] = []
+        if start_index > 0:
+            context['page_range'].append(1)
+        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
+        if end_index < max_index:
+            context['page_range'].append(max_index)
+            
         context['articles'] = articles
         context['year'] = year
         context['month'] = month
         context['day'] = day
         
         return context
-
 
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
@@ -229,6 +244,13 @@ class ArticlePage(SitePage):
         - Expiry date/time
     """
 
+    ARTICLE_IMAGE_RESIZE_DEFAULT='fill-1200x300'
+    ARTICLE_IMAGE_RESIZE_CHOICES = (
+        ('fill-1200x300', 'Banner (fill-1200x300)'),
+        ('fill-1200x150', 'Banner (fill-1200x150)'),
+        ('max-1200x300', 'Best Fit Original (max-1200x600)'),
+    )
+
     RENDER_TEMPLATE_DEFAULT='article_page_default'
     RENDER_TEMPLATE_CHOICES = (
         ('article_page_default', 'Default (Basic article layout)'),
@@ -251,7 +273,6 @@ class ArticlePage(SitePage):
         max_length=255,
         blank=True,
         help_text=_('Use this to override the default author/owner name (free text only).'),
-        #label=_('Override author'),
     )
 
     article_image = models.ForeignKey(
@@ -260,8 +281,13 @@ class ArticlePage(SitePage):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        #label=_('Article Banner Image'),
         help_text=_('Provide an image that spans the top of the article content (and is used as thumbnail in the blog listings unless overridden.'),
+    )
+
+    article_image_resize = models.CharField(
+        max_length=128,
+        default=ARTICLE_IMAGE_RESIZE_DEFAULT,
+        choices=ARTICLE_IMAGE_RESIZE_CHOICES,
     )
     
     thumbnail_image = models.ForeignKey(
@@ -270,7 +296,6 @@ class ArticlePage(SitePage):
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
-        #label=_('Thumbnail image (override)'),
         help_text=_('Specify an alternative image for the thumbnail in blog listings if the main banner image is not suitable or a different image is desired.'),
     )
     
@@ -280,7 +305,6 @@ class ArticlePage(SitePage):
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
-        #label=_('Introduction and Summary'),
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
     )
 
@@ -288,7 +312,6 @@ class ArticlePage(SitePage):
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
-        #label=_('Main Body Content'),
         help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
     )
 
@@ -332,6 +355,7 @@ class ArticlePage(SitePage):
     api_fields = SitePage.search_fields + [
         'author',
         'article_image',
+        'article_image_resize',
         'thumbnail_image',
         'intro',
         'body',
@@ -349,8 +373,11 @@ class ArticlePage(SitePage):
             FieldPanel('author'),
         ], heading="Article Metadata"),
         MultiFieldPanel([
-            ImageChooserPanel('article_image'),
-            ImageChooserPanel('thumbnail_image'),
+            FieldRowPanel([
+                ImageChooserPanel('article_image'),
+                FieldPanel('article_image_resize'),
+            ]),
+             ImageChooserPanel('thumbnail_image'),
         ], heading="Article Banner and Thumbnail"),
     ]
 
