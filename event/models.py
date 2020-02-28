@@ -26,7 +26,7 @@ from taggit.models import TaggedItemBase
 
 
 class EventIndexPage(Page):
-    desc = ShortcodeRichTextField(blank=True)
+    desc = RichTextField(blank=True)
     
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 validators=[
@@ -99,7 +99,7 @@ class EventIndexPage(Page):
     display_title = models.BooleanField(default=True)
     display_desc = models.BooleanField(default=False)
 
-    no_listing_text = ShortcodeRichTextField(blank=True)
+    no_listing_text = RichTextField(blank=True)
 
     
     def get_context(self, request):
@@ -371,7 +371,7 @@ class EventPage(SitePage):
         help_text=_('Use this to override the default author/owner name.')
     )
 
-    intro = ShortcodeRichTextField(
+    intro = RichTextField(
         blank=True,
         help_text=_('Provide introductory text here to summarise the event. Content appears in the event listing page and search result summaries.')
     )

@@ -1,4 +1,4 @@
-{% load static cache wagtailsettings_tags sekizai_tags %}
+{% load cache static wagtailsettings_tags sekizai_tags %}
 {% get_settings %}
 
 <!DOCTYPE html>
@@ -30,6 +30,10 @@
 	    href="{% static 'sitecore/pygments/linenos.css' %}">
       <link rel="stylesheet" type="text/css"
 	    href="{% static 'sitecore/pygments/'|add:settings.sitecore.SiteSettings.code_theme|add:'.css' %}">
+
+      <!-- Sitecore CSS -->
+      <link rel="stylesheet" type="text/css"
+	    href="{% static 'sitecore/css/wagtail.css' %}">
     {% endblock %}
 
     {% block head-css-extension %}{% endblock %}

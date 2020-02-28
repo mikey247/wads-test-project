@@ -3,17 +3,28 @@
   {% for tag in tags.all %}
     {% if show_count %}
       {% if tag.num_tags %}
-	<a class="btn btn-sm my-1 btn-{% if tag|stringformat:'s' == selected %}outline-{% endif %}primary"
-	  href="{% slugurl 'tags' %}?tag={{ tag }}">
-	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
-	  <span class="badge badge-light">{{ tag.num_tags }}</span>
-	</a>
+	{% if tag.slug|stringformat:'s' == selected %}
+	  <a class="btn btn-sm my-1 btn-outline-primary disabled" href="#">
+	    <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	    <span class="badge badge-light">{{ tag.num_tags }}</span>
+	  </a>
+	{% else %}
+	  <a class="btn btn-sm my-1 btn-primary" href="{% slugurl 'tag' %}{{ tag.slug }}/">
+	    <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	    <span class="badge badge-light">{{ tag.num_tags }}</span>
+	  </a>
 	{% endif %}
+      {% endif %}
     {% else %}
-      <a class="btn btn-sm my-1 btn-{% if tag|stringformat:'s' == selected %}outline-{% endif %}primary"
-	 href="{% slugurl 'tags' %}?tag={{ tag }}">
-	<span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
-      </a>
+      {% if tag.slug|stringformat:'s' == selected %}
+	<a class="btn btn-sm my-1 btn-outline-primary disabled" href="#">
+	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	</a>
+      {% else %}
+	<a class="btn btn-sm my-1 btn-primary" href="{% slugurl 'tag' %}{{ tag.slug }}/">
+	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	</a>
+      {% endif %}
     {% endif %}
   {% endfor %}
 </div>

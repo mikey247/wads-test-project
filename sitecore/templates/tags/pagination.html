@@ -1,17 +1,35 @@
 <nav aria-label="Page Navigation">
-  <ul class="pagination">
-    {% if res.has_previous %}
-      <li><a href="?page={{ res.previous_page_number }}" aria-label="Previous">
-	<span aria-hidden="true">&laquo;</span>
-      </a></li>
+  <ul class="pagination justify-content-center">
+    {% if page_res.has_previous %}
+      <li class="page-item">
+	<a class="page-link" href="?page={{ page_res.previous_page_number }}" aria-label="Previous Index Page">
+	  <span aria-hidden="true">&laquo;</span>
+	</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+	<a class="page-link" href="#" aria-label="No Previous Index Page">
+	  <span aria-hidden="true">&laquo;</span>
+	</a>
+      </li>
     {% endif %}
-    {% for page_num in res.paginator.page_range %}
-      <li {% if page_num == res.number %}class="active"{% endif %}><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+    {% for page_num in page_range %}
+      <li class="page-item {% if page_num == page_res.number %}active{% endif %}">
+	<a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+      </li>
     {% endfor %}
-    {% if res.has_next %}
-      <li><a href="?page={{ res.next_page_number }}" aria-label="Next">
-	<span aria-hidden="true">&raquo;</span>
-      </a></li>
+    {% if page_res.has_next %}
+      <li class="page-item">
+	<a class="page-link" href="?page={{ page_res.next_page_number }}" aria-label="Next Index Page">
+	  <span aria-hidden="true">&raquo;</span>
+	</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+	<a class="page-link" href="#" aria-label="No Next Index Page">
+	  <span aria-hidden="true">&raquo;</span>
+	</a>
+      </li>
     {% endif %}
   </ul>
 </nav>

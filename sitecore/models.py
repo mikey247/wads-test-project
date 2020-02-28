@@ -6,8 +6,10 @@ a superclass SitePage model to share commonalities, and support for tag indexing
 """
 
 from django.db import models
+from django.template.response import TemplateResponse
 
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
+from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core.models import Page, Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -162,7 +164,7 @@ class SitePage(Page):
     ]
 
 
-class TagIndexPage(Page):
+class TagIndexPage(RoutablePageMixin, Page):
     """
     This defines a tag index page for searching content with specific tags and/or displaying the 
     entire shared tag cloud. The ?tag= field in the page request is used to search for specific
@@ -171,14 +173,18 @@ class TagIndexPage(Page):
     is appended to the results.
     """
     
-    def get_context(self, request):
+    def get_context(self, request, slug=None):
         context = super(TagIndexPage, self).get_context(request)
 
         # Retrieve requested tag from URL
-        tag = request.GET.get('tag')
+        #tag = request.GET.get('tag')
 
         # Retrieve all pages that match tag (if provided)
-        pages = SitePage.objects.live().filter(tags__name=tag)
+        # pages = SitePage.objects.live().filter(tags__slug=tag)
+        if slug:
+            pages = SitePage.objects.live().filter(tags__slug=slug)
+        else:
+            pages = SitePage.objects.live()
 
         # Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
@@ -189,7 +195,16 @@ class TagIndexPage(Page):
         # Return all matching pages and whole tag cloud
         context['pages'] = pages
         context['tags'] = tags
-            
+        context['slug'] = slug
+        
         return context
 
+    @route(r'^(?P<slug>[\w-]+)/?$')
+    def tag_index_by_slug(self, request, slug=None, name='tag-index-by-slug'):
+        print("tag_index_by_slug", slug)
+        return TemplateResponse(
+            request,
+            self.get_template(request),
+            self.get_context(request, slug=slug)
+        )
 
