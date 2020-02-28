@@ -427,7 +427,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
 
     # Blockquote text content
     
-    quote = ShortcodeRichTextBlock(
+    quote = blocks.RichTextBlock(
         required=True
     )
 
@@ -522,7 +522,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
         help_text=_('Main title for the slide (for larger screen sizes)')
     )
 
-    body = MarkdownAndShortcodeTextBlock(
+    body = blocks.RichTextBlock(
         required=False,
         rows=3
     )
@@ -964,9 +964,9 @@ class CoreBlock(blocks.StreamBlock):
     Re-usable core Block for collecting standard and custom streamfield support into one place
     """
 
-    paragraph = ShortcodeRichTextBlock(
+    paragraph = blocks.RichTextBlock(
         label='Rich Text Paragraph',
-        validators=[ParseShortcodes],
+        #validators=[ParseShortcodes],
         #group='1. Structured Content',
     )
     markdown = MarkdownAndShortcodeTextBlock(
