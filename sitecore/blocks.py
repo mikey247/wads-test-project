@@ -1020,3 +1020,39 @@ class CoreBlock(blocks.StreamBlock):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'core-block'
         return context
+
+
+class SplashBlock(blocks.StreamBlock):
+    """
+    Re-usable splash Block for collecting standard and streamfield support for Splash Content
+    """
+
+    paragraph = blocks.RichTextBlock(
+        features=['bold','italic','hr','ol','ul','link','document-link','image','embed',
+                  'display-1','display-2','display-3','display-4', 
+                  'h1', 'h2', 'h3', 'h4',],
+        label='Rich Text Paragraph',
+        #validators=[ParseShortcodes],
+    )
+    image =  ImageChooserBlock(
+        #template='boostrapblocks/image.html'
+    )
+    docs = DocumentChooserBlock(
+        template='bootstrapblocks/document.html'
+    )
+    page = blocks.PageChooserBlock(
+        required=False,
+    )
+    carousel = SnippetChooserBlock(
+        CarouselSnippet,
+        #group='3. Embedded Content',
+        template='bootstrapblocks/carousel.html'
+    )
+
+    # Override methods
+
+    def get_form_context(self, value, prefix='', errors=None):
+        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context['block_type'] = 'splash-block'
+        return context
+    
