@@ -1,40 +1,156 @@
 {% extends "sitecore/base_default.html" %}
-{% load shortcodes menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
+{% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block head-title %}
   <title>{{ self.title }}</title>
 {% endblock %}
 
-{% block body-class %}page-head{% endblock %}
+{% block body-class %}article-splash{% endblock %}
 
-{% block page-content %}
-  {% block page-content-banner %}
-  {% endblock %}
-  
-  {% block page-content-main %}
-    <main class="pb-5 mb-5">
-      {% block page-content-main-header %}{% endblock %}
-      {% block page-content-main-article %}
-	<article>
-	  <div class="container">
-	    {% for block in page.body %}
-	      {% if block.block_type == 'heading' %}
-		{% include_block block %}
-	      {% elif block.block_type == 'paragraph' %}
-		{% shortcodes block %}
-	      {% elif block.block_type == 'image' %}
-		{% image block.value width-1200 as photo %}
-		<figure class="figure">
-		  <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-		  <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-		</figure>
-	      {% else %}
-		{% include_block block %}
-	      {% endif %}
-	    {% endfor %}
+{% block navbar %}
+  {% get_site_root as site_root %}
+  {% top_menu parent=site_root transparent=False calling_page=self  %}
+{% endblock %}
+
+{% block page-head %}
+  <div class="wrapper">
+    {% if self.splash_image %}
+      {% image self.splash_image fill-1600x600 as photo %}
+      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
+	<div class="container">
+	  <div class="row">
+	    <div class="col-lg-8 p-0 ml-auto mr-auto">
+	      <div
+		  id="splash"
+		  class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }}"
+		  style="border-radius: {{ self.splash_border_radius }}px!important;">
+		  {% for block in page.splash_content %}
+		  {% if block.block_type == 'image' %}
+		    {% image block.value width-1200 as photo %}
+		    <figure class="figure">
+		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+		    </figure>
+		  {% else %}
+		    {% include_block block %}
+		  {% endif %}
+		  {% endfor %}
+	      </div>
+	    </div>
 	  </div>
-	</article>
-      {% endblock %}
-    </main>
-  {% endblock %}
-{% endblock %}  
+	</div>
+      </div>
+    {% endif %}
+  </div>
+  <div class="main main-raised">
+    <section>
+      <div class="container">
+	<div class="row">
+	  <div class="col">
+	    <header class="my-4">
+	      <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
+		{% for block in page.intro %}
+		  {% if block.block_type == 'image' %}
+		    {% image block.value width-1200 as photo %}
+		    <figure class="figure">
+		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+		    </figure>
+		  {% else %}
+		    {% include_block block %}
+		  {% endif %}
+		{% endfor %}
+	      </div>
+	    </header>
+	  </div>
+	</div>
+      </div>
+    </section>
+  </div>
+{% endblock page-head %}
+
+{% block page-content-main-header %}
+  {% if self.display_title %}
+    <h1>{{ self.title }}</h1>
+  {% endif %}
+{% endblock %}
+
+{% block page-content-main-article %}
+  <article>
+    <section class="my-4">
+      {% for block in page.body %}
+	{% if block.block_type == 'image' %}
+	  {% image block.value width-1200 as photo %}
+	  <figure class="figure">
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+	  </figure>
+	{% else %}
+	  {% include_block block %}
+	{% endif %}
+      {% endfor %}
+    </section>
+  </article>
+{% endblock %}
+
+{% block page-content-main-col-size %}col-lg-12{% endblock %}
+{% block page-content-aside %}{% endblock %}
+
+{% block page-content-main-footer %}
+  <footer role="tags">
+    {% if page.tags.all.count %}
+      {% taggit_list page.tags %}
+    {% endif %}
+  </footer>
+
+  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
+  
+{% endblock %}
+
+{% block head-css-extension %}
+  <style>
+    body {
+      padding-top: 0!important;
+    }
+    
+    .page-header {
+      height: 75vh;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background-position: 50%;
+      background-size: cover;
+    }
+    
+    nav.navbar-transparent {
+      transition: 1000ms ease;
+      background-color: transparent!important;
+    }
+
+    nav.navbar-opaque {
+      transition: 1000ms ease;
+    }
+
+    .main {
+      background: #fff;
+      position: relative;
+      z-index: 3;
+    }
+
+    .main-raised {
+      margin: -60px 30px 0;
+      border-radius: 6px;
+      box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+    }
+  </style>
+{% endblock %}
+
+{% block body-js-extension %}
+  <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
+  <script>
+    //document.getElementById("splash").querySelectorAll("h1,h2,h3,h4,h5,h6").forEach(H => H.setAttribute("class", "text-white"));
+  </script>
+{% endblock %}
