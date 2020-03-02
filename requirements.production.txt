@@ -1,5 +1,4 @@
 # Additional packages as required for PRODUCTION mode
-elasticsearch>=7.0.0,<8.0.0
-mod-wsgi==4.7.1
+elasticsearch==6.4.0
 psycopg2==2.8.4
 redis==3.2.0
