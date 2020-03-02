@@ -1,18 +1,8 @@
 {% extends "html5-bootstrap-skeleton.html" %}
 {% load cache menu_tags sekizai_tags site_tags static wagtailuserbar %}
 
-{% block head-css-extension %}
-  <style>
-   .carousel-item:after {
-     content: "";
-     display: block;
-     position: absolute;
-     top: 0;
-     bottom: 0;
-     left: 0;
-     right: 0;
-   }
-  </style>
+{% block head-title %}
+  <title>{{ page.seo_title|default:page.title }}</title>
 {% endblock %}
 
 {% block body-content %}
@@ -73,9 +63,39 @@
   {% endblock %}
   
   {% block footer-content %}
-    <footer class="container-fluid page-footer text-light bg-dark" style="position: absolute; bottom: 0;">
-      {% flat_menu 'base_footer' template='menus/footer_menu.html' %}
+    <footer class="mt-4 container-fluid page-footer text-light" style="background-color: #222222; /* position: absolute; bottom: 0; */">
+      <div class="container">
+	<div class="row py-4">
+	  <div class="col-lg-4">
+	    <h3>Contact Us</h3>
+	    <p><a href="tel:+441613066000" title="contact us by telephone">+44 (0)161 306 6000</a></p>
+	    <p><a href="https://research-it.manchester.ac.uk/contact/" title="Research IT Contact Details page">Contact details</a></p>
+	  </div>
+	  <div class="col-lg-4">
+	    <h3>Find Us</h3>
+	    <address>
+              <a href="http://www.manchester.ac.uk/discover/maps/interactive-map/">
+		The University of Manchester<br>
+		Oxford Road<br>
+		Manchester<br>
+		M13 9PL<br>
+              </a>
+	    </address>
+	  </div>
+	  <div class="col-lg-4">
+	    <h3>Connect with us</h3>
+	    <p>
+              <a href="https://twitter.com/UoM_eResearch"><img src="https://assets.manchester.ac.uk/phase1/templates/images/icon-twitter-50.png" width="40" height="40" alt="Twitter"></a>
+	    </p>
+	    <a href="http://eepurl.com/bZW3Or#d.en.284306" alt="Link to sign up page for Research IT newsletter"><button type="button" class="btn btn-secondary">Sign up for the monthly newsletter</button></a>
+	  </div>
+	</div>
+	<div class="row py-4">
+	  <div class="col-lg-12">
+	    {% flat_menu 'base_footer' template='menus/footer_menu.html' %}
+	  </div>
+	</div>
+      </div>
     </footer>
   {% endblock %}
-  
 {% endblock %}

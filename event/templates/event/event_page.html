@@ -1,9 +1,5 @@
-{% extends "sitecore/base_default.html" %}
+1{% extends "sitecore/base_default.html" %}
 {% load shortcodes article_tags menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
-
-{% block head-title %}
-  <title>{{ self.title }}</title>
-{% endblock %}
 
 {% block body-class %}event-page{% endblock %}
 
@@ -32,7 +28,7 @@
 	<h1>{{ page.start_date|date:'Y' }}</h1>
       </div>
       <div class="media-body pl-2">
-	<h1 class="mt-0">{{ self.title }}</h1>
+	<h1 class="mt-0">{{ self.seo_title|default:self.title }}</h1>
 	<div class="lead">{{ page.intro|richtext }}</div>
 	<h6 class="text-primary"><i class="fas fa-map-marker"></i> <a href="{{ page.location_link }}">{{ page.location }}</a></h6>
 	{% for block in page.dates %}
@@ -98,10 +94,12 @@
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small>Published: {{ page.first_published_at }}</small>
+	<small><i class="fas fa-calendar"></i> Published: {{ page.first_published_at }}</small>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small>Revised: {{ page.latest_revision_created_at }}</small>
+	{% if page.latest_revision_created_at %}
+	  <small><span class="text-secondary"><i class="fas fa-calendar-alt"></i>Revised: {{ page.latest_revision_created_at }}</span></small>
+	{% endif %}
       </li>
     </ul>
   </section>

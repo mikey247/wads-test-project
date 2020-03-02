@@ -1,10 +1,6 @@
 {% extends "sitecore/base_default.html" %}
 {% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
-{% block head-title %}
-  <title>{{ self.title }}</title>
-{% endblock %}
-
 {% block body-class %}article-splash{% endblock %}
 
 {% block navbar %}
@@ -54,7 +50,7 @@
 
 {% block page-content-main-header %}
   {% if self.display_title %}
-    <h1>{{ self.title }}</h1>
+    <h1>{{ self.seo_title|default:self.title }}</h1>
   {% endif %}
 {% endblock %}
 
@@ -90,10 +86,12 @@
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small>Published: {{ page.first_published_at }}</small>
+	<small><span class="text-secondary"><i class="fas fa-calendar"></i> Published:</span> {{ page.first_published_at }}</small>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small>Revised: {{ page.latest_revision_created_at }}</small>
+	{% if page.latest_revision_created_at %}
+	  <small><span class="text-secondary"><i class="fas fa-calendar-alt"></i> Revised:</span> {{ page.latest_revision_created_at }}</small>
+	{% endif %}
       </li>
     </ul>
   </section>
