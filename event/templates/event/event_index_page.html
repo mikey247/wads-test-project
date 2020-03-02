@@ -1,10 +1,6 @@
 {% extends "sitecore/base_default.html" %}
 {% load wagtailcore_tags wagtailimages_tags site_tags %}
 
-{% block head-title %}
-  <title>{{ self.title }}</title>
-{% endblock %}
-
 {% block body-class %}event-index-page{% endblock %}
 
 {% block page-content-main-header %}
@@ -16,7 +12,7 @@
       </div>
     {% endif %}
     {% if page.display_title %}
-      <h1 class="mb-4">{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}</h1>
+      <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
       {% endif %}
     {% if page.display_desc %}
       <div class="lead">{{ page.desc|richtext }}</div>

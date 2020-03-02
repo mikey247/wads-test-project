@@ -1,6 +1,10 @@
 {% extends "html5-bootstrap-skeleton.html" %}
 {% load cache menu_tags sekizai_tags site_tags static wagtailuserbar %}
 
+{% block head-title %}
+  <title>{{ page.seo_title|default:page.title }}</title>
+{% endblock %}
+
 {% block body-content %}
   {% wagtailuserbar 'top-right' %}
   
