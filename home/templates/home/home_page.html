@@ -22,7 +22,7 @@
 	    <div class="col-lg-8 p-0 ml-auto mr-auto">
 	      <div
 		  id="splash"
-		  class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }}"
+		  class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
 		  style="border-radius: {{ self.splash_border_radius }}px!important;">
 		  {% for block in page.splash_content %}
 		  {% if block.block_type == 'image' %}
@@ -93,18 +93,13 @@
   </article>
 {% endblock %}
 
-{% block page-content-main-col-size %}col-lg-12{% endblock %}
-{% block page-content-aside %}{% endblock %}
+{% block page-content-main-col-size %}col-lg-8{% endblock %}
+{% block page-content-aside-col-size %}col-lg-4{% endblock %}
+{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
 
-{% block page-content-main-footer %}
-  <footer role="tags">
-    {% if page.tags.all.count %}
-      {% taggit_list page.tags %}
-    {% endif %}
-  </footer>
-
-  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
-  
+{% block page-content-aside-slot-1 %}
+<a class="twitter-timeline" data-lang="en" data-height="1000" href="https://twitter.com/UoM_eResearch?ref_src=twsrc%5Etfw">Tweets by UoM_eResearch</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {% endblock %}
 
 {% block head-css-extension %}
@@ -144,6 +139,25 @@
       margin: -60px 30px 0;
       border-radius: 6px;
       box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+    }
+
+    div.splash-shadow h1 {
+      text-shadow: 2px 2px #1c3577b8;
+    }
+    div.splash-shadow h2 {
+      text-shadow: 2px 2px #1c3577b8;
+    }
+    div.splash-shadow h3 {
+      text-shadow: 2px 2px #1c3577b8;
+    }
+    div.splash-shadow h4 {
+      text-shadow: 2px 2px #1c3577b8;
+    }
+    div.splash-shadow h5 {
+      text-shadow: 2px 2px #1c3577b8;
+    }
+    div.splash-shadow h6 {
+      text-shadow: 2px 2px #1c3577b8;
     }
   </style>
 {% endblock %}
