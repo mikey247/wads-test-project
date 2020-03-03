@@ -18,7 +18,7 @@
     {% else %}
       {% if tag.slug|stringformat:'s' == selected %}
 	<a class="btn btn-sm my-1 btn-outline-primary disabled" href="#">
-	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	  <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
 	</a>
       {% else %}
 	<a class="btn btn-sm my-1 btn-primary" href="{% slugurl 'tag' %}{{ tag.slug }}/">
