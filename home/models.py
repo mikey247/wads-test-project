@@ -121,6 +121,9 @@ class HomePage(Page):
 
     settings_panels = Page.settings_panels + [
         MultiFieldPanel([
+            FieldPanel('display_title'),
+        ], heading='Page Display Options'),
+        MultiFieldPanel([
             FieldPanel('splash_text_align'),
             FieldPanel('splash_text_colour'),
             FieldPanel('splash_bg_colour'),
