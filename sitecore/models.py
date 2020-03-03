@@ -192,7 +192,7 @@ class TagIndexPage(RoutablePageMixin, Page):
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
         # TODO: Probably better query to achieve this
         site_page_tag_ids = [t.tag_id for t in SitePageTags.objects.all()]
-        tags = Tag.objects.filter(pk__in=site_page_tag_ids).order_by('name').annotate(num_tags=models.Count('sitecore_sitepagetags_items'))
+        tags = Tag.objects.filter(pk__in=site_page_tag_ids).order_by('slug').annotate(num_tags=models.Count('sitecore_sitepagetags_items'))
 
         # Return all matching pages and whole tag cloud
         context['pages'] = pages
