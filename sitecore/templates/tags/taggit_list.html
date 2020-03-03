@@ -10,7 +10,7 @@
 	  </a>
 	{% else %}
 	  <a class="btn btn-sm my-1 btn-primary" href="{% slugurl 'tag' %}{{ tag.slug }}/">
-	    <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	    <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
 	    <span class="badge badge-light">{{ tag.num_tags }}</span>
 	  </a>
 	{% endif %}
@@ -22,7 +22,7 @@
 	</a>
       {% else %}
 	<a class="btn btn-sm my-1 btn-primary" href="{% slugurl 'tag' %}{{ tag.slug }}/">
-	  <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
+	  <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
 	</a>
       {% endif %}
     {% endif %}

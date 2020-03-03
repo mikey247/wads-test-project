@@ -16,7 +16,7 @@
 	    <strong>Showing articles tagged:</strong>
 	  </li>
 	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-primary text-lowercase"><i class="fa fa-tag"></i> {{ slug }}</span>
+	    <span class="btn btn-sm my-1 btn-outline-primary"><i class="fa fa-tag"></i> {{ name }}</span>
 	  </li>
 	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
 	    <strong>Found:</strong>
@@ -31,7 +31,7 @@
 	    <strong>No articles tagged</strong>
 	  </li>
 	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ slug }}</span>
+	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ name }}</span>
 	  </li>
 	</ul>
       {% endif %}
@@ -51,7 +51,8 @@
 {% block page-content-main-header %}
   <header>
     {% if slug %}
-      <h1 class="m-0">Content tagged "{{ slug }}"</h1>
+      <h1 class="m-0">Tag Search Results</h1>
+      <span class="text-secondary m-0"><i class="fas fa-search"></i><i class="fas fa-tag"></i> {{ name }}</span>
     {% else %}
       <h1 class="m-0">Tag Cloud</h1>
     {% endif %}

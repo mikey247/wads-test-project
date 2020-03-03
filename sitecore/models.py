@@ -183,8 +183,10 @@ class TagIndexPage(RoutablePageMixin, Page):
         # pages = SitePage.objects.live().filter(tags__slug=tag)
         if slug:
             pages = SitePage.objects.live().filter(tags__slug=slug).order_by('-first_published_at')
+            name = Tag.objects.get(slug=slug)
         else:
             pages = SitePage.objects.live().order_by('-first_published_at')
+            name = None
 
         # Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
@@ -196,6 +198,7 @@ class TagIndexPage(RoutablePageMixin, Page):
         context['pages'] = pages
         context['tags'] = tags
         context['slug'] = slug
+        context['name'] = name
         
         return context
 
