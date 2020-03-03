@@ -9,39 +9,28 @@
 
 {% block page-content-aside-slot-1 %}
   <section>
-    {% if slug %}
-      {% if pages.specific|length %}
-	<ul class="list-group">
-	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	    <strong>Showing articles tagged:</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-primary"><i class="fa fa-tag"></i> {{ name }}</span>
-	  </li>
-	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	    <strong>Found:</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <h3><span class="badge badge-success">{{pages|length}}</span></h3>
-	  </li>
-	</ul>
-      {% else %}
-	<ul class="list-group">
-	  <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-	    <strong>No articles tagged</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ name }}</span>
-	  </li>
-	</ul>
-      {% endif %}
-    {% else %}
+    {% if pages|length %}
       <ul class="list-group">
-	<li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
-	  <strong>Total number of tags:</strong>
+	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	  <strong>Showing items matching:</strong>
 	</li>
 	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <span class="btn btn-sm my-1 btn-info text-lowercase">{{ tags.all.count }}</span>
+	  <span><i class="fa fa-paragraph"></i> {{ query }}</span>
+	</li>
+	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	  <strong>Number of items found:</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <h3><span class="badge badge-success">{{pages|length}}</span></h3>
+	</li>
+      </ul>
+    {% else %}
+      <ul class="list-group">
+	<li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+	  <strong>No items matching:</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <span class="text-danger"><i class="fa fa-paragraph"></i> {{ query }}</span>
 	</li>
       </ul>
     {% endif %}
@@ -50,19 +39,16 @@
 
 {% block page-content-main-header %}
   <header>
-    {% if slug %}
-      <h1 class="m-0">Tag Search Results</h1>
-      <span class="text-secondary m-0"><i class="fas fa-search"></i><i class="fas fa-tag"></i> {{ name }}</span>
-    {% else %}
-      <h1 class="m-0">Tag Cloud</h1>
-    {% endif %}
+    <h1 class="m-0">Search Results</h1>
+    <span class="text-secondary m-0"><i class="fas fa-search"></i><i class="fas fa-paragraph"></i> {{ query }}</span>
   </header>
 {% endblock %}
 
 {% block page-content-main-article %}
-  {% if slug %}
+
+  {% if pages %}
     <article>
-      {% for page in pages.specific %}
+      {% for page in pages %}
 	<div class="bg-light px-2 my-4 {% if not forloop.last %}border-bottom border-secondary{% endif %}">
 	  <h4><a href="{% pageurl page %}"><span class="badge badge-dark">{{ forloop.counter }}</span> {{ page.title }}</a></h4>
 	  {% if page.content_type|stringformat:'s' == "article page" %}

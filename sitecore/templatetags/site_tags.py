@@ -16,7 +16,7 @@ def has_menu_children(page):
 
 
 @register.inclusion_tag('tags/top_menu.html', takes_context=True)
-def top_menu(context, parent, transparent=False, calling_page=None):
+def top_menu(context, parent, search_query='', transparent=False, calling_page=None):
     """
     Retrieves the top menu items - the immediate children of the root page.
     The has_menu_children method is necessary because the bootstrap menu requires
@@ -51,6 +51,7 @@ def top_menu(context, parent, transparent=False, calling_page=None):
         'menuitems': menuitems,
         'navcfg': navcfg,
         'request': context['request'],
+        'search_query': search_query,
     }
 
 
