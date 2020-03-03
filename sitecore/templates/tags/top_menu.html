@@ -13,8 +13,10 @@
       {% if navcfg.brand_name %}<h1>{{ navcfg.brand_name }}</h1>{% endif %}
     </div>
     <div class="col-lg-3">
-      <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% url 'search' %}" method="get">
-	<input class="form-control mr-sm-2" style="text-align: right" type="search" placeholder="Search" value="{{ search_query }}" aria-label="Search">
+      <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% slugurl 'search' %}" method="get">
+	<input type="text" name="query" {% if search_query %} value="{{ search_query }}"{% endif %}
+	       class="form-control mr-sm-2" style="text-align: right"
+	       placeholder="Search" aria-label="Search">
       </form>
     </div>
   </div>
