@@ -104,10 +104,18 @@ class SiteSettings(BaseSetting):
     )
     
     # Social media settings
-    twitter = models.URLField(blank=True, help_text='Twitter Account')
+    twitter = models.CharField(
+        max_length = 128,
+        blank=True,
+        help_text='Twitter Account'
+    )
 
     # Analytics settings
-    ga_tracking_id = models.URLField(blank=True, help_text='Google Analytics Tracking ID (UA-#########-#)')
+    ga_tracking_id = models.CharField(
+        max_length = 32,
+        blank=True,
+        help_text='Google Analytics Tracking ID (UA-#########-#)'
+    )
 
     ### UA-159634627-1
 
