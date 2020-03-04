@@ -106,6 +106,11 @@ class SiteSettings(BaseSetting):
     # Social media settings
     twitter = models.URLField(blank=True, help_text='Twitter Account')
 
+    # Analytics settings
+    ga_tracking_id = models.URLField(blank=True, help_text='Google Analytics Tracking ID (UA-#########-#)')
+
+    ### UA-159634627-1
+
     # create the panels
     theme_tab_panel = [
         MultiFieldPanel([
@@ -129,10 +134,15 @@ class SiteSettings(BaseSetting):
         FieldPanel('twitter'),
     ]
 
+    analytics_tab_panel = [
+        FieldPanel('ga_tracking_id'),
+    ]
+
     # Combine into tabbed panel interface
     edit_handler = TabbedInterface([
         ObjectList(theme_tab_panel, heading='Theme'),
         ObjectList(social_tab_panel, heading='Social Media'),
+        ObjectList(analytics_tab_panel, heading='Analytics'),
     ])
 
 
