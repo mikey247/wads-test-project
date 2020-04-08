@@ -1,9 +1,9 @@
-.rich-text img.alignleft {
+.rich-text img.left {
     float: left;
     margin: 15px 15px 15px 0;
 }
 
-.rich-text img.alignright {
+.rich-text img.right {
     float: right;
     margin: 15px 0 15px 15px;
 }
