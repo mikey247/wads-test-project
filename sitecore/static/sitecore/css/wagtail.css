@@ -7,3 +7,8 @@
     float: right;
     margin: 15px 0 15px 15px;
 }
+
+.rich-text img.full-width {
+    width: 100%;
+    margin: 15px 0 15px 0;
+}
