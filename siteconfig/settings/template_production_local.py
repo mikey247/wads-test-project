@@ -8,6 +8,26 @@ See: https://docs.djangoproject.com/en/2.2/ref/settings/
 See: https://docs.wagtail.io/en/v2.7/getting_started/integrating_into_django.html#settings
 """
 
+# LDAP IMPORTS
+
+# import os
+# import ldap
+# import logging
+
+# from django_auth_ldap.config import LDAPSearch, LDAPGroupQuery, PosixGroupType, GroupOfNamesType, MemberDNGroupType, ActiveDirectoryGroupType
+
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "handlers": {"console": {"class": "logging.StreamHandler"}},
+#     "loggers": {"dhango_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+# }
+
+# logger = logging.getLogger('django_auth_ldap')
+# logger.addHandler(logging.StreamHandler())
+# logger.setLevel(logging.DEBUG)
+
+
 # Security
 # ------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/2.2/topics/security/#ssl-https
@@ -110,3 +130,60 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
 
+# LDAP VARIABLES AND FUNCTIONS
+# COMMENTED OUT BY DEFAULT
+
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",
+#     "django_auth_ldap.backend.LDAPBackend",
+# ]
+
+# # Django Auth LDAP
+# # With custom group settings
+
+# # Custom XAUTH settings to specify what groupMembership entries should be set per authenticated user
+
+# XAUTH_LDAP_REQUIRE_IS_STAFF_GROUP = 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk'
+# XAUTH_LDAP_REQUIRE_IS_SUPERUSER_GROUP = 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk'
+
+# # Standard AUTH_LDAP settings for django_auth_ldap to integrate with UoM LDAP Active Directory
+
+# AUTH_LDAP_GLOBAL_OPTIONS = {
+#     ldap.OPT_X_TLS_REQUIRE_CERT: False,
+#     ldap.OPT_REFERRALS: False,
+# }
+
+# AUTH_LDAP_SERVER_URI = "ldaps://ldap.manchester.ac.uk"
+# AUTH_LDAP_BIND_DN = ""
+# AUTH_LDAP_BIND_PASSWORD = ""
+# AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# AUTH_LDAP_USER_SEARCH = LDAPSearch (
+#     "ou=mc,ou=admin,ou=uman,o=ac,c=uk",
+#     ldap.SCOPE_SUBTREE,
+#     "(uid=%(user)s)"
+# )
+
+# AUTH_LDAP_USER_ATTR_MAP = {
+#     "first_name": "givenName",
+#     "last_name": "sn",
+#     "email": "mail",
+# }
+
+# # Password validation
+# # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
