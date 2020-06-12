@@ -69,8 +69,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ldaptest.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -86,8 +84,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'ldaptest.wsgi.application'
 
 
 # Database
