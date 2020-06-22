@@ -74,6 +74,11 @@ class SiteSettings(BaseSetting):
         help_text='Provide some text for the brand name next to the logo in the main navigation bar.',
     )
 
+    brand_link = models.URLField(
+        blank=True,
+        help_text='Provide the URL you wish the logo to link to.',
+    )
+
     navbar_expand = models.CharField(
         max_length = 2,
         choices=constants.NAVBAR_RESPONSIVE_SIZE_CHOICES,
@@ -129,6 +134,7 @@ class SiteSettings(BaseSetting):
             ImageChooserPanel('brand_logo'),
             FieldPanel('brand_icon'),
             FieldPanel('brand_name'),
+            FieldPanel('brand_link'),
         ], heading="Navbar Brand"),
         MultiFieldPanel([
             FieldPanel('navbar_expand'),

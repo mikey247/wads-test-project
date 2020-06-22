@@ -39,6 +39,7 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
         'brand_logo': site_settings.brand_logo,
         'brand_icon': site_settings.brand_icon,
         'brand_name': site_settings.brand_name,
+        'brand_link':  site_settings.brand_link,
         'textmode': site_settings.navbar_text_colour_mode,
         'bg': site_settings.navbar_background_colour,
         'transparent': transparent,
