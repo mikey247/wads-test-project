@@ -12,14 +12,17 @@ django-extensions==2.2.6
 PyYAML==5.3
 wagtailimporter==2.0.0
 
-# for ldap authentication
-python-ldap==3.2.0
-django-auth-ldap==2.1.0
+# # for ldap authentication
+# # uncomment for testing on server  whether in dev or production
 
-asgiref==3.2.5
-django-debug-toolbar==2.2
-pkg-resources==0.0.0
-pyasn1==0.4.8
-pyasn1-modules==0.2.8
-pytz==2019.3
-sqlparse==0.3.1
+
+# python-ldap==3.2.0
+# django-auth-ldap==2.1.0
+
+# asgiref==3.2.5
+# django-debug-toolbar==2.2
+# pkg-resources==0.0.0
+# pyasn1==0.4.8
+# pyasn1-modules==0.2.8
+# pytz==2019.3
+# sqlparse==0.3.1
