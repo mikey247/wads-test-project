@@ -17,7 +17,7 @@ from django_select2.forms import Select2Widget
 from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core import blocks
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -30,6 +30,8 @@ from pygments.lexers import get_lexer_by_name
 from sitecore import constants
 from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
+from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase
 
 class CSVIntListCharBlock(blocks.FieldBlock):
     """
@@ -957,6 +959,33 @@ class IconCardDeckSnippet(models.Model):
 #     )
     
 
+class TextSnippetTag(TaggedItemBase):
+    content_object = models.ForeignKey(
+        'TextSnippet',
+        on_delete=models.CASCADE,
+        related_name='tagged_text_snippet'
+    )
+
+@register_snippet
+class TextSnippet(models.Model):
+
+    title = models.CharField(
+        max_length=4096,
+        verbose_name="Text Snippet Title",
+        )
+    
+    text = RichTextField()
+
+    tags = TaggableManager(through=TextSnippetTag, blank=True,)
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('tags'),
+        FieldPanel('text'),
+    ]
+
+    def __str__(self):
+        return self.title
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1010,6 +1039,11 @@ class CoreBlock(blocks.StreamBlock):
         #group='3. Embedded Content',
         template='bootstrapblocks/icon_card_deck.html'
     )
+
+    text_snippet = SnippetChooserBlock(
+        TextSnippet,
+        template='tags/text_snippet.html'
+        )
 
     #    jumbotron = BSJumbotronContainerBlock()
 
