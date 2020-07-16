@@ -187,4 +187,4 @@ AUTH_USER_MODEL = 'siteuser.User'
 
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'twitter']
+WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter']
