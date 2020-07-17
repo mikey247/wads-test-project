@@ -986,6 +986,44 @@ class TextSnippet(models.Model):
 
     def __str__(self):
         return self.title
+
+# Section Block 
+
+# Section Block that is made up of custom snippets that will take up a section in a Bootstrap 'Tab' or 'Pills' (in Navs -> https://getbootstrap.com/docs/4.5/components/navs/) or 'Accordion' (see -> https://getbootstrap.com/docs/4.5/components/collapse/). See   
+# This will allow users to create information dense areas while using little space e.g. 'Meet The Team' but instead of being a list of team members it can be split into groups in tabs e.g. RI Team, RSE Team etc
+
+class SubSectionBlock(blocks.StructBlock):
+
+    title = blocks.CharBlock()
+
+    content = blocks.RichTextBlock(
+        label='Rich Text',
+        #validators=[ParseShortcodes],
+        #group='1. Structured Content',
+    )
+    
+    class Meta:
+        icon = 'form'
+
+class SectionBlock(blocks.StructBlock): 
+
+    nav_choices = [
+
+        ("TAB", 'Tab'),
+        ("PILL",   'Pill'),
+        ("ACCORDION",'Accordion'),
+  
+    ]
+
+    nav =  blocks.ChoiceBlock(
+        choices = nav_choices, 
+        help_text = 'Choose display style',
+        label = 'Section Style')
+
+    section = blocks.ListBlock(SubSectionBlock())
+
+    class Meta:
+        icon = 'form'
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1046,6 +1084,8 @@ class CoreBlock(blocks.StreamBlock):
         )
 
     #    jumbotron = BSJumbotronContainerBlock()
+
+    section = SectionBlock()
 
 
     # Override methods
