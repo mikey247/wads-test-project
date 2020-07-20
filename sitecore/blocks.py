@@ -1004,6 +1004,7 @@ class SubSectionBlock(blocks.StructBlock):
     
     class Meta:
         icon = 'form'
+        template = 'bootstrapblocks/subsection_block.html'
 
 class SectionBlock(blocks.StructBlock): 
 
@@ -1024,6 +1025,7 @@ class SectionBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'form'
+        template = 'bootstrapblocks/section_block.html'
     
     
 class CoreBlock(blocks.StreamBlock):

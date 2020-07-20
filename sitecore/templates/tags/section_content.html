@@ -1,0 +1,9 @@
+{% if link_number == 1 %}
+
+ <div class="tab-pane fade show active" id="{{type}}-{{link_number}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{link_number}}"> {{ section.content }}  </div>
+
+ {% else %}
+
+ <div class="tab-pane fade" id="{{type}}-{{link_number}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{link_number}}"> {{ section.content }}  </div>
+
+ {% endif %}

@@ -1,0 +1,13 @@
+<li class="nav-item" role="presentation">
+
+{% if link_number == 1 %}
+
+<a class="nav-item nav-link active" id="nav-{{type}}-{{link_number}}" data-toggle="{{type}}" href="#{{type}}-{{link_number}}" role="tab" aria-controls="{{type}}-{{link_number}}" aria-selected="true">{{ section.title }}</a>
+
+{% else %}
+
+<a class="nav-item nav-link" id="nav-{{type}}-{{link_number}}" data-toggle="{{type}}" href="#{{type}}-{{link_number}}" role="tab" aria-controls="{{type}}-{{link_number}}" aria-selected="false">{{ section.title }}</a>
+
+{%endif %}
+
+</li>
