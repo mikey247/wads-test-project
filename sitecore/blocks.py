@@ -1011,8 +1011,9 @@ class SectionBlock(blocks.StructBlock):
     nav_choices = [
 
         ("TAB", 'Tab'),
-        ("PILL",   'Pill'),
-        ("ACCORDION",'Accordion'),
+        ("PILL", 'Pill'),
+        ("PILL-VERT-L",'Pill - Vertical (Left)'),
+        ("PILL-VERT-R",'Pill - Vertical (Right)'),
   
     ]
 

@@ -1,6 +1,6 @@
 {% load wagtailcore_tags site_tags %}
 
-
+<!-- If TAB style chosen -->
 {% if self.nav == 'TAB' %}
 
     <ul class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
@@ -27,6 +27,7 @@
 
 </div>
 
+<!-- If PILL style chosen -->
 
 {% elif self.nav == 'PILL' %}
 
@@ -52,6 +53,83 @@
     
 </div>
 
+
+<!-- If PILL-VERT-L style chosen -->
+
+{% elif self.nav == 'PILL-VERT-L' %}
+
+<div class="row">
+
+<div class="col-4"> 
+
+<div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+
+        {% for section in self.section  %}
+
+                {% section_title section 'pill-vert' forloop.counter %}    
+
+        {% endfor %}
+
+      
+        </div>
+      
+</div>
+
+<div class="col-8"> 
+
+      <div class="tab-content mb3" id="v-pills-tabContent">
+ 
+        {% for section in self.section  %}
+
+                {% section_content section 'pill-vert' forloop.counter %}    
+
+        {% endfor %}
+
+
+      </div>
+</div>
+
+</div>
+
+<!-- If PILL-VERT-R style chosen -->
+
+
+{% elif self.nav == 'PILL-VERT-R' %}
+
+<div class="row">
+
+        <div class="col-8"> 
+        
+  
+                <div class="tab-content mb3" id="v-pills-tabContent">
+         
+                        {% for section in self.section  %}
+                
+                                {% section_content section 'pill-vert' forloop.counter %}    
+                
+                        {% endfor %}
+                
+                
+                      </div>
+              
+        </div>
+        
+        <div class="col-4"> 
+  
+              <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        
+        
+                {% for section in self.section  %}
+        
+                        {% section_title section 'pill-vert' forloop.counter %}    
+        
+                {% endfor %}
+        
+              
+                </div>
+        </div>
+        
+        </div>
+
 {% endif %}
-
-
