@@ -1,9 +1,13 @@
-{% if link_number == 1 %}
+{% with prefix=loop id=section.title|slugify %}
 
- <div class="tab-pane fade show active" id="{{type}}-{{link_number}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{link_number}}"> {{ section.content }}  </div>
+{% if loop == 1 %}
+
+ <div class="tab-pane fade show active" id="{{type}}-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{id}}"> {{ section.content }}  </div>
 
  {% else %}
 
- <div class="tab-pane fade" id="{{type}}-{{link_number}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{link_number}}"> {{ section.content }}  </div>
+ <div class="tab-pane fade" id="{{type}}-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-{{type}}-{{id}}"> {{ section.content }}  </div>
 
  {% endif %}
+
+ {% endwith %}

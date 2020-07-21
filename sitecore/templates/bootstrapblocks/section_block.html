@@ -5,12 +5,13 @@
 
     <ul class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
 
+
     <!-- Get Section Titles -->
-{% for section in self.section  %}
+    {% for section in self.section  %}
 
-        {% section_title section forloop.counter 'tab' %}    
+            {% section_title section 'tab' forloop.counter %}    
 
-{% endfor %}
+    {% endfor %}
 
     </ul>
 
@@ -20,7 +21,7 @@
 <!-- Get Section Content -->
 {% for section in self.section  %}
 
-        {% section_content section forloop.counter 'tab' %}    
+        {% section_content section 'tab' forloop.counter %}    
 
 {% endfor %}
 
@@ -34,7 +35,7 @@
         <!-- Get Section Titles -->
 {% for section in self.section  %}
 
-    {% section_title section forloop.counter 'pill' %}    
+    {% section_title section 'pill' forloop.counter %}    
 
 {% endfor %}
 
@@ -45,7 +46,7 @@
     <!-- Get Section Content -->
     {% for section in self.section  %}
     
-            {% section_content section forloop.counter 'pill' %}    
+            {% section_content section 'pill' forloop.counter %}    
     
     {% endfor %}
     
