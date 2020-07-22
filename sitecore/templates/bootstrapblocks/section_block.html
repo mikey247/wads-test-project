@@ -132,4 +132,20 @@
         
         </div>
 
+
+{% elif self.nav == 'ACCORDION' %}
+
+
+<div id="accordion">
+
+
+        {% for section in self.section  %}
+        
+                {% accordion section 'accordion' forloop.counter %}    
+        
+        {% endfor %}
+        
+
+</div>
+
 {% endif %}

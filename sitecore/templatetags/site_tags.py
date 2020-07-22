@@ -120,3 +120,11 @@ def section_content(context, section, type, loopcount):
         'type': type,
         'loop': loopcount, 
     }
+
+@register.inclusion_tag('tags/accordion.html', takes_context=True)
+def accordion(context, section, type, loopcount):
+    return {
+        'section': section,
+        'type': type,
+        'loop': loopcount, 
+    }

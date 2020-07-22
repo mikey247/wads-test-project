@@ -1014,6 +1014,7 @@ class SectionBlock(blocks.StructBlock):
         ("PILL", 'Pill'),
         ("PILL-VERT-L",'Pill - Vertical (Left)'),
         ("PILL-VERT-R",'Pill - Vertical (Right)'),
+        ("ACCORDION", 'Accordion'),
   
     ]
 
