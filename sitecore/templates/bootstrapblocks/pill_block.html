@@ -1,0 +1,214 @@
+
+{% if self.pill_type == 'PILL' %}
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+    <!-- Get Section Head  -->
+    
+    {% for section in self.pill_section  %}
+    
+        {% with prefix=forloop.counter id=section.title|slugify %}
+    
+        <li class="nav-item" role="presentation">
+    
+            {% if prefix == 1 %}
+    
+                <a class="nav-item nav-link active" id="nav-tab-{{id}}" data-toggle="pill" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="true">{{ section.title }}</a>
+    
+            {% else %}
+    
+                <a class="nav-item nav-link" id="nav-tab-{{id}}" data-toggle="pill" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="false">{{ section.title }}</a>
+    
+            {% endif %}
+    
+        </li>
+    
+        {% endwith %}
+    
+    {% endfor %}
+    
+    
+    </ul>
+    
+    
+        <!-- Get Section Content -->
+    
+<div class="tab-content" id="pills-tabContent">
+    
+    {% for section in self.pill_section  %}
+    
+        {% with prefix=forloop.counter id=section.title|slugify %}
+    
+            {% if prefix == 1 %}
+    
+                <div class="tab-pane fade show active" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
+    
+            {% else %}
+    
+                <div class="tab-pane fade" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
+    
+            {% endif %}
+    
+        
+        {% endwith %}
+    
+    {% endfor %}
+    
+    </div>
+    
+{% elif self.pill_type == 'PILL-VERT-L' %}
+
+
+<div class="row">
+
+    <div class="col-4"> 
+    
+    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    
+    
+            {% for section in self.pill_section  %}
+
+                {% with prefix=forloop.counter id=section.title|slugify %}
+
+        
+                    {% if loop == 1 %}
+
+                        <a class="nav-link active" id="v-pills-{{id}}" data-toggle="pill" href="#v-pills-{{prefix}}-{{id}}" role="tab" aria-controls="v-pills-{{id}}" aria-selected="true">{{ section.title }}</a>
+                
+                    {% else %}
+            
+                        <a class="nav-link" id="v-pills-{{id}}" data-toggle="pill" href="#v-pills-{{prefix}}-{{id}}" role="tab" aria-controls="v-pills-{{id}}" aria-selected="false">{{ section.title }}</a>
+        
+                    {% endif %}
+
+                {% endwith %}
+
+            
+            {% endfor %}
+    
+          
+            </div>
+          
+    </div>
+    
+    <div class="col-8"> 
+    
+          <div class="tab-content mb3" id="v-pills-tabContent">
+     
+            {% for section in self.pill_section  %}
+    
+                {% with prefix=forloop.counter id=section.title|slugify %}
+
+                    {% if loop == 1 %}
+
+                        <div class="tab-pane fade show active" id="v-pills-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="v-pills-{{id}}"> {{ section.content }} </div>
+       
+                    {% else %}
+       
+                        <div class="tab-pane fade" id="v-pills-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="v-pills-{{id}}"> {{ section.content }} </div>
+       
+       
+                    {% endif %}
+
+                {% endwith %}
+            
+            {% endfor %}
+    
+    
+          </div>
+    </div>
+    
+</div>
+
+{% elif self.pill_type == 'PILL-VERT-R' %}
+
+
+<div class="row">
+
+    <div class="col-8"> 
+    
+        <div class="tab-content mb3" id="v-pills-tabContent">
+     
+            {% for section in self.pill_section  %}
+    
+                {% with prefix=forloop.counter id=section.title|slugify %}
+
+                    {% if loop == 1 %}
+
+                        <div class="tab-pane fade show active" id="v-pills-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="v-pills-{{id}}"> {{ section.content }} </div>
+       
+                    {% else %}
+       
+                        <div class="tab-pane fade" id="v-pills-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="v-pills-{{id}}"> {{ section.content }} </div>
+       
+       
+                    {% endif %}
+
+                {% endwith %}
+            
+            {% endfor %}
+    
+    
+          </div>
+
+          
+    </div>
+    
+    <div class="col-4"> 
+
+        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    
+    
+            {% for section in self.pill_section  %}
+
+                {% with prefix=forloop.counter id=section.title|slugify %}
+
+        
+                    {% if loop == 1 %}
+
+                        <a class="nav-link active" id="v-pills-{{id}}" data-toggle="pill" href="#v-pills-{{prefix}}-{{id}}" role="tab" aria-controls="v-pills-{{id}}" aria-selected="true">{{ section.title }}</a>
+                
+                    {% else %}
+            
+                        <a class="nav-link" id="v-pills-{{id}}" data-toggle="pill" href="#v-pills-{{prefix}}-{{id}}" role="tab" aria-controls="v-pills-{{id}}" aria-selected="false">{{ section.title }}</a>
+        
+                    {% endif %}
+
+                {% endwith %}
+
+            
+            {% endfor %}
+    
+          
+            </div>
+    
+
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endif %}
+    
+    

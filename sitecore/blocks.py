@@ -1007,26 +1007,63 @@ class SubSectionBlock(blocks.StructBlock):
         template = 'bootstrapblocks/subsection_block.html'
 
 
-    nav_choices = [
+class TabBlock(blocks.StructBlock):
 
-        ("TAB", 'Tab'),
+    tab_section = blocks.ListBlock(SubSectionBlock())
+
+    class Meta:
+        template = 'bootstrapblocks/tab_block.html'
+        icon = 'form'
+
+
+class PillBlock(blocks.StructBlock):
+
+    pill_type_choices = [
+
         ("PILL", 'Pill'),
-        ("PILL-VERT-L",'Pill - Vertical (Left)'),
-        ("PILL-VERT-R",'Pill - Vertical (Right)'),
-        ("ACCORDION", 'Accordion'),
+        ("PILL-VERT-L",'Vertical Pill (Left Tabs)'),
+        ("PILL-VERT-R",'Vertical Pill Right (Right Tabs)'),
   
     ]
 
-    nav =  blocks.ChoiceBlock(
-        choices = nav_choices, 
-        help_text = 'Choose display style',
-        label = 'Section Style')
+    pill_type = blocks.ChoiceBlock(
+        choices = pill_type_choices, 
+        help_text = 'Choose pill display style',
+        label = 'Pill Style',
+        default = 'PILL'
+        )
 
-    section = blocks.ListBlock(SubSectionBlock())
+
+    pill_section = blocks.ListBlock(SubSectionBlock())
 
     class Meta:
+        template = 'bootstrapblocks/pill_block.html'
         icon = 'form'
-        template = 'bootstrapblocks/section_block.html'
+
+
+class AccordionBlock(blocks.StructBlock):
+
+    accordion_type_choices = [
+
+        ("ACCORDION", 'Accordion (Default - First tab open)'),
+        ("ACCORDION-CLOSED",'Accordion - (All tabs closed)' ),
+  
+    ]
+
+    accordion_type = blocks.ChoiceBlock(
+        choices = accordion_type_choices, 
+        help_text = 'Choose Accordion display style',
+        label = 'Accordion Style',
+        default = 'ACCORDION'
+        )
+
+    accordion_section = blocks.ListBlock(SubSectionBlock())
+
+
+    class Meta:
+        template = 'bootstrapblocks/accordion_block.html'
+
+
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1088,8 +1125,11 @@ class CoreBlock(blocks.StreamBlock):
 
     #    jumbotron = BSJumbotronContainerBlock()
 
-    section = SectionBlock()
+    tab = TabBlock(group='Section Blocks')
 
+    pill = PillBlock(group='Section Blocks')
+
+    accordion = AccordionBlock(group='Section Blocks')
 
     # Override methods
 
