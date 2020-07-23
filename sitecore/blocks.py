@@ -1006,7 +1006,6 @@ class SubSectionBlock(blocks.StructBlock):
         icon = 'form'
         template = 'bootstrapblocks/subsection_block.html'
 
-class SectionBlock(blocks.StructBlock): 
 
     nav_choices = [
 

@@ -103,28 +103,3 @@ def page_date(context, page):
     return {
         'page': page,
     }
-
-
-@register.inclusion_tag('tags/section_title.html', takes_context=True)
-def section_title(context, section, type, loopcount):
-    return {
-        'section': section,
-        'type': type,
-        'loop': loopcount, 
-    }
-
-@register.inclusion_tag('tags/section_content.html', takes_context=True)
-def section_content(context, section, type, loopcount):
-    return {
-        'section': section,
-        'type': type,
-        'loop': loopcount, 
-    }
-
-@register.inclusion_tag('tags/accordion.html', takes_context=True)
-def accordion(context, section, type, loopcount):
-    return {
-        'section': section,
-        'type': type,
-        'loop': loopcount, 
-    }
