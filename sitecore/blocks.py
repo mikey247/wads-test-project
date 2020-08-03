@@ -986,6 +986,17 @@ class TextSnippet(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class TwoColBlock(blocks.StructBlock):
+
+    col_one_content = blocks.RichTextBlock(label='Column - 1',)
+
+    col_two_content = blocks.RichTextBlock(label='Column - 2')
+
+    class Meta:
+        template = 'bootstrapblocks/two_col_block.html'
+        icon = 'form'
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1047,6 +1058,10 @@ class CoreBlock(blocks.StreamBlock):
 
     #    jumbotron = BSJumbotronContainerBlock()
 
+    two_col_block = TwoColBlock(
+        label = 'Two Column Layout',
+        group = '1. Structured Content' 
+    )
 
     # Override methods
 
