@@ -1,18 +1,38 @@
-{% load wagtailimages_tags %}
+{% load wagtailimages_tags wagtailcore_tags %}
 
 <div class="row" >
 
 <div class="col-6"> 
 
-    {{ self.col_one_content }}
+    {% for block in self.col_one_content %}
+    {% if block.block_type == 'image' %}
+    {% image block.value width-1200 as photo %}
+    <figure class="figure">
+      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+    </figure>
+    {% else %}
+    {% include_block block %}    
+    {% endif %}
+    {% endfor %}
 
 </div>
 
 <div class="col-6"> 
 
-    {{ self.col_two_content }}
+
+    {% for block in self.col_two_content %}
+    {% if block.block_type == 'image' %}
+    {% image block.value width-1200 as photo %}
+    <figure class="figure">
+      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
+      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+    </figure>
+    {% else %}
+    {% include_block block %}      
+    {% endif %}
+    {% endfor %}
 
 </div>
 
 </div>
-

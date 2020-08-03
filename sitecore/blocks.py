@@ -988,11 +988,71 @@ class TextSnippet(models.Model):
         return self.title
 
 
+class NestedCoreBlock(blocks.StreamBlock):
+    """
+    Re-usable Nested CoreBlock for collecting standard and custom streamfield support into one place
+    """
+
+    nested_paragraph = blocks.RichTextBlock(
+        label='Rich Text Paragraph',
+        #validators=[ParseShortcodes],
+        group='1. Structured Content',
+    )
+    
+    nested_markdown = MarkdownAndShortcodeTextBlock(
+        label='Markdown Paragraph',
+        group='1. Structured Content',
+    )
+    # heading = BSHeadingBlock()
+    # blockquote = BSBlockquoteBlock()
+
+    nested_image =  ImageChooserBlock(
+        group='2. Linked Content',
+        #template='boostrapblocks/image.html'
+    )
+    nested_docs = DocumentChooserBlock(
+        group='2. Linked Content',
+        template='bootstrapblocks/document.html'
+    )
+    
+    nested_page = blocks.PageChooserBlock(
+        required=False,
+        group='2. Linked Content',
+    )
+    # external = blocks.URLBlock(required=False)
+
+    #email = blocks.EmailBlock()
+
+    nested_code = BSCodeBlock(
+        group='3. Embedded Content',
+    )
+#    table = TableBlock(
+#        group='Embedded Content',
+#        template='bootstrapblocks/table.html'
+#    )
+
+    nested_text_snippet = SnippetChooserBlock(
+        TextSnippet,
+        template='tags/text_snippet.html',
+        label = 'Text Snippet',
+        group='3. Embedded Content',
+        )
+
+    #    jumbotron = BSJumbotronContainerBlock()
+
+    # Override methods
+
+    def get_form_context(self, value, prefix='', errors=None):
+        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context['block_type'] = 'core-block'
+        return context
+
+
 class TwoColBlock(blocks.StructBlock):
 
-    col_one_content = blocks.RichTextBlock(label='Column - 1',)
+    col_one_content = NestedCoreBlock(label='Column - 1',)
 
-    col_two_content = blocks.RichTextBlock(label='Column - 2')
+    col_two_content = NestedCoreBlock(label='Column - 2')
 
     class Meta:
         template = 'bootstrapblocks/two_col_block.html'
