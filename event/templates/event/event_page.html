@@ -8,7 +8,7 @@
     {% if page.event_image %}
       {% image page.event_image fill-1200x300 as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid">
+	<img src="{{ photo.url }}" alt="{{ page.event_image.alt_text }}" class="img-fluid">
       </div>
     {% endif %}
     <div class="media mb-4">
@@ -48,9 +48,9 @@
 	{% if block.block_type == 'image' %}
           <div class="thumbnail img-raised">
 	    {% image block.value width-1200 as photo %}
-	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt }}" class="img-responsive img-rounded">
+	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ block.value.alt_text }}" class="img-responsive img-rounded">
 	    <div class="caption">
-	      <p class="text-primary text-right">{{ photo.alt }}</p>
+	      <i>{{ block.value.caption }}</i>
 	    </div>
           </div>
 	{% else %}
