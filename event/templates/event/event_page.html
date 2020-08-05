@@ -43,16 +43,15 @@
 
 {% block page-content-main-article %}
   <article>
-    <section>
+    <section class="my-4">
       {% for block in page.body %}
 	{% if block.block_type == 'image' %}
-          <div class="thumbnail img-raised">
-	    {% image block.value width-1200 as photo %}
-	    <img src="{{ photo.url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ block.value.alt_text }}" class="img-responsive img-rounded">
-	    <div class="caption">
-	      <i>{{ block.value.caption }}</i>
-	    </div>
-          </div>
+	  {% image block.value width-1200 as photo %}
+	  <figure class="figure">
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
+      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
+      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
+	  </figure>
 	{% else %}
 	  {% include_block block %}
 	{% endif %}
