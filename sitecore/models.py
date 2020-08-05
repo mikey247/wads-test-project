@@ -53,7 +53,7 @@ class SiteSettings(BaseSetting):
     )
 
     brand_logo = models.ForeignKey(
-        'images.CaptionImage',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
