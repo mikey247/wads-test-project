@@ -996,33 +996,33 @@ class CoreBlock(blocks.StreamBlock):
     paragraph = blocks.RichTextBlock(
         label='Rich Text Paragraph',
         #validators=[ParseShortcodes],
-        #group='1. Structured Content',
+        group='1. Structured Content',
     )
     markdown = MarkdownAndShortcodeTextBlock(
         label='Markdown Paragraph',
-        #group='1. Structured Content',
+        group='1. Structured Content',
     )
     # heading = BSHeadingBlock()
     # blockquote = BSBlockquoteBlock()
 
     image =  ImageChooserBlock(
-        #group='2. Linked Content',
+        group='2. Linked Content',
         #template='boostrapblocks/image.html'
     )
     docs = DocumentChooserBlock(
-        #group='2. Linked Content',
+        group='2. Linked Content',
         template='bootstrapblocks/document.html'
     )
     page = blocks.PageChooserBlock(
         required=False,
-        #group='2. Linked Content',
+        group='2. Linked Content',
     )
     # external = blocks.URLBlock(required=False)
 
     #email = blocks.EmailBlock()
 
     code = BSCodeBlock(
-        #group='3. Embedded Content',
+        group='3. Embedded Content',
     )
 #    table = TableBlock(
 #        group='Embedded Content',
@@ -1031,17 +1031,18 @@ class CoreBlock(blocks.StreamBlock):
 
     carousel = SnippetChooserBlock(
         CarouselSnippet,
-        #group='3. Embedded Content',
+        group='3. Embedded Content',
         template='bootstrapblocks/carousel.html'
     )
     icon_card_deck = SnippetChooserBlock(
         IconCardDeckSnippet,
-        #group='3. Embedded Content',
+        group='3. Embedded Content',
         template='bootstrapblocks/icon_card_deck.html'
     )
 
     text_snippet = SnippetChooserBlock(
         TextSnippet,
+        group = '3. Embedded Content',
         template='tags/text_snippet.html'
         )
 
