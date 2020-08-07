@@ -9,11 +9,11 @@
         {% if navcfg.brand_link and navcfg.brand_logo %}
         <a href="{{navcfg.brand_link}}"> 
         {% image navcfg.brand_logo max-206x86 as photo %}
-        <img src="{{ photo.url }}" alt="{{ photo.alt }}">
+        <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
           </a>
         {% else %}
         {% image navcfg.brand_logo max-206x86 as photo %}
-        <img src="{{ photo.url }}" alt="{{ photo.alt }}">
+        <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
         {% endif %}
 
     </div>

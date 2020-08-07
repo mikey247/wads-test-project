@@ -15,7 +15,7 @@
       {% endif %}
       
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block" >
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
@@ -24,8 +24,9 @@
 	{% if block.block_type == 'image' %}
 	  {% image block.value width-1200 as photo %}
 	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
+      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
+      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
 	  </figure>
 	{% else %}
 	  {% include_block block %}
@@ -42,8 +43,9 @@
 	{% if block.block_type == 'image' %}
 	  {% image block.value width-1200 as photo %}
 	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
+      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
+      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
 	  </figure>
 	{% else %}
 	  {% include_block block %}

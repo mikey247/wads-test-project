@@ -21,8 +21,9 @@
 		  {% if block.block_type == 'image' %}
 		    {% image block.value width-1200 as photo %}
 		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
+		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
+          <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
+          <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
 		    </figure>
 		  {% else %}
 		    {% include_block block %}
@@ -61,9 +62,9 @@
 	{% if block.block_type == 'image' %}
 	  {% image block.value width-1200 as photo %}
 	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
+	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
+      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
+      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>	  </figure>
 	{% else %}
 	  {% include_block block %}
 	{% endif %}
