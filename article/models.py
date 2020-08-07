@@ -276,7 +276,7 @@ class ArticlePage(SitePage):
     )
 
     article_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -291,7 +291,7 @@ class ArticlePage(SitePage):
     )
     
     thumbnail_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
