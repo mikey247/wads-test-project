@@ -1062,6 +1062,8 @@ class AccordionBlock(blocks.StructBlock):
 
     class Meta:
         template = 'bootstrapblocks/accordion_block.html'
+        icon = 'form'
+
 
 
     
