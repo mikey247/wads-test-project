@@ -15,7 +15,7 @@
       {% endif %}
       
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ block.value.alt_text }}" class="img-fluid rounded mx-auto d-block" >
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
