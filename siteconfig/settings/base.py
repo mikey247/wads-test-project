@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
-    'ldapsignal',
     'captioned_images',
 
     'wagtail.contrib.forms',
