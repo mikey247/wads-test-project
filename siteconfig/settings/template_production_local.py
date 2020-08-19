@@ -8,25 +8,17 @@ See: https://docs.djangoproject.com/en/2.2/ref/settings/
 See: https://docs.wagtail.io/en/v2.7/getting_started/integrating_into_django.html#settings
 """
 
-# LDAP IMPORTS
+import ldap
+import logging
 
-# import os
-# import ldap
-# import logging
+from django_auth_ldap.config import LDAPSearch
+from django.core.exceptions import ImproperlyConfigured
 
-# from django_auth_ldap.config import LDAPSearch, LDAPGroupQuery, PosixGroupType, GroupOfNamesType, MemberDNGroupType, ActiveDirectoryGroupType
+from sitecore.auth import GroupMembershipDNGroupType
 
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {"console": {"class": "logging.StreamHandler"}},
-#     "loggers": {"dhango_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
-# }
-
-# logger = logging.getLogger('django_auth_ldap')
-# logger.addHandler(logging.StreamHandler())
-# logger.setLevel(logging.DEBUG)
-
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
 
 # Security
 # ------------------------------------------------------------------------
@@ -130,60 +122,103 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
 
-# LDAP VARIABLES AND FUNCTIONS
-# COMMENTED OUT BY DEFAULT
+# Authentication Backend(s)
+# ------------------------------------------------------------------------
+# Add LDAP Authentication and custom settings
+# Remove/comment "ModelBackend" if no default username/password access is required
+# See: https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",
-#     "django_auth_ldap.backend.LDAPBackend",
-# ]
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
-# # Django Auth LDAP
-# # With custom group settings
+AUTH_LDAP_GLOBAL_OPTIONS = {
+    ldap.OPT_X_TLS_REQUIRE_CERT: False,
+    ldap.OPT_REFERRALS: False,
+}
 
-# # Custom XAUTH settings to specify what groupMembership entries should be set per authenticated user
+AUTH_LDAP_SERVER_URI = 'ldaps://ldap.manchester.ac.uk'
+AUTH_LDAP_BIND_DN = ''
+AUTH_LDAP_BIND_PASSWORD = ''
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_GROUP_TYPE = GroupMembershipDNGroupType()
 
-# XAUTH_LDAP_REQUIRE_IS_STAFF_GROUP = 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk'
-# XAUTH_LDAP_REQUIRE_IS_SUPERUSER_GROUP = 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk'
+# Specific queries for user and group search
 
-# # Standard AUTH_LDAP settings for django_auth_ldap to integrate with UoM LDAP Active Directory
+AUTH_LDAP_USER_SEARCH = LDAPSearch('<insert LDAP user search query>', ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch('<insert LDAP group search query>', ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
 
-# AUTH_LDAP_GLOBAL_OPTIONS = {
-#     ldap.OPT_X_TLS_REQUIRE_CERT: False,
-#     ldap.OPT_REFERRALS: False,
+# (examples for UoM)
+# AUTH_LDAP_USER_SEARCH = LDAPSearch('ou=mc,ou=admin,ou=uman,o=ac,c=uk', ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch('ou=mc,ou=admin,ou=uman,o=ac,c=uk', ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+
+# Specify minimum group requirement to allow user authentication = MUST BE MEMBER OF THIS GROUP
+
+AUTH_LDAP_REQUIRE_GROUP = '<insert required LDAP group for user authentication>'
+
+# (examples for UoM)
+# AUTH_LDAP_REQUIRE_GROUP = 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk'
+
+# Map LDAP attribute fields to user model fields
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+
+# Assign status flags based on group membership
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_staff": '<insert LDAP group DN required for access>',
+    "is_superuser": '<insert LDAP group DN required for superuser access>',
+}
+
+# (examples for UoM)
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_staff": 'cn=admin-mc-ResearchIT-all,ou=mc,ou=admin,ou=uman,o=ac,c=uk',
+#     "is_superuser": 'cn=admin-mc-ResearchIT-webadmin,ou=mc,ou=admin,ou=uman,o=ac,c=uk',
 # }
 
-# AUTH_LDAP_SERVER_URI = "ldaps://ldap.manchester.ac.uk"
-# AUTH_LDAP_BIND_DN = ""
-# AUTH_LDAP_BIND_PASSWORD = ""
-# AUTH_LDAP_ALWAYS_UPDATE_USER = True
+# LDAP to Django Group Mapping - additional settings (not supported directly by django_auth_ldap)
 
-# AUTH_LDAP_USER_SEARCH = LDAPSearch (
-#     "ou=mc,ou=admin,ou=uman,o=ac,c=uk",
-#     ldap.SCOPE_SUBTREE,
-#     "(uid=%(user)s)"
-# )
+# Assign to Django group (dict key) if user has LDAP groupMembership to any group in the value list
 
-# AUTH_LDAP_USER_ATTR_MAP = {
-#     "first_name": "givenName",
-#     "last_name": "sn",
-#     "email": "mail",
+XAUTH_LDAP_GROUPS_FROM_MEMBERSHIP = {
+    '<insert name of Django/Wagtail Group>': [
+        '<insert LDAP group DN>',
+        '<insert LDAP group DN>',
+    ],
+}
+
+# (example for UoM)
+# XAUTH_LDAP_GROUPS_FROM_MEMBERSHIP = {
+#     'Moderators': [
+#         'cn=admin-mc-ResearchIT-webadmin,ou=mc,ou=admin,ou=uman,o=ac,c=uk',
+#     ],
 # }
 
-# # Password validation
-# # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+# Assign to Django group (dict key) if user DOES NOT HAVE LDAP groupMembership to any group in the value list
 
-# AUTH_PASSWORD_VALIDATORS = [
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-#     },
-#     {
-#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-#     },
-# ]
+XAUTH_LDAP_GROUPS_FROM_NON_MEMBERSHIP = {
+    '<insert name of Django/Wagtail Group>': [
+        '<insert LDAP group DN>',
+        '<insert LDAP group DN>',
+    ]
+}
+
+# XAUTH_LDAP_GROUPS_FROM_NON_MEMBERSHIP = {
+#     'Editors': [
+#         'cn=admin-mc-ResearchIT-webadmin,ou=mc,ou=admin,ou=uman,o=ac,c=uk',
+#     ]
+# }
+
+# For LDAP we do not allow users to reset their passwords (nor can we change them)
+# Also disables password fields in "new user" forms (if enabled)
+
+WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = False
+WAGTAIL_PASSWORD_RESET_ENABLED = False
+WAGTAILUSERS_PASSWORD_ENABLED = False
+
