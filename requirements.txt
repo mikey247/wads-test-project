@@ -11,10 +11,3 @@ shortcodes==2.5.0
 django-extensions==2.2.6
 PyYAML==5.3
 wagtailimporter==2.0.0
-
-# # for ldap authentication
-# # uncomment for testing on server  whether in dev or production
-
-# python-ldap==3.2.0
-# django-auth-ldap==2.1.0
-
