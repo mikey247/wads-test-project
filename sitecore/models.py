@@ -122,8 +122,6 @@ class SiteSettings(BaseSetting):
         help_text='Google Analytics Tracking ID (UA-#########-#)'
     )
 
-    ### UA-159634627-1
-
     # create the panels
     theme_tab_panel = [
         MultiFieldPanel([
