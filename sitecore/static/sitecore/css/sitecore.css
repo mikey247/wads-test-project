@@ -20,3 +20,11 @@
     content: "/";
     padding: 0.5rem;
 }
+
+a.cc-btn.cc-dismiss:hover {
+    color: black;
+}
+
+.cc-message h3 {
+    margin-bottom: 1em;
+}

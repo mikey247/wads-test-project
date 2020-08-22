@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
-    'ldapsignal',
+    'captioned_images',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -187,4 +187,6 @@ AUTH_USER_MODEL = 'siteuser.User'
 
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
+WAGTAILIMAGES_IMAGE_MODEL = 'captioned_images.CaptionImage'
 WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter']
+

@@ -53,7 +53,7 @@ class SiteSettings(BaseSetting):
     )
 
     brand_logo = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -121,8 +121,6 @@ class SiteSettings(BaseSetting):
         blank=True,
         help_text='Google Analytics Tracking ID (UA-#########-#)'
     )
-
-    ### UA-159634627-1
 
     # create the panels
     theme_tab_panel = [
