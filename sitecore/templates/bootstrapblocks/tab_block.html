@@ -1,59 +1,27 @@
-
-<ul class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-
-
 <!-- Get Section Head  -->
-
-{% for section in self.tab_section  %}
-
+<ul class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+  {% for section in self.tab_section  %}
     {% with prefix=forloop.counter id=section.title|slugify %}
-
-    <li class="nav-item" role="presentation">
-
+      <li class="nav-item" role="presentation">
         {% if prefix == 1 %}
-
-            <a class="nav-item nav-link active" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="true">{{ section.title }}</a>
-
+          <a class="nav-item nav-link active" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="true">{{ section.title }}</a>
         {% else %}
-
-            <a class="nav-item nav-link" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="false">{{ section.title }}</a>
-
+          <a class="nav-item nav-link" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="false">{{ section.title }}</a>
         {% endif %}
-
-    </li>
-
+      </li>
     {% endwith %}
-
-{% endfor %}
-
-
+  {% endfor %}
 </ul>
 
-
-    <!-- Get Section Content -->
-
+<!-- Get Section Content -->
 <div class="tab-content" id="nav-tabContent">
-
-{% for section in self.tab_section  %}
-
+  {% for section in self.tab_section  %}
     {% with prefix=forloop.counter id=section.title|slugify %}
-
-        {% if prefix == 1 %}
-
-            <div class="tab-pane fade show active" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
-
-        {% else %}
-
-            <div class="tab-pane fade" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
-
-        {% endif %}
-
-    
+      {% if prefix == 1 %}
+        <div class="tab-pane fade show active" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
+      {% else %}
+        <div class="tab-pane fade" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ section.content }}  </div>
+      {% endif %}
     {% endwith %}
-
-{% endfor %}
-
+  {% endfor %}
 </div>
-
-
-
