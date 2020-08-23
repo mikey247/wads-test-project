@@ -1,27 +1,32 @@
-<!-- Get Section Head  -->
-<ul class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+<!-- Tab Section Navigation -->
+<ul class="nav nav-tabs mb-3" id="{{ppid}}-{{pid}}-nav-tab" role="tablist">
   {% for tab in self.tab_section  %}
-    {% with prefix=forloop.counter id=tab.title|slugify %}
+    {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
       <li class="nav-item" role="presentation">
-        {% if prefix == 1 %}
-          <a class="nav-item nav-link active" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="true">{{ tab.title }}</a>
-        {% else %}
-          <a class="nav-item nav-link" id="nav-tab-{{id}}" data-toggle="tab" href="#tab-{{prefix}}-{{id}}" role="tab" aria-controls="tab-{{id}}" aria-selected="false">{{ tab.title }}</a>
-        {% endif %}
+        <a id="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}"
+	   class="nav-item nav-link{% if not tab_id %} active{% endif %}"
+	   href="#{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+	   data-toggle="tab"
+	   role="tab"
+	   aria-selected="{% if not tab_id %}true{% else %}false{% endif %}"
+	   aria-controls="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}">
+	  {{ tab.title }}
+	</a>
       </li>
     {% endwith %}
   {% endfor %}
 </ul>
 
-<!-- Get Section Content -->
-<div class="tab-content" id="nav-tabContent">
+<!-- Tab Section Content -->
+<div class="tab-content" id="{{ppid}}-{{pid}}-nav-tab-content">
   {% for tab in self.tab_section  %}
-    {% with prefix=forloop.counter id=tab.title|slugify %}
-      {% if prefix == 1 %}
-        <div class="tab-pane fade show active" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ tab.content }}  </div>
-      {% else %}
-        <div class="tab-pane fade" id="tab-{{prefix}}-{{id}}" role="tabpanel" aria-labelledby="nav-tab-{{id}}"> {{ tab.content }}  </div>
-      {% endif %}
+    {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
+      <div id="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+	   class="tab-pane fade{% if not tab_id %} show active{%endif%}"
+	   role="tabpanel"
+	   aria-labelledby="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}">
+	{{ tab.content }}
+      </div>
     {% endwith %}
   {% endfor %}
 </div>
