@@ -1142,6 +1142,11 @@ class CoreBlock(blocks.StreamBlock):
         return context
 
 
+    class Meta:
+        template = 'sitecore/coreblock.html'
+    
+
+
 class SplashBlock(blocks.StreamBlock):
     """
     Re-usable splash Block for collecting standard and streamfield support for Splash Content
