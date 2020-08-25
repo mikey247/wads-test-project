@@ -32,7 +32,7 @@ class ShortcodeRichTextField(RichTextField):
 
 
     class Meta:
-        template = 'bootstrapblocks/richtext_shortcode.html'
+        template = 'sitecore/blocks/richtext_shortcode.html'
 
 
 class MarkdownShortcodeCharField(CharField):

@@ -74,7 +74,7 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
         
     class Meta:
         icon = 'pilcrow'
-        template = 'bootstrapblocks/richtext_shortcode.html'
+        template = 'sitecore/blocks/richtext_shortcode.html'
 
 
 class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
@@ -119,7 +119,7 @@ class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
 
     class Meta:
         icon = "pilcrow"
-        template = 'bootstrapblocks/markdown_shortcode.html'
+        template = 'sitecore/blocks/markdown_shortcode.html'
 
 
 class LinkStructValue(blocks.StructValue):
@@ -250,8 +250,8 @@ class BSHeadingBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'title'
-        template = 'bootstrapblocks/heading.html'
-        #form_template = 'bootstrapblocks/admin/heading.html'
+        template = 'sitecore/blocks/heading.html'
+        #form_template = 'sitecore/admin/blocks/heading.html'
         #form_classname = 'heading-block struct-block'
 
 
@@ -480,7 +480,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
     
     class Meta:
         icon = 'openquote'
-        template = 'bootstrapblocks/blockquote.html'
+        template = 'sitecore/blocks/blockquote.html'
 
 
 #class CarouselTextBlock(blocks.StreamBlock):
@@ -493,12 +493,12 @@ class BSBlockquoteBlock(blocks.StructBlock):
     # blockquote = BSBlockquoteBlock()
 
     # image =  ImageChooserBlock() # perhaps requires carousel specific renderer?
-    # docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+    # docs = DocumentChooserBlock(template='sitecore/blocks/document.html')
     # page = blocks.PageChooserBlock()
     # external = blocks.URLBlock()
 
     # class Meta:
-    #     template = 'bootstrapblocks/carouseltext.html'
+    #     template = 'sitecore/blocks/carouseltext.html'
 
 
 #class CarouselSlideBlock(blocks.StructBlock):
@@ -583,7 +583,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
 
 
     class Meta:
-        template = 'bootstrapblocks/carousel_simple_slide.html'
+        template = 'sitecore/blocks/carousel_simple_slide.html'
 
 
 @register_snippet
@@ -939,7 +939,7 @@ class IconCardDeckSnippet(models.Model):
 
 #     image =  ImageChooserBlock()
 #     #image =  ImageChooserBlock(template='image.html')
-#     docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+#     docs = DocumentChooserBlock(template='sitecore/blocks/document.html')
 #     page = blocks.PageChooserBlock(required=False)
 #     external = blocks.URLBlock(required=False)
 
@@ -1004,7 +1004,7 @@ class SubSectionBlock(blocks.StructBlock):
     
     class Meta:
         icon = 'form'
-        template = 'bootstrapblocks/subsection_block.html'
+        template = 'sitecore/blocks/subsection_block.html'
 
 
 class TabBlock(blocks.StructBlock):
@@ -1012,7 +1012,7 @@ class TabBlock(blocks.StructBlock):
     tab_section = blocks.ListBlock(SubSectionBlock())
 
     class Meta:
-        template = 'bootstrapblocks/tab_block.html'
+        template = 'sitecore/blocks/tab_block.html'
         icon = 'form'
 
 
@@ -1037,7 +1037,7 @@ class PillBlock(blocks.StructBlock):
     pill_section = blocks.ListBlock(SubSectionBlock())
 
     class Meta:
-        template = 'bootstrapblocks/pill_block.html'
+        template = 'sitecore/blocks/pill_block.html'
         icon = 'form'
 
 
@@ -1061,7 +1061,7 @@ class AccordionBlock(blocks.StructBlock):
 
 
     class Meta:
-        template = 'bootstrapblocks/accordion_block.html'
+        template = 'sitecore/blocks/accordion_block.html'
         icon = 'form'
 
 
@@ -1087,11 +1087,11 @@ class CoreBlock(blocks.StreamBlock):
 
     image =  ImageChooserBlock(
         group='2. Linked Content',
-        #template='boostrapblocks/image.html'
+        template='sitecore/blocks/rendition.html'
     )
     docs = DocumentChooserBlock(
         group='2. Linked Content',
-        template='bootstrapblocks/document.html'
+        template='sitecore/blocks/document.html'
     )
     page = blocks.PageChooserBlock(
         required=False,
@@ -1112,18 +1112,18 @@ class CoreBlock(blocks.StreamBlock):
     carousel = SnippetChooserBlock(
         CarouselSnippet,
         group='3. Embedded Content',
-        template='bootstrapblocks/carousel.html'
+        template='sitecore/blocks/carousel.html'
     )
     icon_card_deck = SnippetChooserBlock(
         IconCardDeckSnippet,
         group='3. Embedded Content',
-        template='bootstrapblocks/icon_card_deck.html'
+        template='sitecore/blocks/icon_card_deck.html'
     )
 
     text_snippet = SnippetChooserBlock(
         TextSnippet,
         group = '3. Embedded Content',
-        template='tags/text_snippet.html'
+        template='sitecore/tags/text_snippet.html'
         )
 
     #    jumbotron = BSJumbotronContainerBlock()
@@ -1143,7 +1143,7 @@ class CoreBlock(blocks.StreamBlock):
 
 
     class Meta:
-        template = 'sitecore/coreblock.html'
+        template = 'sitecore/blocks/coreblock.html'
     
 
 
@@ -1160,10 +1160,10 @@ class SplashBlock(blocks.StreamBlock):
         #validators=[ParseShortcodes],
     )
     image =  ImageChooserBlock(
-        #template='boostrapblocks/image.html'
+        template='sitecore/blocks/rendition.html'
     )
     docs = DocumentChooserBlock(
-        template='bootstrapblocks/document.html'
+        template='sitecore/blocks/document.html'
     )
     page = blocks.PageChooserBlock(
         required=False,
@@ -1171,7 +1171,7 @@ class SplashBlock(blocks.StreamBlock):
     carousel = SnippetChooserBlock(
         CarouselSnippet,
         #group='3. Embedded Content',
-        template='bootstrapblocks/carousel.html'
+        template='sitecore/blocks/carousel.html'
     )
 
     # Override methods
