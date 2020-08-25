@@ -1,5 +1,5 @@
 {% extends "sitecore/base/default.html" %}
-{% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
+{% load rendition shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block head-title %}
   <title>{{ self.title }}</title>
@@ -15,27 +15,15 @@
 {% block page-head %}
   <div class="wrapper">
     {% if self.splash_image %}
-      {% image self.splash_image fill-1600x600 as photo %}
+      {% rendition self.splash_image 'fill-1600x600' as photo %}
       <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
 	<div class="container">
 	  <div class="row">
 	    <div class="col-lg-8 p-0 ml-auto mr-auto">
-	      <div
-		  id="splash"
-		  class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
-		  style="border-radius: {{ self.splash_border_radius }}px!important;">
-		  {% for block in page.splash_content %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-		      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-          <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		  {% endfor %}
+	      <div id="splash"
+		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
+		   style="border-radius: {{ self.splash_border_radius }}px!important;">
+		{% include_block page.splash_content with pid='splash-content' filterspec='width-1200' %}
 	      </div>
 	    </div>
 	  </div>
@@ -50,18 +38,7 @@
 	  <div class="col">
 	    <header class="my-4">
 	      <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
-		{% for block in page.intro %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-          <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-          <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		{% endfor %}
+		{% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
 	      </div>
 	    </header>
 	  </div>
@@ -80,18 +57,7 @@
 {% block page-content-main-article %}
   <article>
     <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.body with pid='page-body' filterspec='width-1200' %}
     </section>
   </article>
 {% endblock %}
@@ -100,10 +66,6 @@
 {% block page-content-aside-col-size %}col-lg-4{% endblock %}
 {% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
 {% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
-
-{% block page-content-aside-slot-1 %}
-<a class="twitter-timeline" data-lang="en" data-height="1000" href="https://twitter.com/UoM_eResearch?ref_src=twsrc%5Etfw">Tweets by UoM_eResearch</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endblock %}
 
 {% block head-css-extension %}
   <style>
@@ -167,7 +129,4 @@
 
 {% block body-js-extension %}
   <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
-  <script>
-    //document.getElementById("splash").querySelectorAll("h1,h2,h3,h4,h5,h6").forEach(H => H.setAttribute("class", "text-white"));
-  </script>
 {% endblock %}
