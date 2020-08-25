@@ -1180,4 +1180,8 @@ class SplashBlock(blocks.StreamBlock):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'splash-block'
         return context
+
     
+    class Meta:
+        template = 'sitecore/blocks/splashblock.html'
+
