@@ -197,7 +197,9 @@ class TagIndexPage(RoutablePageMixin, Page):
     derived models. All tags are returned for tag cloud rendering. Additionally the tag usage count
     is appended to the results.
     """
-    
+
+    template = 'sitecore/tags/index_page.html'
+
     def get_context(self, request, slug=None):
         context = super(TagIndexPage, self).get_context(request)
 
@@ -238,6 +240,7 @@ class TagIndexPage(RoutablePageMixin, Page):
 
 
 
+
 class SearchIndexPage(Page):
     """
     This defines a search index page for searching content with given search terms
@@ -246,6 +249,8 @@ class SearchIndexPage(Page):
     derived models.
     """
     
+    template = 'sitecore/search/index_page.html'
+
     def get_context(self, request, slug=None):
         context = super(SearchIndexPage, self).get_context(request)
 
