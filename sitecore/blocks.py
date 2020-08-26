@@ -987,6 +987,8 @@ class TextSnippet(models.Model):
     def __str__(self):
         return self.title
 
+
+
 # Section Block 
 
 # Section Block that is made up of custom snippets that will take up a section in a Bootstrap 'Tab' or 'Pills' (in Navs -> https://getbootstrap.com/docs/4.5/components/navs/) or 'Accordion' (see -> https://getbootstrap.com/docs/4.5/components/collapse/). See   
@@ -1065,7 +1067,14 @@ class AccordionBlock(blocks.StructBlock):
         icon = 'form'
 
 
+class TwoColBlock(blocks.StructBlock):
 
+    col_one_content = NestedCoreBlock(label='Column - 1',)
+    col_two_content = NestedCoreBlock(label='Column - 2')
+
+    class Meta:
+        template = 'sitecore/blocks/twocol_block.html'
+        icon = 'form'
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1097,17 +1106,10 @@ class CoreBlock(blocks.StreamBlock):
         required=False,
         group='2. Linked Content',
     )
-    # external = blocks.URLBlock(required=False)
-
-    #email = blocks.EmailBlock()
 
     code = BSCodeBlock(
         group='3. Embedded Content',
     )
-#    table = TableBlock(
-#        group='Embedded Content',
-#        template='bootstrapblocks/table.html'
-#    )
 
     carousel = SnippetChooserBlock(
         CarouselSnippet,
@@ -1143,8 +1145,60 @@ class CoreBlock(blocks.StreamBlock):
 
 
     class Meta:
-        template = 'sitecore/blocks/coreblock.html'
+        template = 'sitecore/blocks/core_streamblock.html'
     
+
+class NestedCoreBlock(blocks.StreamBlock):
+    """
+    Re-usable Nested CoreBlock for collecting standard and custom streamfield support into one place
+    """
+
+    nested_paragraph = blocks.RichTextBlock(
+        label='Rich Text Paragraph',
+        group='1. Structured Content',
+    )
+    
+    nested_markdown = MarkdownAndShortcodeTextBlock(
+        label='Markdown Paragraph',
+        group='1. Structured Content',
+    )
+
+    nested_image =  ImageChooserBlock(
+        group='2. Linked Content',
+        template='sitecore/blocks/rendition.html'
+    )
+    nested_docs = DocumentChooserBlock(
+        group='2. Linked Content',
+        template='bootstrapblocks/document.html'
+    )
+    
+    nested_page = blocks.PageChooserBlock(
+        required=False,
+        group='2. Linked Content',
+    )
+
+    nested_code = BSCodeBlock(
+        group='3. Embedded Content',
+    )
+
+    nested_text_snippet = SnippetChooserBlock(
+        TextSnippet,
+        template='tags/text_snippet.html',
+        label = 'Text Snippet',
+        group='3. Embedded Content',
+    )
+
+    # Override methods
+
+    def get_form_context(self, value, prefix='', errors=None):
+        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context['block_type'] = 'nested-core-block'
+        return context
+
+
+    class Meta:
+        template = 'sitecore/blocks/twocol_streamblock.html'
+
 
 
 class SplashBlock(blocks.StreamBlock):
@@ -1183,5 +1237,5 @@ class SplashBlock(blocks.StreamBlock):
 
     
     class Meta:
-        template = 'sitecore/blocks/splashblock.html'
+        template = 'sitecore/blocks/splash_streamblock.html'
 
