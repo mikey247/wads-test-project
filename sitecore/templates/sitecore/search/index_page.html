@@ -1,0 +1,97 @@
+{% extends "sitecore/base/default.html" %}
+{% load shortcodes site_tags wagtailcore_tags %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
+
+{% block page-content-banner %}{% endblock %}
+
+{% block page-content-aside-slot-1 %}
+  <section>
+    {% if pages|length %}
+      <ul class="list-group">
+	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	  <strong>Showing items matching:</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <span><i class="fa fa-paragraph"></i> {{ query }}</span>
+	</li>
+	<li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	  <strong>Number of items found:</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <h3><span class="badge badge-success">{{pages|length}}</span></h3>
+	</li>
+      </ul>
+    {% else %}
+      <ul class="list-group">
+	<li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+	  <strong>No items matching:</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  <span class="text-danger"><i class="fa fa-paragraph"></i> {{ query }}</span>
+	</li>
+      </ul>
+    {% endif %}
+  </section>
+{% endblock page-content-aside-slot-1 %}
+
+{% block page-content-main-header %}
+  <header>
+    <h1 class="m-0">Search Results</h1>
+    <span class="text-secondary m-0"><i class="fas fa-search"></i><i class="fas fa-paragraph"></i> {{ query }}</span>
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+
+  {% if pages %}
+    <article>
+      {% for page in pages %}
+	<div class="bg-light px-2 my-4 {% if not forloop.last %}border-bottom border-secondary{% endif %}">
+	  <h4><a href="{% pageurl page %}"><span class="badge badge-dark">{{ forloop.counter }}</span> {{ page.title }}</a></h4>
+	  {% if page.content_type|stringformat:'s' == "article page" %}
+	    <span class="badge badge-secondary"><i class="fas fa-scroll"></i> Article</span>
+	  {% elif page.content_type|stringformat:'s' == 'event page' %}
+	    <span class="badge badge-primary"><i class="fas fa-calendar"></i> Event</span>
+	  {% endif %}
+	  {% if page.content_type|stringformat:'s' == 'event page' %}
+	    <small><span class="text-dark"><i class="fas fa-calendar"></i> {{ page.start_date }}
+	      {% if page.duration > 1 %}&mdash; {{ page.end_date }}{% endif %}</span></small>
+	  {% else %}
+	      <small><span class="text-secondary"><i class="fas fa-calendar"></i> Published:</span> {{ page.first_published_at }}</small>
+	      {% if page.latest_revision_created_at %}
+		<small><span class="text-secondary"><i class="fas fa-calendar-alt"></i> Revised:</span> {{ page.latest_revision_created_at }}</small>
+	      {% endif %}
+	  {% endif %}
+	  {% include_block page.event_type with view="summary" %}
+	  <hr>
+	  {% if page.search_description %}
+	    <div class="lead">{{ page.search_description }}</div>
+	  {% elif page.intro != "<p></p>" %}
+	    <div class="lead">{% include_block page.intro %}</div>
+	  {% else %}
+	    <p class="text-warning">Page has no introductory text or search description.</p>
+	  {% endif %}
+	  
+	  {% if page.tags.all.count %}
+	    {% taggit_list page.tags.all slug %}
+	  {% endif %}
+	</div>
+      {% empty %}
+	<span class="text-info">No pages found with that tag.</span>
+      {% endfor %}
+      <hr>
+    </article>
+  {% endif %}
+{% endblock %}
+
+{% block page-content-main-footer %}
+  <footer class="my-4" role="tag cloud">
+    {% if slug %}
+      <h4>Tag Cloud</h4>
+    {% endif %}
+    {% taggit_list tags show_count=True %}
+  </footer>
+{% endblock %}
