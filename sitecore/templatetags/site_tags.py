@@ -15,7 +15,7 @@ def has_menu_children(page):
     return page.get_children().live().in_menu().exists()
 
 
-@register.inclusion_tag('tags/top_menu.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/top_menu.html', takes_context=True)
 def top_menu(context, parent, search_query='', transparent=False, calling_page=None):
     """
     Retrieves the top menu items - the immediate children of the root page.
@@ -57,7 +57,7 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
 
 
 # Retrieves the children of the top menu items for the drop downs
-@register.inclusion_tag('tags/top_menu_children.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/top_menu_children.html', takes_context=True)
 def top_menu_children(context, parent, menu_id):
     menuitems_children = parent.get_children()
     menuitems_children = menuitems_children.live().in_menu()
@@ -71,7 +71,7 @@ def top_menu_children(context, parent, menu_id):
 
 
 # Renders the page taggit tags as collection of labels
-@register.inclusion_tag('tags/taggit_list.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/taggit_list.html', takes_context=True)
 def taggit_list(context, page_tags, selected_tag=None, show_count=False): 
    return {
        'tags': page_tags,
@@ -81,7 +81,7 @@ def taggit_list(context, page_tags, selected_tag=None, show_count=False):
 
 
 # Renders the page pagination block based on the paginator resource
-@register.inclusion_tag('tags/pagination.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/pagination.html', takes_context=True)
 def pagination(context, page_res, page_range): 
    return {
        'page_res': page_res,
@@ -90,7 +90,7 @@ def pagination(context, page_res, page_range):
 
 
 # Calls render method for page author using page.author as alias if provided; fallback to owner.get_full_name; fallback to owner (username)
-@register.inclusion_tag('tags/page_author.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/page_author.html', takes_context=True)
 def page_author(context, page):
     return {
         'page': page,
@@ -98,7 +98,7 @@ def page_author(context, page):
 
 
 # Calls eenders method for page timestamp using creation date and/or modification date
-@register.inclusion_tag('tags/page_date.html', takes_context=True)
+@register.inclusion_tag('sitecore/tags/page_date.html', takes_context=True)
 def page_date(context, page):
     return {
         'page': page,
