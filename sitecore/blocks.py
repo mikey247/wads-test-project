@@ -1067,87 +1067,6 @@ class AccordionBlock(blocks.StructBlock):
         icon = 'form'
 
 
-class TwoColBlock(blocks.StructBlock):
-
-    col_one_content = NestedCoreBlock(label='Column - 1',)
-    col_two_content = NestedCoreBlock(label='Column - 2')
-
-    class Meta:
-        template = 'sitecore/blocks/twocol_block.html'
-        icon = 'form'
-    
-    
-class CoreBlock(blocks.StreamBlock):
-    """
-    Re-usable core Block for collecting standard and custom streamfield support into one place
-    """
-
-    paragraph = blocks.RichTextBlock(
-        label='Rich Text Paragraph',
-        #validators=[ParseShortcodes],
-        group='1. Structured Content',
-    )
-    markdown = MarkdownAndShortcodeTextBlock(
-        label='Markdown Paragraph',
-        group='1. Structured Content',
-    )
-    # heading = BSHeadingBlock()
-    # blockquote = BSBlockquoteBlock()
-
-    image =  ImageChooserBlock(
-        group='2. Linked Content',
-        template='sitecore/blocks/rendition.html'
-    )
-    docs = DocumentChooserBlock(
-        group='2. Linked Content',
-        template='sitecore/blocks/document.html'
-    )
-    page = blocks.PageChooserBlock(
-        required=False,
-        group='2. Linked Content',
-    )
-
-    code = BSCodeBlock(
-        group='3. Embedded Content',
-    )
-
-    carousel = SnippetChooserBlock(
-        CarouselSnippet,
-        group='3. Embedded Content',
-        template='sitecore/blocks/carousel.html'
-    )
-    icon_card_deck = SnippetChooserBlock(
-        IconCardDeckSnippet,
-        group='3. Embedded Content',
-        template='sitecore/blocks/icon_card_deck.html'
-    )
-
-    text_snippet = SnippetChooserBlock(
-        TextSnippet,
-        group = '3. Embedded Content',
-        template='sitecore/tags/text_snippet.html'
-        )
-
-    #    jumbotron = BSJumbotronContainerBlock()
-
-    tab = TabBlock(group='Section Blocks')
-
-    pill = PillBlock(group='Section Blocks')
-
-    accordion = AccordionBlock(group='Section Blocks')
-
-    # Override methods
-
-    def get_form_context(self, value, prefix='', errors=None):
-        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
-        context['block_type'] = 'core-block'
-        return context
-
-
-    class Meta:
-        template = 'sitecore/blocks/core_streamblock.html'
-    
-
 class NestedCoreBlock(blocks.StreamBlock):
     """
     Re-usable Nested CoreBlock for collecting standard and custom streamfield support into one place
@@ -1169,7 +1088,7 @@ class NestedCoreBlock(blocks.StreamBlock):
     )
     nested_docs = DocumentChooserBlock(
         group='2. Linked Content',
-        template='bootstrapblocks/document.html'
+        template='sitecore/blocks/document.html'
     )
     
     nested_page = blocks.PageChooserBlock(
@@ -1197,7 +1116,18 @@ class NestedCoreBlock(blocks.StreamBlock):
 
 
     class Meta:
-        template = 'sitecore/blocks/twocol_streamblock.html'
+        template = 'sitecore/blocks/nested_streamblock.html'
+
+
+        
+class TwoColBlock(blocks.StructBlock):
+
+    col_one_content = NestedCoreBlock(label='Column - 1',)
+    col_two_content = NestedCoreBlock(label='Column - 2')
+
+    class Meta:
+        template = 'sitecore/blocks/twocol_structblock.html'
+        icon = 'form'
 
 
 
@@ -1238,4 +1168,74 @@ class SplashBlock(blocks.StreamBlock):
     
     class Meta:
         template = 'sitecore/blocks/splash_streamblock.html'
+
+
+        
+class CoreBlock(blocks.StreamBlock):
+    """
+    Re-usable core Block for collecting standard and custom streamfield support into one place
+    """
+
+    paragraph = blocks.RichTextBlock(
+        label='Rich Text Paragraph',
+        group='1. Structured Content',
+    )
+    markdown = MarkdownAndShortcodeTextBlock(
+        label='Markdown Paragraph',
+        group='1. Structured Content',
+    )
+
+    image =  ImageChooserBlock(
+        group='2. Linked Content',
+        template='sitecore/blocks/rendition.html'
+    )
+    docs = DocumentChooserBlock(
+        group='2. Linked Content',
+        template='sitecore/blocks/document.html'
+    )
+    page = blocks.PageChooserBlock(
+        required=False,
+        group='2. Linked Content',
+    )
+
+    code = BSCodeBlock(
+        group='3. Embedded Content',
+    )
+
+    carousel = SnippetChooserBlock(
+        CarouselSnippet,
+        group='3. Embedded Content',
+        template='sitecore/blocks/carousel.html'
+    )
+    icon_card_deck = SnippetChooserBlock(
+        IconCardDeckSnippet,
+        group='3. Embedded Content',
+        template='sitecore/blocks/icon_card_deck.html'
+    )
+
+    text_snippet = SnippetChooserBlock(
+        TextSnippet,
+        group = '3. Embedded Content',
+        template='sitecore/tags/text_snippet.html'
+        )
+
+    tab = TabBlock(group='Section Blocks')
+
+    pill = PillBlock(group='Section Blocks')
+
+    accordion = AccordionBlock(group='Section Blocks')
+
+    two_cols = TwoColBlock(group='Section Blocks')
+
+    # Override methods
+
+    def get_form_context(self, value, prefix='', errors=None):
+        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context['block_type'] = 'core-block'
+        return context
+
+
+    class Meta:
+        template = 'sitecore/blocks/core_streamblock.html'
+    
 
