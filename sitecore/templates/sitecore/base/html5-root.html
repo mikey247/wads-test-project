@@ -70,7 +70,7 @@
   
   <body class="{% block body-class %}{% endblock %}" style="min-height: 100vh; position: relative; margin: 0; padding-bottom: 0px; padding-top: 0px;">
     {% block body-content %}
-      <h1>html5-bootstrap-skeleton.html / Wagtail block body-content default body text</h1>
+      <h1>html5-root.html / Wagtail block body-content default body text / This should be overridden</h1>
     {% endblock %}
     
     {% block body-js %}
@@ -86,7 +86,7 @@
     {% block body-js-extension %}{% endblock %}
 
     {% block body-cookie-consent %}
-      <script src="{% static 'sitecore/cookieconsent/js/cookieconsent.min.css' %}" data-cfasync="false"></script>
+      <script src="{% static 'sitecore/cookieconsent/js/cookieconsent.min.js' %}" data-cfasync="false"></script>
       <script>
 	window.addEventListener("load", function(){
 	    window.cookieconsent.initialise({

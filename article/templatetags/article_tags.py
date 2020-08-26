@@ -4,7 +4,7 @@ from django.conf import settings
 
 register = template.Library()
 
-@register.inclusion_tag('tags/article_meta.html')
+@register.inclusion_tag('article/tags/article_meta.html')
 def article_meta(article): 
    return {
        'article': article,

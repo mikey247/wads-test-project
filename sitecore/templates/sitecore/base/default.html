@@ -1,4 +1,4 @@
-{% extends "html5-bootstrap-skeleton.html" %}
+{% extends "sitecore/base/html5-root.html" %}
 {% load cache menu_tags sekizai_tags site_tags static wagtailuserbar %}
 
 {% block head-title %}
@@ -21,7 +21,9 @@
     <div class="container p-0 my-4">
       <div class="row p-0 m-0">
 	{% block page-content-main %}
-	  <div class="{% block page-content-main-col-size %}col-lg-9{% endblock %} {% block page-content-main-col-order %}order-1 order-lg-2{% endblock %}">
+	  <div class="{% block page-content-main-col-size %}col-lg-9{% endblock %} 
+		      {% block page-content-main-col-style %}pr-0{% endblock %} 
+		      {% block page-content-main-col-order %}order-1 order-lg-2{% endblock %} ">
 	    <main>
 	      {% block page-content-main-header %}
 		<header>
@@ -38,13 +40,15 @@
 	  </div>
 	{% endblock page-content-main %}
 	{% block page-content-aside %}
-	  <div class="{% block page-content-aside-col-size %}col-lg-3{% endblock %} {% block page-content-aside-col-order %}order-2 order-lg-1{% endblock %}">
+	  <div class="{% block page-content-aside-col-size %}col-lg-3{% endblock %} 
+		      {% block page-content-aside-col-style %}pl-0{% endblock %} 
+		      {% block page-content-aside-col-order %}order-2 order-lg-1{% endblock %}">
 	    <aside>
 	      <div class="row">
 		{% block page-content-aside-slots %}
 		  <div class="mb-4 col-12 {% block page-content-aside-slot-1-order %}order-1{% endblock %}">
 		    {% block page-content-aside-slot-1 %}
-		      {% section_menu template='menus/section_menu.html' %}
+		      {% section_menu template='sitecore/menus/section_menu.html' %}
 		    {% endblock %}
 		  </div>
 		  <div class="mb-4 col-12 {% block page-content-aside-slot-2-order %}order-2{% endblock %}">
@@ -66,10 +70,10 @@
     <footer class="mt-4 container-fluid page-footer text-light" style="background-color: #222222; /* position: absolute; bottom: 0; */">
       <div class="container">
 	<div class="row py-4">
-	  <div class="col-lg-4">
+	  <div class="col-lg-4 pl-0">
 	    <h3>Contact Us</h3>
 	    <p><a href="tel:+441613066000" title="contact us by telephone">+44 (0)161 306 6000</a></p>
-	    <p><a href="https://research-it.manchester.ac.uk/contact/" title="Research IT Contact Details page">Contact details</a></p>
+	    <p><a href="/contact/" title="Contact Details page">Contact details</a></p>
 	  </div>
 	  <div class="col-lg-4">
 	    <h3>Find Us</h3>
@@ -92,7 +96,7 @@
 	</div>
 	<div class="row py-4">
 	  <div class="col-lg-12">
-	    {% flat_menu 'base_footer' template='menus/footer_menu.html' %}
+	    {% flat_menu 'base_footer' template='sitecore/menus/footer_menu.html' %}
 	  </div>
 	</div>
       </div>

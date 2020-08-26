@@ -22,6 +22,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
+from sitecore import constants
 from sitecore.fields import ShortcodeRichTextField
 from sitecore.models import SitePage
 from sitecore.parsers import ValidateCoreBlocks
@@ -244,8 +245,8 @@ class ArticlePage(SitePage):
         - Expiry date/time
     """
 
-    ARTICLE_IMAGE_RESIZE_DEFAULT='fill-1200x300'
-    ARTICLE_IMAGE_RESIZE_CHOICES = (
+    ARTICLE_IMAGE_FILTERSPEC_DEFAULT='fill-1200x300'
+    ARTICLE_IMAGE_FILTERSPEC_CHOICES = (
         ('fill-1200x300', 'Banner (fill-1200x300)'),
         ('fill-1200x150', 'Banner (fill-1200x150)'),
         ('max-1200x300', 'Best Fit Original (max-1200x600)'),
@@ -284,10 +285,10 @@ class ArticlePage(SitePage):
         help_text=_('Provide an image that spans the top of the article content (and is used as thumbnail in the blog listings unless overridden.'),
     )
 
-    article_image_resize = models.CharField(
+    article_image_filterspec = models.CharField(
         max_length=128,
-        default=ARTICLE_IMAGE_RESIZE_DEFAULT,
-        choices=ARTICLE_IMAGE_RESIZE_CHOICES,
+        default=ARTICLE_IMAGE_FILTERSPEC_DEFAULT,
+        choices=ARTICLE_IMAGE_FILTERSPEC_CHOICES,
     )
     
     thumbnail_image = models.ForeignKey(
@@ -335,10 +336,33 @@ class ArticlePage(SitePage):
     )
     
     splash_content = StreamField(
-        sitecore_blocks.CoreBlock,
+        sitecore_blocks.SplashBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here. This will be used in the blog list pages and search result summaries.'),
+    )
+
+    splash_text_align = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        default='text-center',
+        max_length=128
+    )
+
+    splash_text_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        default='text-white',
+        max_length=128
+    )
+    
+    splash_bg_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        default='bg-transparent',
+        max_length=128
+    )
+
+    splash_border_radius = models.IntegerField(
+        default='15',
+        validators=[MinValueValidator(0)]
     )
 
 
@@ -375,9 +399,9 @@ class ArticlePage(SitePage):
         MultiFieldPanel([
             FieldRowPanel([
                 ImageChooserPanel('article_image'),
-                FieldPanel('article_image_resize'),
             ]),
-             ImageChooserPanel('thumbnail_image'),
+            FieldPanel('article_image_filterspec'),
+            ImageChooserPanel('thumbnail_image'),
         ], heading="Article Banner and Thumbnail"),
     ]
 
@@ -415,8 +439,18 @@ class ArticlePage(SitePage):
                 FieldPanel('render_template'),
                 FieldPanel('sidebar_placement'),
             ]),
-            StreamFieldPanel('splash_content'),
         ], heading='Theme and Layout Options'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('splash_text_align'),
+                FieldPanel('splash_text_colour'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('splash_bg_colour'),
+                FieldPanel('splash_border_radius'),
+            ]),
+            StreamFieldPanel('splash_content'),
+        ], heading='Splash Content and Options'),
     ]
 
     # Rebuild edit_handler so we have all tabs

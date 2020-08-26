@@ -180,7 +180,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'registration/login.html'
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'sitecore/registration/login.html'
 WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
 
 AUTH_USER_MODEL = 'siteuser.User'
@@ -190,3 +190,4 @@ WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
 WAGTAILIMAGES_IMAGE_MODEL = 'captioned_images.CaptionImage'
 WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter']
 
+LOGIN_REDIRECT_URL = '/'

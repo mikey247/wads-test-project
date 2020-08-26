@@ -1,5 +1,5 @@
-{% extends "sitecore/base_default.html" %}
-{% load wagtailcore_tags wagtailimages_tags site_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load rendition wagtailcore_tags wagtailimages_tags site_tags %}
 
 {% block body-class %}article-index-by-date-page{% endblock %}
 
@@ -29,12 +29,12 @@
       <div class="row bg-light my-2">
 	<div class="col-lg-3 order-2 order-lg-1 px-0">
 	  {% if post.thumbnail_image %}
-	    {% image post.thumbnail_image fill-300x300 as photo %}
+	    {% rendition post.thumbnail_image 'fill-300x300' as photo %}
 	    <div class="my-2">
 	      <img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
 	    </div>
 	  {% elif post.article_image %}
-	    {% image post.article_image fill-300x300 as photo %}
+	    {% rendition post.article_image 'fill-300x300' as photo %}
 	    <div class="my-2">
 	      <img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
 	    </div>
@@ -44,7 +44,7 @@
 	  <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
 	  {% page_date post %}
 	  {% page_author post %}
-	  <div class="my-2 xlead">{% include_block post.intro %}</div>
+	  <div class="my-2">{% include_block post.intro %}</div>
 	  <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
 	</div>
       </div>
