@@ -89,7 +89,7 @@ class EventIndexPage(Page):
     )
 
     listing_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -383,7 +383,7 @@ class EventPage(SitePage):
     # )
 
     event_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

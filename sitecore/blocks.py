@@ -74,7 +74,7 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
         
     class Meta:
         icon = 'pilcrow'
-        template = 'bootstrapblocks/richtext_shortcode.html'
+        template = 'sitecore/blocks/richtext_shortcode.html'
 
 
 class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
@@ -119,7 +119,7 @@ class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
 
     class Meta:
         icon = "pilcrow"
-        template = 'bootstrapblocks/markdown_shortcode.html'
+        template = 'sitecore/blocks/markdown_shortcode.html'
 
 
 class LinkStructValue(blocks.StructValue):
@@ -250,8 +250,8 @@ class BSHeadingBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'title'
-        template = 'bootstrapblocks/heading.html'
-        #form_template = 'bootstrapblocks/admin/heading.html'
+        template = 'sitecore/blocks/heading.html'
+        #form_template = 'sitecore/admin/blocks/heading.html'
         #form_classname = 'heading-block struct-block'
 
 
@@ -480,7 +480,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
     
     class Meta:
         icon = 'openquote'
-        template = 'bootstrapblocks/blockquote.html'
+        template = 'sitecore/blocks/blockquote.html'
 
 
 #class CarouselTextBlock(blocks.StreamBlock):
@@ -493,12 +493,12 @@ class BSBlockquoteBlock(blocks.StructBlock):
     # blockquote = BSBlockquoteBlock()
 
     # image =  ImageChooserBlock() # perhaps requires carousel specific renderer?
-    # docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+    # docs = DocumentChooserBlock(template='sitecore/blocks/document.html')
     # page = blocks.PageChooserBlock()
     # external = blocks.URLBlock()
 
     # class Meta:
-    #     template = 'bootstrapblocks/carouseltext.html'
+    #     template = 'sitecore/blocks/carouseltext.html'
 
 
 #class CarouselSlideBlock(blocks.StructBlock):
@@ -583,7 +583,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
 
 
     class Meta:
-        template = 'bootstrapblocks/carousel_simple_slide.html'
+        template = 'sitecore/blocks/carousel_simple_slide.html'
 
 
 @register_snippet
@@ -939,7 +939,7 @@ class IconCardDeckSnippet(models.Model):
 
 #     image =  ImageChooserBlock()
 #     #image =  ImageChooserBlock(template='image.html')
-#     docs = DocumentChooserBlock(template='bootstrapblocks/document.html')
+#     docs = DocumentChooserBlock(template='sitecore/blocks/document.html')
 #     page = blocks.PageChooserBlock(required=False)
 #     external = blocks.URLBlock(required=False)
 
@@ -987,76 +987,85 @@ class TextSnippet(models.Model):
     def __str__(self):
         return self.title
 
+# Section Block 
 
-class NestedCoreBlock(blocks.StreamBlock):
-    """
-    Re-usable Nested CoreBlock for collecting standard and custom streamfield support into one place
-    """
+# Section Block that is made up of custom snippets that will take up a section in a Bootstrap 'Tab' or 'Pills' (in Navs -> https://getbootstrap.com/docs/4.5/components/navs/) or 'Accordion' (see -> https://getbootstrap.com/docs/4.5/components/collapse/). See   
+# This will allow users to create information dense areas while using little space e.g. 'Meet The Team' but instead of being a list of team members it can be split into groups in tabs e.g. RI Team, RSE Team etc
 
-    nested_paragraph = blocks.RichTextBlock(
-        label='Rich Text Paragraph',
+class SubSectionBlock(blocks.StructBlock):
+
+    title = blocks.CharBlock()
+
+    content = blocks.RichTextBlock(
+        label='Rich Text',
         #validators=[ParseShortcodes],
-        group='1. Structured Content',
+        #group='1. Structured Content',
     )
     
-    nested_markdown = MarkdownAndShortcodeTextBlock(
-        label='Markdown Paragraph',
-        group='1. Structured Content',
-    )
-    # heading = BSHeadingBlock()
-    # blockquote = BSBlockquoteBlock()
-
-    nested_image =  ImageChooserBlock(
-        group='2. Linked Content',
-        #template='boostrapblocks/image.html'
-    )
-    nested_docs = DocumentChooserBlock(
-        group='2. Linked Content',
-        template='bootstrapblocks/document.html'
-    )
-    
-    nested_page = blocks.PageChooserBlock(
-        required=False,
-        group='2. Linked Content',
-    )
-    # external = blocks.URLBlock(required=False)
-
-    #email = blocks.EmailBlock()
-
-    nested_code = BSCodeBlock(
-        group='3. Embedded Content',
-    )
-#    table = TableBlock(
-#        group='Embedded Content',
-#        template='bootstrapblocks/table.html'
-#    )
-
-    nested_text_snippet = SnippetChooserBlock(
-        TextSnippet,
-        template='tags/text_snippet.html',
-        label = 'Text Snippet',
-        group='3. Embedded Content',
-        )
-
-    #    jumbotron = BSJumbotronContainerBlock()
-
-    # Override methods
-
-    def get_form_context(self, value, prefix='', errors=None):
-        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
-        context['block_type'] = 'core-block'
-        return context
+    class Meta:
+        icon = 'form'
+        template = 'sitecore/blocks/subsection_block.html'
 
 
-class TwoColBlock(blocks.StructBlock):
+class TabBlock(blocks.StructBlock):
 
-    col_one_content = NestedCoreBlock(label='Column - 1',)
-
-    col_two_content = NestedCoreBlock(label='Column - 2')
+    tab_section = blocks.ListBlock(SubSectionBlock())
 
     class Meta:
-        template = 'bootstrapblocks/two_col_block.html'
+        template = 'sitecore/blocks/tab_block.html'
         icon = 'form'
+
+
+class PillBlock(blocks.StructBlock):
+
+    pill_type_choices = [
+
+        ("PILL", 'Pill'),
+        ("PILL-VERT-L",'Vertical Pill (Left Tabs)'),
+        ("PILL-VERT-R",'Vertical Pill Right (Right Tabs)'),
+  
+    ]
+
+    pill_type = blocks.ChoiceBlock(
+        choices = pill_type_choices, 
+        help_text = 'Choose pill display style',
+        label = 'Pill Style',
+        default = 'PILL'
+        )
+
+
+    pill_section = blocks.ListBlock(SubSectionBlock())
+
+    class Meta:
+        template = 'sitecore/blocks/pill_block.html'
+        icon = 'form'
+
+
+class AccordionBlock(blocks.StructBlock):
+
+    accordion_type_choices = [
+
+        ("ACCORDION", 'Accordion (Default - First tab open)'),
+        ("ACCORDION-CLOSED",'Accordion - (All tabs closed)' ),
+  
+    ]
+
+    accordion_type = blocks.ChoiceBlock(
+        choices = accordion_type_choices, 
+        help_text = 'Choose Accordion display style',
+        label = 'Accordion Style',
+        default = 'ACCORDION'
+        )
+
+    accordion_section = blocks.ListBlock(SubSectionBlock())
+
+
+    class Meta:
+        template = 'sitecore/blocks/accordion_block.html'
+        icon = 'form'
+
+
+
     
     
 class CoreBlock(blocks.StreamBlock):
@@ -1067,33 +1076,33 @@ class CoreBlock(blocks.StreamBlock):
     paragraph = blocks.RichTextBlock(
         label='Rich Text Paragraph',
         #validators=[ParseShortcodes],
-        #group='1. Structured Content',
+        group='1. Structured Content',
     )
     markdown = MarkdownAndShortcodeTextBlock(
         label='Markdown Paragraph',
-        #group='1. Structured Content',
+        group='1. Structured Content',
     )
     # heading = BSHeadingBlock()
     # blockquote = BSBlockquoteBlock()
 
     image =  ImageChooserBlock(
-        #group='2. Linked Content',
-        #template='boostrapblocks/image.html'
+        group='2. Linked Content',
+        template='sitecore/blocks/rendition.html'
     )
     docs = DocumentChooserBlock(
-        #group='2. Linked Content',
-        template='bootstrapblocks/document.html'
+        group='2. Linked Content',
+        template='sitecore/blocks/document.html'
     )
     page = blocks.PageChooserBlock(
         required=False,
-        #group='2. Linked Content',
+        group='2. Linked Content',
     )
     # external = blocks.URLBlock(required=False)
 
     #email = blocks.EmailBlock()
 
     code = BSCodeBlock(
-        #group='3. Embedded Content',
+        group='3. Embedded Content',
     )
 #    table = TableBlock(
 #        group='Embedded Content',
@@ -1102,26 +1111,28 @@ class CoreBlock(blocks.StreamBlock):
 
     carousel = SnippetChooserBlock(
         CarouselSnippet,
-        #group='3. Embedded Content',
-        template='bootstrapblocks/carousel.html'
+        group='3. Embedded Content',
+        template='sitecore/blocks/carousel.html'
     )
     icon_card_deck = SnippetChooserBlock(
         IconCardDeckSnippet,
-        #group='3. Embedded Content',
-        template='bootstrapblocks/icon_card_deck.html'
+        group='3. Embedded Content',
+        template='sitecore/blocks/icon_card_deck.html'
     )
 
     text_snippet = SnippetChooserBlock(
         TextSnippet,
-        template='tags/text_snippet.html'
+        group = '3. Embedded Content',
+        template='sitecore/tags/text_snippet.html'
         )
 
     #    jumbotron = BSJumbotronContainerBlock()
 
-    two_col_block = TwoColBlock(
-        label = 'Two Column Layout',
-        group = '1. Structured Content' 
-    )
+    tab = TabBlock(group='Section Blocks')
+
+    pill = PillBlock(group='Section Blocks')
+
+    accordion = AccordionBlock(group='Section Blocks')
 
     # Override methods
 
@@ -1129,6 +1140,11 @@ class CoreBlock(blocks.StreamBlock):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'core-block'
         return context
+
+
+    class Meta:
+        template = 'sitecore/blocks/coreblock.html'
+    
 
 
 class SplashBlock(blocks.StreamBlock):
@@ -1144,10 +1160,10 @@ class SplashBlock(blocks.StreamBlock):
         #validators=[ParseShortcodes],
     )
     image =  ImageChooserBlock(
-        #template='boostrapblocks/image.html'
+        template='sitecore/blocks/rendition.html'
     )
     docs = DocumentChooserBlock(
-        template='bootstrapblocks/document.html'
+        template='sitecore/blocks/document.html'
     )
     page = blocks.PageChooserBlock(
         required=False,
@@ -1155,7 +1171,7 @@ class SplashBlock(blocks.StreamBlock):
     carousel = SnippetChooserBlock(
         CarouselSnippet,
         #group='3. Embedded Content',
-        template='bootstrapblocks/carousel.html'
+        template='sitecore/blocks/carousel.html'
     )
 
     # Override methods
@@ -1164,4 +1180,8 @@ class SplashBlock(blocks.StreamBlock):
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'splash-block'
         return context
+
     
+    class Meta:
+        template = 'sitecore/blocks/splashblock.html'
+

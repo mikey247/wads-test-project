@@ -1,0 +1,75 @@
+
+<div id="accordion">
+
+    {% for section in self.accordion_section  %}
+            
+        {% with prefix=forloop.counter id=section.title|slugify %}
+
+            {% if prefix == 1 %}
+
+                <div class="card">
+                <div class="card-header" id="heading-acc-{{prefix}}-{{id}}">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-acc-{{prefix}}-{{id}}" aria-expanded="true" aria-controls="collapse-acc-{{prefix}}-{{id}}">
+                        {{ section.title }}
+                    </button>
+                    </h5>
+                </div>
+
+                <div id="collapse-acc-{{prefix}}-{{id}}" class="{% if self.accordion_type == 'ACCORDION-CLOSED' %} collapse {% else %} collapse show {% endif %}" aria-labelledby="heading-acc-{{prefix}}-{{id}}" data-parent="#accordion">
+                    <div class="card-body">
+                    {{ section.content }}
+                    </div>
+                </div>
+                </div>
+
+
+        {% else %}
+
+        <div class="card">
+            <div class="card-header" id="heading-acc-{{prefix}}-{{id}}">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse-acc-{{prefix}}-{{id}}" aria-expanded="false" aria-controls="collapse-acc-{{prefix}}-{{id}}">
+                    {{ section.title }}
+                    </button>
+            </h5>
+            </div>
+            <div id="collapse-acc-{{prefix}}-{{id}}" class="collapse" aria-labelledby="heading-acc-{{prefix}}-{{id}}" data-parent="#accordion">
+            <div class="card-body">
+
+                {{ section.content }}
+
+            </div>
+            </div>
+        </div>
+
+{% endif %}
+
+{% endwith %}
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

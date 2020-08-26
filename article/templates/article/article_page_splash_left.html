@@ -1,5 +1,5 @@
-{% extends "sitecore/base_default.html" %}
-{% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load rendition article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-splash{% endblock %}
 
@@ -11,23 +11,15 @@
 {% block page-head %}
   <div class="wrapper">
     {% if self.article_image %}
-      {% image self.article_image fill-1600x600 as photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
+      {% rendition self.article_image 'fill-1600x600' as splash_photo %}
+      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ splash_photo.url }}" style="background: transparent;">
 	<div class="container">
 	  <div class="row">
 	    <div class="col-lg-8 p-0 ml-auto mr-auto">
-	      <div id="splash" class="text-center">
-		  {% for block in page.splash_content %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		  {% endfor %}
+	      <div id="splash"
+		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
+		   style="border-radius: {{ self.splash_border_radius }}px!important;">
+		{% include_block page.splash_content with pid='page-splash-content' filterspec='width-1200' %}
 	      </div>
 	    </div>
 	  </div>
@@ -39,8 +31,11 @@
     <section>
       <div class="container">
 	<div class="row">
-	  <header class="my-4">
-	    <div class="lead richtext_shortcodes">{% shortcodes page.intro|safe %}</div>
+	  <div class="col-12 p-0 my-4">
+	    <header class="lead">
+	      <div class="lead mb-4">
+		{% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+	      </div>
 	  </header>
 	</div>
       </div>
@@ -57,17 +52,7 @@
 {% block page-content-main-article %}
   <article>
     <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.body with pid='page-body' filterspec='width-1200' %}
     </section>
   </article>
 {% endblock %}
@@ -80,17 +65,17 @@
   <section>
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	<strong>Article Details</strong>
+	<strong><i class="fas fa-info-circle"></i> Article Details</strong>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><span class="text-secondary"><i class="fas fa-calendar"></i> Published:</span> {{ page.first_published_at }}</small>
+	<small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
 	{% if page.latest_revision_created_at %}
-	  <small><span class="text-secondary"><i class="fas fa-calendar-alt"></i> Revised:</span> {{ page.latest_revision_created_at }}</small>
+	  <small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
 	{% endif %}
       </li>
     </ul>
@@ -151,7 +136,4 @@
 
 {% block body-js-extension %}
   <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
-  <script>
-    document.getElementById("splash").querySelectorAll("h1,h2,h3,h4,h5,h6").forEach(H => H.setAttribute("class", "text-white"));
-  </script>
 {% endblock %}

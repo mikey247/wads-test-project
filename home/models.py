@@ -20,7 +20,7 @@ class HomePage(Page):
     # content fields
     
     splash_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'captioned_images.CaptionImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

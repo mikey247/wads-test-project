@@ -24,6 +24,10 @@
       {% endif %}
     {% endblock %}
 
+    {% block head-cookie-consent %}
+      <link rel="stylesheet" type="text/css" href="{% static 'sitecore/cookieconsent/css/cookieconsent.min.css' %}" />
+    {% endblock %}
+    
     {% block head-title %}
       <title>{{ request.site.name }}</title>
     {% endblock %}
@@ -66,7 +70,7 @@
   
   <body class="{% block body-class %}{% endblock %}" style="min-height: 100vh; position: relative; margin: 0; padding-bottom: 0px; padding-top: 0px;">
     {% block body-content %}
-      <h1>html5-bootstrap-skeleton.html / Wagtail block body-content default body text</h1>
+      <h1>html5-root.html / Wagtail block body-content default body text / This should be overridden</h1>
     {% endblock %}
     
     {% block body-js %}
@@ -80,5 +84,32 @@
     {% block body-js-dynamic-block %}{% endblock %}
     {% render_block "body-js-dynamic" %}
     {% block body-js-extension %}{% endblock %}
+
+    {% block body-cookie-consent %}
+      <script src="{% static 'sitecore/cookieconsent/js/cookieconsent.min.js' %}" data-cfasync="false"></script>
+      <script>
+	window.addEventListener("load", function(){
+	    window.cookieconsent.initialise({
+		"palette": {
+		    "popup": {
+			"background": "#393a3c",
+			"text": "#ffffff"
+		    },
+		    "button": {
+			"background": "#fc3",
+			"text": "#000"
+		    }
+		},
+		"theme": "classic",
+		"position": "top-left",
+		"content": {
+		    "message": "<h3>Cookies</h3><p>This website uses cookies. By dismissing this message you are consenting to the use of cookies as detailed in our <a class='cc-link' href='https://www.manchester.ac.uk/discover/privacy-information/data-protection/website-privacy-notice/#cookies'>privacy notice.</a></p><p>You can clear and manage cookies through your <a class='cc-link' href='https://www.manchester.ac.uk/discover/privacy-information/data-protection/website-privacy-notice/#delete-manage-cookies'>browser settings.</a></p>",
+		    "link": "",
+		    "dismiss": "Dismiss"
+		}
+	    })});
+      </script>
+    {% endblock %}
+    
   </body>
 </html>

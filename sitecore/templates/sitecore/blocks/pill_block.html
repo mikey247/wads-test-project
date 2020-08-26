@@ -1,0 +1,80 @@
+{% if self.pill_type == 'PILL' %}
+
+  <!-- Pill Section Navigation  -->
+  <ul class="nav nav-pills mb-3" id="{{ppid}}-{{pid}}-nav-pills" role="tablist">
+    {% for pill in self.pill_section  %}
+      {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+        <li class="nav-item" role="presentation">
+          <a id="{{ppid}}-{{pid}}-nav-pills-{{pill_id}}-{{pill_name}}"
+	     class="nav-item nav-link{% if not pill_id %} active{% endif %}"
+	     href="#{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     data-toggle="pill"
+	     role="tab"
+	     aria-controls="{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     aria-selected="{% if not pill_id %}true{% else %}false{% endif %}">
+	    {{ pill.title }}
+	  </a>
+        </li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+  
+  <!-- Pill Section Content -->
+  <div class="tab-content" id="{{ppid}}-{{pid}}-nav-pills-content">
+    {% for pill in self.pill_section  %}
+      {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+        <div id="{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     class="tab-pane fade{% if not pill_id%} show active{% endif %}"
+	     role="tabpanel"
+	     aria-labelledby="{{ppid}}-{{pid}}-nav-pills-{{pill_id}}-{{pill_name}}">
+	  {{ pill.content }}
+	</div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+  
+{% elif self.pill_type == 'PILL-VERT-L' or self.pill_type == 'PILL-VERT-R' %}
+
+  <div class="container p-0 m-0">
+    <div class="row">
+
+      <!-- Pill Section Navigation  -->
+      <div class="col-4 {% if self.pill_type == 'PILL-VERT-L'%}order-1{% else %}order-2{% endif %}"> 
+	<div id="{{ppid}}-{{pid}}-vpills-tab"
+	     class="nav flex-column nav-pills mb-3"
+	     role="tablist"
+	     aria-orientation="vertical">
+          {% for pill in self.pill_section  %}
+	    {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+	      <a id="{{ppid}}-{{pid}}-vpills-tab-{{pill_id}}-{{pill_name}}" 
+		 class="nav-link{% if not pill_id %} active{% endif %}"
+		 href="#{{ppid}}-{{pid}}-vpills-{{pill_id}}-{{pill_name}}"
+		 data-toggle="pill"
+		 role="tab"
+		 aria-controls="{{ppid}}-{{pid}}-vpills-{{pill_id}}-{{pill_name}}"
+		 aria-selected="{% if not pill_id %}true{% else %}false{% endif %}">
+		{{ pill.title }}
+	      </a>
+	    {% endwith %}
+          {% endfor %}
+	</div>
+      </div>
+
+      <!-- Pill Section Content -->
+      <div class="col-8 {% if self.pill_type == 'PILL-VERT-L'%}order-2{% else %}order-1{% endif %}"> 
+	<div class="tab-content mb3" id="{{ppid}}-{{pid}}-vpills-tab-content">
+          {% for pill in self.pill_section  %}
+	    {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+	      <div id="{{ppid}}-{{pid}}-vpills-{{pill_id}}-{{pill_name}}"
+		   class="tab-pane fade{% if not pill_id %} show active{% endif %}"
+		   role="tabpanel"
+		   aria-labelledby="{{ppid}}-{{pid}}-vpills-{{pill_id}}-{{pill_name}}">
+		{{ pill.content }}
+	      </div>
+            {% endwith %}
+          {% endfor %}
+	</div>
+      </div>
+    </div>
+  </div>
+{% endif %}

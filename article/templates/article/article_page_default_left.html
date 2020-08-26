@@ -1,55 +1,26 @@
-{% extends "sitecore/base_default.html" %}
-{% load shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load rendition shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-page{% endblock %}
 
 {% block page-content-main-header %}
   <header>
     {% if self.article_image %}
-      {% if self.article_image_resize == 'fill-1200x300' %}
-	{% image self.article_image fill-1200x300 as photo %}
-      {% elif self.article_image_resize == 'fill-1200x150' %}
-	{% image self.article_image fill-1200x150 as photo %}
-      {% else %}
-	{% image self.article_image max-1200x300 as photo %}
-      {% endif %}
-      
+      {% rendition self.article_image self.article_image_resize as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block" >
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
     <div class="lead mb-4">
-      {% for block in page.intro %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
     </div>
   </header>
 {% endblock %}
 
 {% block page-content-main-article %}
   <article>
-    {% for block in page.body %}
-      <div class="mb-4">
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      </div>
-    {% endfor %}
+    {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
 {% endblock %}
 
@@ -57,17 +28,17 @@
   <section>
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	<strong>Article Details</strong>
+	<strong><i class="fas fa-info-circle"></i> Article Details</strong>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><span class="text-secondary"><i class="fas fa-calendar"></i> Published:</span> {{ page.first_published_at }}</small>
+	<small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
       </li>
       {% if page.latest_revision_created_at %}
 	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <small><span class="text-secondary"><i class="fas fa-calendar-alt"></i> Revised:</span> {{ page.latest_revision_created_at }}</small>
+	  <small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
 	</li>
       {% endif %}
     </ul>

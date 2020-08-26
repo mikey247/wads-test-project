@@ -9,11 +9,11 @@
         {% if navcfg.brand_link and navcfg.brand_logo %}
         <a href="{{navcfg.brand_link}}"> 
         {% image navcfg.brand_logo max-206x86 as photo %}
-        <img src="{{ photo.url }}" alt="{{ photo.alt }}">
+        <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
           </a>
         {% else %}
         {% image navcfg.brand_logo max-206x86 as photo %}
-        <img src="{{ photo.url }}" alt="{{ photo.alt }}">
+        <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
         {% endif %}
 
     </div>
@@ -23,7 +23,7 @@
     <div class="col-lg-3">
       <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% slugurl 'search' %}" method="get">
 	<input type="text" name="query" {% if search_query %} value="{{ search_query }}"{% endif %}
-	       class="form-control mr-sm-2" style="text-align: right"
+	       class="form-control mr-sm-0" style="text-align: right"
 	       placeholder="Search" aria-label="Search">
       </form>
     </div>
