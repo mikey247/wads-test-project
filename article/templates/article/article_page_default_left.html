@@ -1,60 +1,26 @@
-{% extends "sitecore/base_default.html" %}
-{% load shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load rendition shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-page{% endblock %}
 
 {% block page-content-main-header %}
   <header>
     {% if self.article_image %}
-      {% if self.article_image_resize == 'fill-1200x300' %}
-	{% image self.article_image fill-1200x300 as photo %}
-      {% elif self.article_image_resize == 'fill-1200x150' %}
-	{% image self.article_image fill-1200x150 as photo %}
-      {% else %}
-	{% image self.article_image max-1200x300 as photo %}
-      {% endif %}
-      
+      {% rendition self.article_image self.article_image_resize as photo %}
       <div class="mb-4">
 	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
     <div class="lead mb-4">
-      {% include_block page.intro with pid='page-intro' %}
-      {% for block in page.introx %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
     </div>
   </header>
 {% endblock %}
 
 {% block page-content-main-article %}
   <article>
-    {% include_block page.body with pid='page-body' %}
-    {% for block in page.bodyx %}
-      <h4>Block {{ forloop.counter0 }}</h4><tt>{{ block }}</tt>
-      <div class="mb-4">
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      </div>
-    {% endfor %}
+    {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
 {% endblock %}
 

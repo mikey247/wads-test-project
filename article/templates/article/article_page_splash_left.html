@@ -1,4 +1,4 @@
-{% extends "sitecore/base_default.html" %}
+{% extends "sitecore/base/default.html" %}
 {% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-splash{% endblock %}
@@ -11,24 +11,13 @@
 {% block page-head %}
   <div class="wrapper">
     {% if self.article_image %}
-      {% image self.article_image fill-1600x600 as photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
+      {% image self.article_image fill-1600x600 as splash_photo %}
+      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ splash_photo.url }}" style="background: transparent;">
 	<div class="container">
 	  <div class="row">
 	    <div class="col-lg-8 p-0 ml-auto mr-auto">
 	      <div id="splash" class="text-center">
-		  {% for block in page.splash_content %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-          <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-          <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		  {% endfor %}
+		{% include_block page.splash_content with pid='page-splash-content' filterspec='width-1200' %}
 	      </div>
 	    </div>
 	  </div>
@@ -40,8 +29,11 @@
     <section>
       <div class="container">
 	<div class="row">
-	  <header class="my-4">
-	    <div class="lead richtext_shortcodes">{% shortcodes page.intro|safe %}</div>
+	  <div class="col-12 p-0 my-4">
+	    <header class="lead">
+	      <div class="lead mb-4">
+		{% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+	      </div>
 	  </header>
 	</div>
       </div>
@@ -58,17 +50,7 @@
 {% block page-content-main-article %}
   <article>
     <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.body with pid='page-body' filterspec='width-1200' %}
     </section>
   </article>
 {% endblock %}
