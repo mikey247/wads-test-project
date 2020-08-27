@@ -1128,6 +1128,7 @@ class TwoColBlock(blocks.StructBlock):
     class Meta:
         template = 'sitecore/blocks/twocol_structblock.html'
         icon = 'form'
+        label='Two Columns'
 
 
 
