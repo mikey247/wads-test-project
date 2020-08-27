@@ -390,7 +390,8 @@ class BSCodeBlock(blocks.StructBlock):
     lang = Select2ChoiceBlock(
         choices=LANGUAGE_CHOICES,
         required=True,
-        default=''
+        default='',
+        label='Language'
     )
 
     code = blocks.TextBlock(
@@ -398,7 +399,8 @@ class BSCodeBlock(blocks.StructBlock):
     )
 
     hl_lines = CSVIntListCharBlock(
-        required=False
+        required=False,
+        label='Highlighted Lines'
     )
 
     line_nums = blocks.BooleanBlock(
