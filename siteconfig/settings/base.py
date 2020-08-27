@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-    'wagtailimporter',
+#    'wagtailimporter',
 
     'django.contrib.admin',
     'django.contrib.auth',
