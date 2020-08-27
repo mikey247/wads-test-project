@@ -4,14 +4,16 @@
 {% block body-class %}article-index-by-date-page{% endblock %}
 
 {% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-main-col-style %}pl-0{% endblock %} 
 {% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
+{% block page-content-aside-col-style %}pr-0{% endblock %} 
 
 {% block page-content-main-header %}
   <div class="container p-0 m-0">
-    <div class="row">
-      <div class="col-lg-3 order-2 order-lg-1">
+    <div class="row p-0 m-0">
+      <div class="col-lg-3 order-2 order-lg-1 pl-0">
       </div>
-      <div class="col-lg-9 order-1 order-lg-2">	
+      <div class="col-lg-9 order-1 order-lg-2 pr-0">	
 	{% if page.display_title %}
 	  <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
 	{% endif %}
@@ -26,26 +28,28 @@
 {% block page-content-main-article %}
   {% for post in articles %}
     {% with post=post.specific %}
-      <div class="row bg-light my-2">
-	<div class="col-lg-3 order-2 order-lg-1 px-0">
-	  {% if post.thumbnail_image %}
-	    {% rendition post.thumbnail_image 'fill-300x300' as photo %}
-	    <div class="my-2">
-	      <img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
-	    </div>
-	  {% elif post.article_image %}
-	    {% rendition post.article_image 'fill-300x300' as photo %}
-	    <div class="my-2">
-	      <img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
-	    </div>
-	  {% endif %}
-	</div>
-	<div class="col-lg-9 order-1 order-lg-2 pb-2">
-	  <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
-	  {% page_date post %}
-	  {% page_author post %}
-	  <div class="my-2">{% include_block post.intro %}</div>
-	  <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
+      <div class="container p-0 mx-0 my-4">
+	<div class="row bg-light p-0 m-0">
+	  <div class="col-lg-3 order-2 order-lg-1 p-0 m-0">
+	    {% if post.thumbnail_image %}
+	      {% rendition post.thumbnail_image 'fill-300x300' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	      </div>
+	    {% elif post.article_image %}
+	      {% rendition post.article_image 'fill-300x300' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	      </div>
+	    {% endif %}
+	  </div>
+	  <div class="col-lg-9 order-1 order-lg-2 pr-2 m-0">
+	    <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+	    {% page_date post %}
+	    {% page_author post %}
+	    <div class="my-2">{% include_block post.intro %}</div>
+	    <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
+	  </div>
 	</div>
       </div>
     {% endwith %}
