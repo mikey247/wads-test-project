@@ -586,6 +586,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
 
     class Meta:
         template = 'sitecore/blocks/carousel_simple_slide.html'
+        icon = 'table'
 
 
 @register_snippet
