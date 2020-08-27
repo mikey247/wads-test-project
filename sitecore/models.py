@@ -198,7 +198,7 @@ class TagIndexPage(RoutablePageMixin, Page):
     is appended to the results.
     """
 
-    template = 'sitecore/tags/index_page.html'
+    template = 'sitecore/taggit/index_page.html'
 
     def get_context(self, request, slug=None):
         context = super(TagIndexPage, self).get_context(request)
