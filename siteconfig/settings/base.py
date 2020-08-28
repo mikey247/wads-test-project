@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-#    'wagtailimporter',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,7 +80,7 @@ MIDDLEWARE = [
 
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
     
-    'wagtail.core.middleware.SiteMiddleware',
+# deprecated:   'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
