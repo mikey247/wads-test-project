@@ -1,5 +1,6 @@
 from datetime import date
 from django import template
+from wagtail.core.models import Page, Site
 
 register = template.Library()
 
@@ -8,7 +9,7 @@ register = template.Library()
 def get_site_root(context):
     # NB this returns a core.Page, not the implementation-specific model used
     # so object-comparison to self will return false as objects would differ
-    return context['request'].site.root_page
+    return Page.objects.get(pk=Site.find_for_request(context['request']).root_page_id)
 
 
 def has_menu_children(page):
