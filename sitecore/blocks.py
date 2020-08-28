@@ -1171,6 +1171,28 @@ class SplashBlock(blocks.StreamBlock):
         template = 'sitecore/blocks/splash_streamblock.html'
 
 
+class GalleryBlock(blocks.StructBlock):
+    
+    gallery_filterspec_choices = [
+
+        ("ROW3", '3 in a row'),  
+    ]
+
+    gallery_type = blocks.ChoiceBlock(
+        choices = gallery_filterspec_choices, 
+        help_text = 'Choose Gallery display style',
+        label = 'Gallery Style',
+        )
+
+    gallery_images = blocks.ListBlock(ImageChooserBlock(), label='Gallery Images')
+
+
+    class Meta:
+        icon = 'image'
+        label = 'Gallery'
+
+
+
         
 class CoreBlock(blocks.StreamBlock):
     """
@@ -1227,6 +1249,8 @@ class CoreBlock(blocks.StreamBlock):
     accordion = AccordionBlock(group='Section Blocks')
 
     two_cols = TwoColBlock(group='Section Blocks')
+
+    gallery = GalleryBlock(group='3. Embedded Content')
 
     # Override methods
 
