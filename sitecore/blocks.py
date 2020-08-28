@@ -1184,12 +1184,14 @@ class GalleryBlock(blocks.StructBlock):
         label = 'Gallery Style',
         )
 
-    gallery_images = blocks.ListBlock(ImageChooserBlock(), label='Gallery Images')
+    gallery_images = blocks.ListBlock(
+        ImageChooserBlock(), label='Gallery Images')
 
 
     class Meta:
         icon = 'image'
         label = 'Gallery'
+        template = 'sitecore/blocks/gallery_block.html'
 
 
 
