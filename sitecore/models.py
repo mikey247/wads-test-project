@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.core.models import Page, Orderable
+from wagtail.core.models import Page, Orderable, Site
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search.models import Query
 
@@ -27,16 +27,18 @@ from sitecore import constants
 class SiteSettings(BaseSetting):
     """
     This registers new site settings options (per site) in the Wagtail admin panels.
-    Limited functionality is provided here to set the (Bootstrap 3) theme.
+    Limited functionality is provided here to set the (Bootstrap 4) theme.
     Settings can be grouped and provided with tabbed panels for display.
     """
     def get_context(self, request):
         context = super(SiteSettings, self).get_context(request)
-        context['site_settings'] = self.for_site(request.site)
+        context['site'] = Site.find_for_request(request)
         return context
 
+    
     class Meta:
-        verbose_name = 'Custom Site Settings'
+        verbose_name = 'Customization'
+
 
     bootstrap_theme = models.CharField(
         max_length = 32,
