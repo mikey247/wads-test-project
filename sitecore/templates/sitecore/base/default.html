@@ -10,7 +10,7 @@
   
   {% block navbar %}
     {% get_site_root as site_root %}
-    {% top_menu parent=site_root calling_page=self search_query=query transparent=true %}
+    {% top_menu parent=site_root.root_page calling_page=self search_query=query transparent=true %}
   {% endblock %}
   
   {% block page-head %}<div class="wrapper"></div>{% endblock %}
