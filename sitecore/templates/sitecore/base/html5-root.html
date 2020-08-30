@@ -1,5 +1,5 @@
 {% load cache static wagtailsettings_tags sekizai_tags %}
-{% get_settings %}
+{% get_settings use_default_site=False %}
 
 <!DOCTYPE html>
 <html lang="{% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% else %}en{% endif %}">
@@ -29,7 +29,7 @@
     {% endblock %}
     
     {% block head-title %}
-      <title>{{ request.site.name }}</title>
+      <title></title>
     {% endblock %}
 
     <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
