@@ -1,12 +1,7 @@
 {% extends "sitecore/base/default.html" %}
-{% load rendition article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
+{% load article_tags rendition site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-splash{% endblock %}
-
-{% block navbar %}
-  {% get_site_root as site_root %}
-  {% top_menu parent=site_root transparent=False calling_page=self  %}
-{% endblock %}
 
 {% block page-head %}
   <div class="wrapper">
