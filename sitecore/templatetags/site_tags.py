@@ -7,10 +7,18 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def get_site_root(context):
-    # NB this returns a core.Page, not the implementation-specific model used
-    # so object-comparison to self will return false as objects would differ
-    return Page.objects.get(pk=Site.find_for_request(context['request']).root_page_id)
-
+    
+    if 'request' in context and context['request'] is not None:
+        site = Site.find_for_request(context['request'])
+    else:
+        site = Site.objects.get(is_default_site=True)
+        
+    return {
+        'site': site,
+        'root_page_id': site.root_page_id,
+        'root_page': Page.objects.get(pk=root_page_id)
+    }
+    
 
 def has_menu_children(page):
     return page.get_children().live().in_menu().exists()
@@ -23,7 +31,7 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
     The has_menu_children method is necessary because the bootstrap menu requires
     a dropdown class to be applied to a parent.
     """
-
+    
     menuitems = parent.get_children().live().in_menu()
     for menuitem in menuitems:
         menuitem.show_dropdown = has_menu_children(menuitem)
@@ -32,6 +40,7 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
         # if the variable passed as calling_page does not exist.
         menuitem.active = (calling_page.url.startswith(menuitem.url)
                            if calling_page else False)
+        
 
     # build a the navbar configuration for this page
     site_settings = context['settings']['sitecore']['SiteSettings']
@@ -49,11 +58,13 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
 
     # 'request' is required by the pageurl tag that we want to use within this template
     return {
+        'parent': parent,
         'calling_page': calling_page,
+        'search_query': search_query,
         'menuitems': menuitems,
         'navcfg': navcfg,
-        'request': context['request'],
-        'search_query': search_query,
+        'context': context,
+        'path': context['request'].path if 'request' in context and context['request'] is not None else '/',
     }
 
 
@@ -63,17 +74,15 @@ def top_menu_children(context, parent, menu_id):
     menuitems_children = parent.get_children()
     menuitems_children = menuitems_children.live().in_menu()
     return {
-        'parent': parent,        
+        'parent': parent,
         'menuitems_children': menuitems_children,
         'menu_id': menu_id,
-        # required by the pageurl tag that we want to use within this template
-        'request': context['request'],
     }
 
 
 # Renders the page taggit tags as collection of labels
 @register.inclusion_tag('sitecore/tags/taggit_list.html', takes_context=True)
-def taggit_list(context, page_tags, selected_tag=None, show_count=False): 
+def taggit_list(context, page_tags, selected_tag=None, show_count=False):
    return {
        'tags': page_tags,
        'selected': selected_tag,
@@ -83,7 +92,7 @@ def taggit_list(context, page_tags, selected_tag=None, show_count=False):
 
 # Renders the page pagination block based on the paginator resource
 @register.inclusion_tag('sitecore/tags/pagination.html', takes_context=True)
-def pagination(context, page_res, page_range): 
+def pagination(context, page_res, page_range):
    return {
        'page_res': page_res,
        'page_range': page_range,
