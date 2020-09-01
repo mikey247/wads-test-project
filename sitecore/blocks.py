@@ -1172,7 +1172,7 @@ class SplashBlock(blocks.StreamBlock):
 
 
 class GalleryBlock(blocks.StructBlock):
-    
+
     gallery_filterspec_choices = [
 
         ("ROW3", '3 in a row'),  
@@ -1183,6 +1183,9 @@ class GalleryBlock(blocks.StructBlock):
         help_text = 'Choose Gallery display style',
         label = 'Gallery Style',
         )
+
+    gallery_image_title = blocks.BooleanBlock(help_text="Show Image Title", required=False)
+    gallery_image_caption = blocks.BooleanBlock(help_text="Show Image Caption", required=False)
 
     gallery_images = blocks.ListBlock(
         ImageChooserBlock(), label='Gallery Images')
