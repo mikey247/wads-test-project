@@ -1220,13 +1220,13 @@ class CoreBlock(blocks.StreamBlock):
         template='sitecore/tags/text_snippet.html'
         )
 
-    tab = TabBlock(group='Section Blocks')
+    tab = TabBlock(group='4. Section Blocks')
 
-    pill = PillBlock(group='Section Blocks')
+    pill = PillBlock(group='4. Section Blocks')
 
-    accordion = AccordionBlock(group='Section Blocks')
+    accordion = AccordionBlock(group='4. Section Blocks')
 
-    two_cols = TwoColBlock(group='Section Blocks')
+    two_cols = TwoColBlock(group='4. Section Blocks')
 
     # Override methods
 
