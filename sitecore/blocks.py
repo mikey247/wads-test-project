@@ -390,7 +390,8 @@ class BSCodeBlock(blocks.StructBlock):
     lang = Select2ChoiceBlock(
         choices=LANGUAGE_CHOICES,
         required=True,
-        default=''
+        default='',
+        label='Language'
     )
 
     code = blocks.TextBlock(
@@ -398,7 +399,8 @@ class BSCodeBlock(blocks.StructBlock):
     )
 
     hl_lines = CSVIntListCharBlock(
-        required=False
+        required=False,
+        label='Highlighted Lines'
     )
 
     line_nums = blocks.BooleanBlock(
@@ -584,6 +586,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
 
     class Meta:
         template = 'sitecore/blocks/carousel_simple_slide.html'
+        icon = 'table'
 
 
 @register_snippet
@@ -1011,7 +1014,7 @@ class SubSectionBlock(blocks.StructBlock):
 
 class TabBlock(blocks.StructBlock):
 
-    tab_section = blocks.ListBlock(SubSectionBlock())
+    tab_section = blocks.ListBlock(SubSectionBlock(), label='Tab Section(s)')
 
     class Meta:
         template = 'sitecore/blocks/tab_block.html'
@@ -1036,7 +1039,7 @@ class PillBlock(blocks.StructBlock):
         )
 
 
-    pill_section = blocks.ListBlock(SubSectionBlock())
+    pill_section = blocks.ListBlock(SubSectionBlock(), label='Pill Section(s)')
 
     class Meta:
         template = 'sitecore/blocks/pill_block.html'
@@ -1059,7 +1062,7 @@ class AccordionBlock(blocks.StructBlock):
         default = 'ACCORDION'
         )
 
-    accordion_section = blocks.ListBlock(SubSectionBlock())
+    accordion_section = blocks.ListBlock(SubSectionBlock(), label='Accordion Section(s)')
 
 
     class Meta:

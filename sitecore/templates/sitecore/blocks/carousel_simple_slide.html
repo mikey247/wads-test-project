@@ -5,7 +5,7 @@
   {% endaddtoblock %}
 {% endif %}
 {% image self.image fill-1200x400 as photo %}
-<img class="d-block w-100" src="{{ photo.url }}" alt="{{ self.title }}">
+<img class="d-block w-100" src="{{ photo.url }}" alt="{{ self.image.alt_text }}">
 <div class="carousel-caption">
   {% if self.title %}
     {% include_block self.title with colour=self.title_colour only %}   
