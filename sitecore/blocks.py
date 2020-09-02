@@ -1174,6 +1174,34 @@ class SplashBlock(blocks.StreamBlock):
         template = 'sitecore/blocks/splash_streamblock.html'
 
 
+class GalleryBlock(blocks.StructBlock):
+
+    gallery_filterspec_choices = [
+
+        ("original", '3 images in a row / original image size'),
+        ("fill-300x300", '3 images in a row / 300 x 300 px'),    
+        
+    ]
+
+    gallery_type = blocks.ChoiceBlock(
+        choices = gallery_filterspec_choices, 
+        help_text = 'Choose Gallery display style',
+        label = 'Gallery Style',
+        )
+
+    gallery_image_title = blocks.BooleanBlock(help_text="Show Image Title", required=False)
+    gallery_image_caption = blocks.BooleanBlock(help_text="Show Image Caption", required=False)
+
+    gallery_images = blocks.ListBlock(
+        ImageChooserBlock(), label='Gallery Images')
+
+    class Meta:
+        icon = 'image'
+        label = 'Gallery'
+        template = 'sitecore/blocks/gallery_block.html'
+
+
+
         
 class CoreBlock(blocks.StreamBlock):
     """
@@ -1230,6 +1258,8 @@ class CoreBlock(blocks.StreamBlock):
     accordion = AccordionBlock(group='4. Section Blocks')
 
     two_cols = TwoColBlock(group='4. Section Blocks')
+
+    gallery = GalleryBlock(group='3. Embedded Content')
 
     # Override methods
 
