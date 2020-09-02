@@ -1175,7 +1175,9 @@ class GalleryBlock(blocks.StructBlock):
 
     gallery_filterspec_choices = [
 
-        ("ROW3", '3 in a row'),  
+        ("original", '3 images in a row / original image size'),
+        ("fill-300x300", '3 images in a row / 300 x 300 px'),    
+        
     ]
 
     gallery_type = blocks.ChoiceBlock(
@@ -1189,7 +1191,6 @@ class GalleryBlock(blocks.StructBlock):
 
     gallery_images = blocks.ListBlock(
         ImageChooserBlock(), label='Gallery Images')
-
 
     class Meta:
         icon = 'image'
