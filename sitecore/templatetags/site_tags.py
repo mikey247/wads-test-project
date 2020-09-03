@@ -16,7 +16,7 @@ def get_site_root(context):
     return {
         'site': site,
         'root_page_id': site.root_page_id,
-        'root_page': Page.objects.get(pk=root_page_id)
+        'root_page': Page.objects.get(pk=site.root_page_id)
     }
     
 
@@ -91,25 +91,47 @@ def taggit_list(context, page_tags, selected_tag=None, show_count=False):
 
 
 # Renders the page pagination block based on the paginator resource
-@register.inclusion_tag('sitecore/tags/pagination.html', takes_context=True)
-def pagination(context, page_res, page_range):
+@register.inclusion_tag('sitecore/tags/index_pagination.html', takes_context=True)
+def index_pagination(context, page_res, page_range):
    return {
        'page_res': page_res,
        'page_range': page_range,
    }
 
 
-# Calls render method for page author using page.author as alias if provided; fallback to owner.get_full_name; fallback to owner (username)
+# Renders the page author using author alias if provided; othjerwise fallback to owner.get_full_name; fallback to owner (username)
 @register.inclusion_tag('sitecore/tags/page_author.html', takes_context=True)
-def page_author(context, page):
+def page_author(context, page, div_class='page-author'):
     return {
         'page': page,
+        'div_class': div_class,
     }
 
 
-# Calls eenders method for page timestamp using creation date and/or modification date
-@register.inclusion_tag('sitecore/tags/page_date.html', takes_context=True)
-def page_date(context, page):
+# Renders the page creation/first published datetime
+@register.inclusion_tag('sitecore/tags/page_date_published.html', takes_context=True)
+def page_date_published(context, page, div_class='page-date-published'):
     return {
         'page': page,
+        'div_class': div_class,
     }
+
+
+# Renders the page last revised datetime
+@register.inclusion_tag('sitecore/tags/page_date_revised.html', takes_context=True)
+def page_date_revised(context, page, div_class='page-date-revised'):
+    return {
+        'page': page,
+        'div_class': div_class,
+    }
+
+
+# Renders a badge representing the content type; article/event/etc.
+@register.inclusion_tag('sitecore/tags/page_content_type.html', takes_context=True)
+def page_content_type(context, page, div_class='page-content-type'):
+    return {
+        'page': page,
+        'div_class': div_class,
+    }
+
+
