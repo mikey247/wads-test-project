@@ -133,10 +133,12 @@ class EventIndexPage(Page):
         else: # self.EVENTS_FILTER_PAST
             all_events = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
 
-
+        # get the paginator obj and the current page number
         paginator = Paginator(all_events, self.per_page) 
-
         page = request.GET.get('page')
+        index = int(page)-1 if page is not None else 0
+        
+        # get list of events for the desired page
         try:
             events = paginator.page(page)
         except PageNotAnInteger:
@@ -144,6 +146,19 @@ class EventIndexPage(Page):
         except EmptyPage:
             events = paginator.page(paginator.num_pages)
 
+        # limit page_range of the paginator (hard-coded to 3 pages both ways)
+        max_index = len(paginator.page_range)
+        start_index = max(0, index - 3)
+        end_index = min(max_index, start_index + 7)
+
+        # build new page range from calculated range but also include first/last pages if not in range
+        context['page_range'] = []
+        if start_index > 0:
+            context['page_range'].append(1)
+        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
+        if end_index < max_index:
+            context['page_range'].append(max_index)
+            
         context['events'] = events
 
         return context
