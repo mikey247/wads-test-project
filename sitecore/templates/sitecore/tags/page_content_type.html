@@ -1,0 +1,7 @@
+<div class="{{ div_class }}">
+  {% if page.content_type|stringformat:'s' == "article | article page" %}
+    <span class="badge badge-info"><i class="fas fa-scroll"></i> Article</span>
+  {% elif page.content_type|stringformat:'s' == 'event | event page' %}
+    <span class="badge badge-info"><i class="fas fa-calendar"></i> Event</span>
+  {% endif %}
+</div>  

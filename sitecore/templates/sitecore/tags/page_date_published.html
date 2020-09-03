@@ -1,0 +1,8 @@
+<div class="{{ div_class }}">
+  <small>
+    <strong><i class="fas fa-calendar"></i> Published: </strong>
+    <time datetime="{{ page.first_published_at|date:'c' }}">
+      {{ page.first_published_at|date:"DATETIME_FORMAT" }}
+    </time>
+  </small>
+</div>  
