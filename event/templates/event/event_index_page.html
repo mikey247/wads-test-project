@@ -13,7 +13,7 @@
     {% endif %}
     {% if page.display_title %}
       <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
-      {% endif %}
+    {% endif %}
     {% if page.display_desc %}
       <div class="lead">{{ page.desc|richtext }}</div>
     {% endif %}
@@ -23,18 +23,18 @@
       </div>
     {% endif %}  
   </header>
-{% endblock %}
+{% endblock page-content-main-header %}
 
 {% block page-content-main-article %}
   <article>
     {% for post in events %}
       <section>
-      {% with event=post.specific %}
-	<div class="media bg-light mt-0 mb-4 pr-2 ">
-	  <div class="py-0">
-	    <div class="bg-dark px-3 py-4 mr-2 text-light text-center">
-	      <h2><i class="fas fa-calendar"></i></h2>
-	      {% if event.duration == 1 %}
+	{% with event=post.specific %}
+	  <div class="media bg-light mt-0 mb-4 pr-2 ">
+	    <div class="py-0">
+	      <div class="bg-dark px-3 py-4 mr-2 text-light text-center">
+		<h2><i class="fas fa-calendar"></i></h2>
+		{% if event.duration == 1 %}
 		<h4>{{ event.start_date|date:'d' }} {{ event.start_date|date:'M'|upper }}</h4>
 	      {% else %}
 		{% if event.in_same_month %}
@@ -62,4 +62,10 @@
       {% endwith %}
     {% endfor %}
   </article>
-{% endblock %}
+{% endblock page-content-main-article %}
+
+{% block page-content-main-footer-nav %}
+  <footer class="my-4" role="pagination">
+    {% index_pagination events page_range %}
+  </footer>
+{% endblock page-content-main-footer-nav %}
