@@ -28,3 +28,27 @@ a.cc-btn.cc-dismiss:hover {
 .cc-message h3 {
     margin-bottom: 1em;
 }
+
+div.page-author-inline {
+    display: inline;
+}
+
+div.page-date-published-inline {
+    display: inline;
+}
+
+div.page-date-revised-inline {
+    display: inline;
+}
+
+div.page-content-type-inline {
+    display: inline;
+}
+
+div.event-date-range-inline {
+    display: inline;
+}
+
+div.event-type-inline {
+    display: inline;
+}
