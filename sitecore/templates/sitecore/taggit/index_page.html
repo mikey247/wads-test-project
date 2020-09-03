@@ -1,6 +1,11 @@
 {% extends "sitecore/base/default.html" %}
 {% load shortcodes site_tags wagtailcore_tags %}
 
+{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-main-col-style %}pl-0{% endblock %} 
+{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
+{% block page-content-aside-col-style %}pr-0{% endblock %}
+
 {% block head-title %}
   <title>{{ self.title }}</title>
 {% endblock %}
@@ -62,49 +67,54 @@
   {% if slug %}
     <article class="container m-0 p-0">
       {% for page in pages.specific %}
-	<div class="bg-light p-2 mb-4 {% if not forloop.last %}border-bottom border-primary{% endif %}">
-	  <h2><a href="{% pageurl page %}"><span class="badge badge-primary">{{ forloop.counter }}</span> {{ page.title }}</a></h2>
-	  {% if page.content_type|stringformat:'s' == "article | article page" %}
-	    <span class="badge badge-info"><i class="fas fa-scroll"></i> Article</span>
-	  {% elif page.content_type|stringformat:'s' == 'event | event page' %}
-	    <span class="badge badge-info"><i class="fas fa-calendar"></i> Event</span>
-	  {% endif %}
-	  {% if page.content_type|stringformat:'s' == 'event | event page' %}
-	    <small><span class="text-dark"><i class="fas fa-calendar"></i> {{ page.start_date }}
-	      {% if page.duration > 1 %}&mdash; {{ page.end_date }}{% endif %}</span></small>
-	  {% else %}
-	      <small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
-	      {% if page.latest_revision_created_at %}
-		<small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
+	<div class="row p-0 m-0">
+	  <div class="col-12 m-0 p-0">
+	    <div class="bg-light p-2 mb-4 {% if not forloop.last %}border-bottom border-primary{% endif %}">
+	      <h4><a href="{% pageurl page %}"><span class="badge badge-primary">{{ forloop.counter }}</span> {{ page.title }}</a></h4>
+	      {% page_content_type page 'page-content-type-inline' %}
+	      {% if page.content_type|stringformat:'s' == 'event | event page' %}
+		<div class="event-type-inline">
+		  {% include_block page.event_type with view="summary" %}
+		</div>
+		<div class="event-date-range-inline">
+		  <small>
+		    <strong><i class="fas fa-calendar"></i> Event runs: </strong>
+		    {{ page.start_date }}{% if page.duration > 1 %} &mdash; {{ page.end_date }}{% endif %}
+		  </small>
+		</div>
+	      {% else %}
+		{% page_author page 'page-author-inline' %}
+		{% page_date_published page 'page-date-published-inline' %}
+		{% page_date_revised page 'page-date-revised-inline' %}
 	      {% endif %}
-	  {% endif %}
-	  {% include_block page.event_type with view="summary" %}
-	  <hr>
-	  {% if page.search_description %}
-	    <div class="lead">{{ page.search_description }}</div>
-	  {% elif page.intro != "<p></p>" %}
-	    <div class="lead">{% include_block page.intro %}</div>
-	  {% else %}
-	    <p class="text-warning">Page has no introductory text or search description.</p>
-	  {% endif %}
-	  
-	  {% if page.tags.all.count %}
-	    {% taggit_list page.tags.all slug %}
-	  {% endif %}
+	      <hr>
+	      {% if page.search_description %}
+		<div class="lead">{{ page.search_description }}</div>
+	      {% elif page.intro != "<p></p>" %}
+		<div class="lead">{% include_block page.intro %}</div>
+	      {% else %}
+		<p class="text-warning">Page has no introductory text or search description.</p>
+	      {% endif %}
+	      
+	      {% if page.tags.all.count %}
+		{% taggit_list page.tags.all slug %}
+	      {% endif %}
+	    </div>
+	  </div>
 	</div>
       {% empty %}
 	<span class="text-info">No pages found with that tag.</span>
+	<hr>
       {% endfor %}
-      <hr>
     </article>
   {% endif %}
 {% endblock %}
 
-{% block page-content-main-footer %}
+{% block page-content-main-footer-nav %}
   <footer class="my-4" role="tag cloud">
     {% if slug %}
       <h4>Tag Cloud</h4>
     {% endif %}
     {% taggit_list tags show_count=True %}
   </footer>
-{% endblock %}
+{% endblock page-content-main-footer-nav %}
