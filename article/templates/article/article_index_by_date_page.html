@@ -23,7 +23,7 @@
       </div>
     </div>
   </div>
-{% endblock %}
+{% endblock page-content-main-header %}
 
 {% block page-content-main-article %}
   {% for post in articles %}
@@ -45,7 +45,8 @@
 	  </div>
 	  <div class="col-lg-9 order-1 order-lg-2 pr-2 m-0">
 	    <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
-	    {% page_date post %}
+	    {% page_date_published post %}
+	    {% page_date_revised post %}
 	    {% page_author post %}
 	    <div class="my-2">{% include_block post.intro %}</div>
 	    <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
@@ -54,7 +55,7 @@
       </div>
     {% endwith %}
   {% endfor %}
-{% endblock %}
+{% endblock page-content-main-article %}
 
 {% block page-content-aside-slot-1 %}
   <section>
@@ -77,8 +78,8 @@
   </section>
 {% endblock page-content-aside-slot-1 %}
 
-{% block page-content-main-footer %}
+{% block page-content-main-footer-nav %}
   <footer class="my-4" role="pagination">
-    {% pagination articles page_range %}
+    {% index_pagination articles page_range %}
   </footer>
-{% endblock %}
+{% endblock page-content-main-footer-nav %}
