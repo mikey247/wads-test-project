@@ -93,13 +93,13 @@
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
+	{% page_date_published page %}
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-	{% if page.latest_revision_created_at %}
-	  <small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
-	{% endif %}
-      </li>
+      {% if page.latest_revision_created_at %}
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  {% page_date_revised page %}
+	</li>
+      {% endif %}
     </ul>
   </section>
 {% endblock page-content-aside-slot-3 %}
