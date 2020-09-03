@@ -67,16 +67,32 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         context = super(ArticleIndexPage, self).get_context(request)
         all_articles = self.get_children().live().order_by('-first_published_at')
 
+        # get the paginator obj and the current page number
         paginator = Paginator(all_articles, self.per_page) 
-
         page = request.GET.get('page')
+        index = int(page)-1 if page is not None else 0
+        
+        # get list of articles for the desired page
         try:
             articles = paginator.page(page)
         except PageNotAnInteger:
             articles = paginator.page(1)
         except EmptyPage:
-            articles= paginator.page(paginator.num_pages)
+            articles = paginator.page(paginator.num_pages)
 
+        # limit page_range of the paginator (hard-coded to 3 pages both ways)
+        max_index = len(paginator.page_range)
+        start_index = max(0, index - 3)
+        end_index = min(max_index, start_index + 7)
+
+        # build new page range from calculated range but also include first/last pages if not in range
+        context['page_range'] = []
+        if start_index > 0:
+            context['page_range'].append(1)
+        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
+        if end_index < max_index:
+            context['page_range'].append(max_index)
+            
         context['articles'] = articles
         
         return context
