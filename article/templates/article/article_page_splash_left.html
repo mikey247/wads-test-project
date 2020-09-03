@@ -66,26 +66,37 @@
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
+	{% page_date_published page %}
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-	{% if page.latest_revision_created_at %}
-	  <small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
-	{% endif %}
-      </li>
+      {% if page.latest_revision_created_at %}
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  {% page_date_revised page %}
+	</li>
+      {% endif %}
     </ul>
   </section>
 {% endblock page-content-aside-slot-2 %}
 
-{% block page-content-main-footer %}
+{% block page-content-main-footer-meta %}
   <footer role="tags">
     {% if page.tags.all.count %}
       {% taggit_list page.tags %}
     {% endif %}
   </footer>
+{% endblock page-content-main-footer-meta %}
 
-  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
+{% block page-content-main-footer-social %}
+  <footer role="social">
+  </footer>
+{% endblock page-content-main-footer-social %}
   
+{% block page-content-main-footer-nav %}
+  <p><strong><a href="{{ page.get_parent.url }}"><i class="fas fa-level-up-alt"></i> Return to {{ page.get_parent.title }}</a></strong></p>
+{% endblock page-content-main-footer-nav %}
+
+{% block page-content-main-footer-aside %}
+  <footer role="aside">
+  </footer>
 {% endblock %}
 
 {% block head-css-extension %}
