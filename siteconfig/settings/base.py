@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     
 #    'debug_toolbar',
     'django_extensions',
-    'django-pg-copy',
+    'pg_copy',
     'django_select2',
 ]
 
