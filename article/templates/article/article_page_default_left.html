@@ -8,7 +8,7 @@
     {% if self.article_image %}
       {% rendition self.article_image self.article_image_filterspec as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block" >
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
@@ -45,24 +45,24 @@
   </section>
 {% endblock %}
 
-{% block page-content-main-footer-meta %}
-  <footer role="tags">
-    {% if page.tags.all.count %}
+{% if page.tags.all.count %}
+  {% block page-content-main-footer-meta %}
+    <footer role="tags">
       {% taggit_list page.tags %}
-    {% endif %}
-  </footer>
-{% endblock page-content-main-footer-meta %}
+    </footer>
+  {% endblock page-content-main-footer-meta %}
+{% endif %}
 
 {% block page-content-main-footer-social %}
   <footer role="social">
+    {% social_share_list page %}
   </footer>
 {% endblock page-content-main-footer-social %}
   
 {% block page-content-main-footer-nav %}
-  <p><strong><a href="{{ page.get_parent.url }}"><i class="fas fa-level-up-alt"></i> Return to {{ page.get_parent.title }}</a></strong></p>
-{% endblock page-content-main-footer-nav %}
-
-{% block page-content-main-footer-aside %}
-  <footer role="aside">
+  <footer role="nav">
+    <div class="my-3">
+      <p><strong><a href="{{ page.get_parent.url }}"><i class="fas fa-level-up-alt"></i> Return to {{ page.get_parent.title }}</a></strong></p>
+    </div>
   </footer>
-{% endblock %}
+{% endblock page-content-main-footer-nav %}
