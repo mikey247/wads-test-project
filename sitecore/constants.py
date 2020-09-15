@@ -127,3 +127,11 @@ BOOTSTRAP4_BUTTON_SIZE_CHOICES = (
     ('btn-sm', 'Small'),
     ('btn-lg', 'Large'),
 )
+
+BOOTSTRAP4_TWOCOL_RATIO_CHOICES = (
+    ('1:1', '1:1'),
+    ('2:1', '2:1'),
+    ('1:2', '1:2'),
+    ('3:1', '3:1'),
+    ('1:3', '1:3'),
+)

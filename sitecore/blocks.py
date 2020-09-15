@@ -1120,7 +1120,43 @@ class NestedCoreBlock(blocks.StreamBlock):
 
 
         
+class TwoColStructValue(blocks.StructValue):
+    """
+    Defines a "value_class" for the TwoColBlock class below, which enables a StructBlock to have some control over context in rendering.
+    """
+    def col_one_layout(self):
+        col_ratio = self.get('col_ratio')
+        if col_ratio == '1:2':
+            return "col-md-4"
+        elif col_ratio == '1:3':
+            return "col-md-3"
+        elif col_ratio == '2:1':
+            return "col-md-8"
+        elif col_ratio == '3:1':
+            return "col-md-9"
+        else:
+            return "col-md-6"
+
+    def col_two_layout(self):
+        col_ratio = self.get('col_ratio')
+        if col_ratio == '1:2':
+            return "col-md-8"
+        elif col_ratio == '1:3':
+            return "col-md-9"
+        elif col_ratio == '2:1':
+            return "col-md-4"
+        elif col_ratio == '3:1':
+            return "col-md-3"
+        else:
+            return "col-md-6"
+        
+        
 class TwoColBlock(blocks.StructBlock):
+
+    col_ratio = blocks.ChoiceBlock(
+        choices=constants.BOOTSTRAP4_TWOCOL_RATIO_CHOICES,
+        default='1:1',
+    )
 
     col_one_content = NestedCoreBlock(label='Column - 1',)
     col_two_content = NestedCoreBlock(label='Column - 2')
@@ -1129,6 +1165,7 @@ class TwoColBlock(blocks.StructBlock):
         template = 'sitecore/blocks/twocol_structblock.html'
         icon = 'form'
         label='Two Columns'
+        value_class = TwoColStructValue
 
 
 
@@ -1158,6 +1195,8 @@ class SplashBlock(blocks.StreamBlock):
         #group='3. Embedded Content',
         template='sitecore/blocks/carousel.html'
     )
+
+    two_cols = TwoColBlock(group='Section Blocks')
 
     # Override methods
 
