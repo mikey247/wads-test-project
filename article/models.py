@@ -388,14 +388,15 @@ class ArticlePage(SitePage):
         index.SearchField('author'),
         index.SearchField('intro'),
         index.SearchField('body'),
+        index.SearchField('splash_content'),
     ]
 
     # Append which fields are to be accessible via the REST API
 
-    api_fields = SitePage.search_fields + [
+    api_fields = SitePage.api_fields + [
         'author',
         'article_image',
-        'article_image_resize',
+        'article_image_filterspec',
         'thumbnail_image',
         'intro',
         'body',
