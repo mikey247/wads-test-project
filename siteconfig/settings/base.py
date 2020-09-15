@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
+    'pg_copy',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -65,7 +66,8 @@ INSTALLED_APPS = [
     
 #    'debug_toolbar',
     'django_extensions',
-    'django_select2'
+    'django_select2',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
