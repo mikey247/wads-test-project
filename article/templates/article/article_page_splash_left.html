@@ -7,9 +7,9 @@
   <div class="wrapper">
     {% if self.article_image %}
       {% rendition self.article_image 'fill-1600x600' as splash_photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ splash_photo.url }}" style="background: transparent;">
-	<div class="container">
-	  <div class="row">
+      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ splash_photo.url }}" >
+	<div class="container p-0 my-4">
+	  <div class="row p-0 m-0">
 	    <div class="col-lg-8 p-0 ml-auto mr-auto">
 	      <div id="splash"
 		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
@@ -22,19 +22,14 @@
       </div>
     {% endif %}
   </div>
-  <div class="main main-raised">
-    <section>
-      <div class="container">
-	<div class="row">
-	  <div class="col-12 p-0 my-4">
-	    <header class="lead">
-	      <div class="lead mb-4">
-		{% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
-	      </div>
-	  </header>
-	</div>
+  <div class="container main main-raised">
+    <div class="row p-0 m-0">
+      <div class="col-12 p-0 my-4">
+	<header class="lead mb-4">
+	  {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+	</header>
       </div>
-    </section>
+    </div>
   </div>
 {% endblock page-head %}
 
@@ -133,7 +128,8 @@
     }
 
     .main-raised {
-      margin: -60px 30px 0;
+      /* margin: -60px 30px 0; */
+      margin-top: -60px;
       border-radius: 6px;
       box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
     }
