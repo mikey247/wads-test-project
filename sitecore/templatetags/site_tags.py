@@ -90,6 +90,15 @@ def taggit_list(context, page_tags, selected_tag=None, show_count=False):
    }
 
 
+# Renders the social share buttons for the page as collection of icons
+@register.inclusion_tag('sitecore/tags/social_share_list.html', takes_context=True)
+def social_share_list(context, page):
+   return {
+       'request': context['request'],
+       'page': page,
+   }
+
+
 # Renders the page pagination block based on the paginator resource
 @register.inclusion_tag('sitecore/tags/index_pagination.html', takes_context=True)
 def index_pagination(context, page_res, page_range):
