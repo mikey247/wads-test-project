@@ -1,26 +1,26 @@
 {% load site_tags static wagtailcore_tags wagtailimages_tags %}
 
 <div class="container p-0 my-4 h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="col-lg-3">
+  <div class="row p-0 m-0 h-100 justify-content-center align-items-center">
+    <div class="col-6 col-lg-3 order-1 order-lg-1 pl-3 pl-lg-0 mb-4 mb-lg-0">
       
       {% if navcfg.brand_link and navcfg.brand_logo %}
         <a href="{{navcfg.brand_link}}"> 
-          {% image navcfg.brand_logo max-206x86 as photo %}
+          {% image navcfg.brand_logo max-169x72 as photo %}
           <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
         </a>
       {% else %}
-        {% image navcfg.brand_logo max-206x86 as photo %}
+        {% image navcfg.brand_logo max-169x72 as photo %}
         <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
       {% endif %}
       
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-12 col-lg-6 order-3 order-lg-2">
       {% if navcfg.brand_name %}<h1>{{ navcfg.brand_name }}</h1>{% endif %}
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-6 col-lg-3 order-2 order-lg-3 pr-3 pr-lg-0 mb-4 mb-lg-0">
       <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% slugurl 'search' %}" method="get">
 	<input type="text" name="query" {% if search_query %} value="{{ search_query }}"{% endif %}
 	       class="form-control mr-sm-0" style="text-align: right"
@@ -38,7 +38,7 @@
       {% endif %}>
     
     <div class="{{ navcfg.outerclass }} p-0">
-      <a style="width: auto" class="navbar-brand" href="{% pageurl parent %}" title="{{ parent.title }}">
+      <a style="width: auto" class="navbar-brand pl-3 pl-lg-0" href="{% pageurl parent %}" title="{{ parent.title }}">
         {% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% endif %}
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
