@@ -11,9 +11,9 @@
 {% block page-content-main-header %}
   <div class="container p-0 m-0">
     <div class="row p-0 m-0">
-      <div class="col-lg-3 order-2 order-lg-1 pl-0">
+      <div class="col-lg-3 d-none d-lg-block order-2 order-lg-1 pl-lg-0">
       </div>
-      <div class="col-lg-9 order-1 order-lg-2 pr-0">	
+      <div class="col-lg-9 order-1 order-lg-2 pr-lg-0">	
 	{% if page.display_title %}
 	  <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
 	{% endif %}
@@ -48,7 +48,7 @@
 	    {% page_date_published post %}
 	    {% page_date_revised post %}
 	    {% page_author post %}
-	    <div class="my-2">{% include_block post.intro %}</div>
+	    <div class="my-2">{% include_block post.intro with pid='post-intro' filterspec='width-1200' %}</div>
 	    <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
 	  </div>
 	</div>
