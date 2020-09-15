@@ -182,7 +182,9 @@ class SitePage(Page):
     
     tags = ClusterTaggableManager(through=SitePageTags, blank=True)
 
-    api_fields = Page.search_fields + [
+    search_fields = Page.search_fields
+    
+    api_fields = [
         'tags',
     ]
 
