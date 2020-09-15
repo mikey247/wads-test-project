@@ -65,7 +65,8 @@ INSTALLED_APPS = [
     
 #    'debug_toolbar',
     'django_extensions',
-    'django_select2'
+    'django-pg-copy',
+    'django_select2',
 ]
 
 MIDDLEWARE = [
