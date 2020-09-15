@@ -8,15 +8,37 @@
     right: 0;
 }
 
+.page-footer address {
+    line-height: 24px;
+}
+
+.page-footer address a {
+    color: #aaaaaa!important;
+}
+
 .page-footer li {
-    float: left;
+    line-height: 2;
 }
 
 .page-footer li a {
-    color: #ffffff;
+    color: #aaaaaa!important;
 }
 
-.page-footer li + li:before {
+.page-footer hr {
+    border-top: 1px solid #808184;
+    height: 1px;
+    margin: 0;
+}
+
+.base-footer li {
+    float: left;
+}
+
+.base-footer li a {
+    color: #aaaaaa!important;
+}
+
+.base-footer li + li:before {
     content: "/";
     padding: 0.5rem;
 }
@@ -52,3 +74,77 @@ div.event-date-range-inline {
 div.event-type-inline {
     display: inline;
 }
+
+div.social-share {
+    display: inline-block;
+}
+
+i.fa-twitter-square {
+    color: #00aced;
+}
+
+i.fa-facebook-square {
+    color: #3b579b;
+}
+
+i.fa-envelope-square {
+    color: darkorange;
+}
+
+i.fa-linkedin {
+    color: #0173b2;
+}
+
+i.fa-reddit-square {
+    color: #ff5c06;
+}
+
+@media (max-width: 575.98px) {
+    .img-full-width-md {
+	left: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	max-width: 100vw;
+	position: relative;
+	right: 50%;
+	width: 100vw;
+    }
+}
+
+@media (min-width: 576px) {
+    .img-full-width-md {
+	margin-left: auto !important;
+	margin-right: auto !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .display-1 {
+	font-size: 2.5rem;
+    }
+    .display-2 {
+	font-size: 2rem;
+    }
+}
+
+@media (max-width: 677.98px) and ( min-width: 576px) {
+    .display-1 {
+	font-size: 3rem;
+    }
+    .display-2 {
+	font-size: 2.5rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .container.main.main-raised {
+	max-width: 990px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container.main.main-raised {
+	max-width: 1170px;
+    }
+}
+
