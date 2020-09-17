@@ -1,0 +1,95 @@
+{% extends "sitecore/base/default.html" %}
+{% load rendition wagtailcore_tags wagtailimages_tags site_tags %}
+
+{% block body-class %}article-index-by-date-page{% endblock %}
+
+{% block page-content-main-header %}
+  <div class="container p-0 m-0">
+    <div class="row p-0 m-0">
+      <div class="col-lg-3 d-none d-lg-block order-2 order-lg-1 pl-lg-0">
+      </div>
+      <div class="col-lg-9 order-1 order-lg-2 pr-lg-0">	
+	{% if page.display_title %}
+	  <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
+	{% endif %}
+	{% if page.intro %}
+	  <div class="lead mb-4">
+	    {% include_block page.intro with pid='page-index-intro' filterspec='width-1200' %}
+	  </div>
+	{% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock page-content-main-header %}
+
+{% block page-content-main-article %}
+  {% for post in articles %}
+    {% with post=post.specific %}
+      <div class="container p-0 mx-0 my-4">
+	<div class="row bg-light p-0 m-0">
+	  <div class="d-none d-md-block col-12 col-md-3 order-1 p-0 m-0">
+	    {% if post.thumbnail_image %}
+	      {% rendition post.thumbnail_image 'fill-300x300' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	      </div>
+	    {% elif post.article_image %}
+	      {% rendition post.article_image 'fill-300x300' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	      </div>
+	    {% endif %}
+	  </div>
+	  <div class="d-md-none col-12 col-md-3 order-1 p-0 m-0">
+	    {% if post.thumbnail_image %}
+	      {% rendition post.thumbnail_image 'fill-600x150' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block">
+	      </div>
+	    {% elif post.article_image %}
+	      {% rendition post.article_image 'fill-600x150' as photo %}
+	      <div class="m-0">
+		<img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block">
+	      </div>
+	    {% endif %}
+	  </div>
+	  <div class="col-12 col-md-9 order-1 py-0 m-0">
+	    <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+	    {% page_date_published post %}
+	    {% page_date_revised post %}
+	    {% page_author post %}
+	    <div class="my-2">{% include_block post.intro with pid='post-intro' filterspec='width-1200' %}</div>
+	    <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
+	  </div>
+	</div>
+      </div>
+    {% endwith %}
+  {% endfor %}
+{% endblock page-content-main-article %}
+
+{% block page-content-aside-slot-1 %}
+  <section>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
+	<strong>Articles Filtered by:</strong>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+	{% if day %}
+	  <span>{{ year }} / {{ month }} / {{ day }}</span>
+	{% elif month %}
+	  <span>{{ year }} / {{ month }}</span>
+	{% elif year %}
+	  <span>{{ year }}</span>
+	{% else %}
+	  <span>Showing All</span>
+	{% endif %}
+      </li>
+    </ul>
+  </section>
+{% endblock page-content-aside-slot-1 %}
+
+{% block page-content-main-footer-nav %}
+  <footer class="my-4" role="pagination">
+    {% index_pagination articles page_range %}
+  </footer>
+{% endblock page-content-main-footer-nav %}
