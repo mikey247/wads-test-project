@@ -52,7 +52,20 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     
     """
     
-    desc = RichTextField(blank=True)
+    SIDEBAR_PLACEMENT_DEFAULT='left'
+    SIDEBAR_PLACEMENT_CHOICES = (
+        ('left', 'Single sidebar (To left of main content'),
+        ('right', 'Single sidebar (To right of main content'),
+        ('none', 'No sidebars'),
+    )
+    
+    intro = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+    )
+
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 validators=[
                                                     MinValueValidator(1),
@@ -60,7 +73,13 @@ class ArticleIndexPage(RoutablePageMixin, Page):
                                                 ])
 
     display_title = models.BooleanField(default=True)
-    display_desc = models.BooleanField(default=False)
+    display_intro = models.BooleanField(default=False)
+    
+    sidebar_placement = models.CharField(
+        max_length=128,
+        default='left',
+        choices=SIDEBAR_PLACEMENT_CHOICES,
+    )
     
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
@@ -97,19 +116,73 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         
         return context
 
-    content_panels = Page.content_panels + [
-        FieldPanel('desc', classname="full"),
-        FieldPanel('per_page'),
+
+    # Build new meta tab panel
+    
+    # Rebuild main content tab panel
+    
+    content_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('title'),
+            StreamFieldPanel('intro')
+        ], heading="Article Introduction and Summary"),
     ]
 
-    promote_panels = Page.promote_panels + [
+    # Rebuild promote tab panel
+    
+    promote_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('show_in_menus'),
+            FieldPanel('search_description'),
+        ], heading=_('Common page configuration')),
+        PublishingPanel()
+    ]
+
+
+    settings_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('per_page'),
+        ], heading='Article Index Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
-            FieldPanel('display_desc'),
+            FieldPanel('display_intro'),
         ], heading='Page Display Options'),
+        MultiFieldPanel([
+            FieldRowPanel([
+#                FieldPanel('render_template'),
+                FieldPanel('sidebar_placement'),
+            ]),
+        ], heading='Theme and Layout Options'),
+#        MultiFieldPanel([
+#            FieldRowPanel([
+#                FieldPanel('splash_text_align'),
+#                FieldPanel('splash_text_colour'),
+#            ]),
+#            FieldRowPanel([
+#                FieldPanel('splash_bg_colour'),
+#                FieldPanel('splash_border_radius'),
+#            ]),
+#            StreamFieldPanel('splash_content'),
+#        ], heading='Splash Content and Options'),
     ]
 
+    # Rebuild edit_handler so we have all tabs
+    
+    edit_handler = TabbedInterface([
+#        ObjectList(meta_tab_panel, heading='Meta'),
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+    ])
 
+    def get_template(self, request):
+        return f'article/article_index_page_{self.sidebar_placement}.html'
+
+
+
+    
 
 class ArticleIndexByDatePage(ArticleIndexPage):
     """
@@ -228,6 +301,9 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         sub_article_page = article_page.get_children().live().specific().filter(slug=sub.strip("/"))
         return sub_article_page[0].serve(request)
 
+
+    def get_template(self, request):
+        return f'article/article_index_by_date_page_{self.sidebar_placement}.html'
 
     # Control what child pages can be created under this index page
     # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
