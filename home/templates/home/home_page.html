@@ -7,14 +7,36 @@
 
 {% block body-class %}home-splash{% endblock %}
 
+{% if self.splash_image %}
+  {% block head-css-extension %}
+    {% rendition self.splash_image 'width-1920' as photo %}
+    {% rendition self.splash_image 'width-3840' as photo2x %}
+    <style>
+      @media (max-width: 1919.98px) {
+	.page-header-background {
+	  min-height: 50vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo.url }});
+	}
+      }
+      @media (min-width: 1920px) {
+	.page-header-background {
+	  min-height: 50vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo2x.url }});
+	}
+      }
+    </style>
+  {% endblock %}
+{% endif %}
+
 {% block page-head %}
   <div class="wrapper">
     {% if self.splash_image %}
-      {% rendition self.splash_image 'fill-1600x600' as photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
-	<div class="container">
-	  <div class="row">
-	    <div class="col-lg-8 p-0 ml-auto mr-auto">
+      <div class="page-header page-header-background">
+	<div class="container p-0 my-0">
+	  <div class="row page-header-row m-0">
+	    <div class="col-lg-12 p-0 mx-auto">
 	      <div id="splash"
 		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
 		   style="border-radius: {{ self.splash_border_radius }}px!important;">
@@ -26,20 +48,16 @@
       </div>
     {% endif %}
   </div>
-  <div class="main main-raised">
-    <section>
-      <div class="container">
-	<div class="row">
-	  <div class="col">
-	    <header class="my-4">
-	      <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
-		{% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
-	      </div>
-	    </header>
+  <div class="container main main-raised">
+    <div class="row">
+      <div class="col">
+	<header class="my-4">
+	  <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
+	    {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
 	  </div>
-	</div>
+	</header>
       </div>
-    </section>
+    </div>
   </div>
 {% endblock page-head %}
 
@@ -60,67 +78,3 @@
 {% block page-content-main-col-size %}col-lg-12{% endblock %}
 {% block page-content-main-col-style %}px-0{% endblock %}
 {% block page-content-aside %}{% endblock %}
-
-{% block head-css-extension %}
-  <style>
-    body {
-      padding-top: 0!important;
-    }
-    
-    .page-header {
-      height: 75vh;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      background-position: 50%;
-      background-size: cover;
-    }
-    
-    nav.navbar-transparent {
-      transition: 1000ms ease;
-      background-color: transparent!important;
-    }
-
-    nav.navbar-opaque {
-      transition: 1000ms ease;
-    }
-
-    .main {
-      background: #fff;
-      position: relative;
-      z-index: 3;
-    }
-
-    .main-raised {
-      margin: -60px 30px 0;
-      border-radius: 6px;
-      box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
-    }
-
-    div.splash-shadow h1 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h2 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h3 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h4 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h5 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h6 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-  </style>
-{% endblock %}
-
-{% block body-js-extension %}
-  <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
-{% endblock %}
