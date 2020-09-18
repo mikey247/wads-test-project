@@ -3,14 +3,36 @@
 
 {% block body-class %}article-splash{% endblock %}
 
+{% if self.article_image %}
+  {% block head-css-extension %}
+    {% rendition self.article_image 'width-1920' as photo %}
+    {% rendition self.article_image 'width-3840' as photo2x %}
+    <style>
+      @media (max-width: 1919.98px) {
+	.page-header-background {
+	  min-height: 50vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo.url }});
+	}
+      }
+      @media (min-width: 1920px) {
+	.page-header-background {
+	  min-height: 50vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo2x.url }});
+	}
+      }
+    </style>
+  {% endblock %}
+{% endif %}
+
 {% block page-head %}
   <div class="wrapper">
     {% if self.article_image %}
-      {% rendition self.article_image 'fill-1600x600' as splash_photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ splash_photo.url }}" >
-	<div class="container p-0 my-4">
-	  <div class="row p-0 m-0">
-	    <div class="col-lg-8 p-0 ml-auto mr-auto">
+      <div class="page-header page-header-background">
+	<div class="container p-0 my-0">
+	  <div class="row page-header-row m-0">
+	    <div class="col-lg-12 p-0 mx-auto">
 	      <div id="splash"
 		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
 		   style="border-radius: {{ self.splash_border_radius }}px!important;">
@@ -92,50 +114,4 @@
 {% block page-content-main-footer-aside %}
   <footer role="aside">
   </footer>
-{% endblock %}
-
-{% block head-css-extension %}
-  <style>
-    body {
-      padding-top: 0!important;
-    }
-    
-    .page-header {
-      height: 75vh;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      background-position: 50%;
-      background-size: cover;
-    }
-    
-    nav.navbar-transparent {
-      transition: 1000ms ease;
-      background-color: transparent!important;
-    }
-
-    nav.navbar-opaque {
-      transition: 1000ms ease;
-    }
-
-    .main {
-      background: #fff;
-      position: relative;
-      z-index: 3;
-    }
-
-    .main-raised {
-      /* margin: -60px 30px 0; */
-      margin-top: -60px;
-      border-radius: 6px;
-      box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
-    }
-  </style>
-{% endblock %}
-
-{% block body-js-extension %}
-  <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
 {% endblock %}
