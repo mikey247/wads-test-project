@@ -35,12 +35,13 @@
     <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
     
     {% block head-css %}
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" type="text/css" href="{% static 'sitecore/bootstrap-4.5.2/css/bootstrap.min.css' %}">
-      <!-- Bootswatch Theme CSS -->
+      <!-- Bootswatch Themed CSS -->
       {% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
 	<link rel="stylesheet" type="text/css"
 	      href="{% static 'sitecore/bootswatch-4.5.2/'|add:settings.sitecore.SiteSettings.bootstrap_theme|add:'/bootstrap.min.css' %}">
+      {% else %}
+	<!-- Bootstrap Default CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'sitecore/bootstrap-4.5.2/css/bootstrap.min.css' %}">
       {% endif %}
       <!-- Font Awesome CSS -->
       <link rel="stylesheet" type="text/css" href="{% static 'sitecore/fontawesome-5.11.2/css/all.css' %}">
