@@ -1,12 +1,44 @@
-.carousel-item:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+/* nav options */
+
+nav.navbar-transparent {
+    transition: 1000ms ease;
+    background-color: transparent!important;
 }
+
+nav.navbar-opaque {
+    transition: 1000ms ease;
+}
+
+/* splash page header and inset */
+
+.page-header {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-position: 50%;
+    background-size: cover;
+}
+
+.page-header-row {
+    padding: 30px 0 60px 0;
+}
+
+.main {
+    background-color: #fff;
+    position: relative;
+    z-index: 3;
+}
+
+.main-raised {
+    margin-top: -60px;
+    border-radius: 6px;
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+}
+
+/* page footer */
 
 .page-footer address {
     line-height: 24px;
@@ -30,6 +62,8 @@
     margin: 0;
 }
 
+/* base footer */
+
 .base-footer li {
     float: left;
 }
@@ -43,6 +77,8 @@
     padding: 0.5rem;
 }
 
+/* cookie consent */
+
 a.cc-btn.cc-dismiss:hover {
     color: black;
 }
@@ -50,6 +86,8 @@ a.cc-btn.cc-dismiss:hover {
 .cc-message h3 {
     margin-bottom: 1em;
 }
+
+/* custom meta data fields */
 
 div.page-author-inline {
     display: inline;
@@ -75,6 +113,8 @@ div.event-type-inline {
     display: inline;
 }
 
+/* custom colours for social share icons */
+
 div.social-share {
     display: inline-block;
 }
@@ -98,6 +138,8 @@ i.fa-linkedin {
 i.fa-reddit-square {
     color: #ff5c06;
 }
+
+/* go full width on images for mobile */
 
 @media (max-width: 575.98px) {
     .img-full-width-sm {
@@ -137,6 +179,7 @@ i.fa-reddit-square {
     }
 }
 
+/* scale display-<N> on mobile */
 
 @media (max-width: 575.98px) {
     .display-1 {
@@ -220,5 +263,38 @@ i.fa-reddit-square {
     .container.main.main-raised {
 	max-width: 1170px;
     }
+}
+
+/* shadows for splash headers */
+
+div.splash-shadow h1 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+div.splash-shadow h2 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+div.splash-shadow h3 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+div.splash-shadow h4 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+div.splash-shadow h5 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+div.splash-shadow h6 {
+    text-shadow: 2px 2px #1c3577b8;
+}
+
+/* carousel styling */
+
+.carousel-item:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
