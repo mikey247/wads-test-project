@@ -1,5 +1,5 @@
 {% extends "sitecore/base/default.html" %}
-{% load shortcodes site_tags wagtailcore_tags %}
+{% load rendition site_tags wagtailcore_tags %}
 
 {% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
 {% block page-content-main-col-style %}pl-0{% endblock %} 
@@ -91,7 +91,7 @@
 	      {% if page.search_description %}
 		<div class="lead">{{ page.search_description }}</div>
 	      {% elif page.intro != "<p></p>" %}
-		<div class="lead">{% include_block page.intro %}</div>
+		<div class="lead">{% include_block page.intro with pid='tag-index-intro' filterspec='width-1200' %}</div>
 	      {% else %}
 		<p class="text-warning">Page has no introductory text or search description.</p>
 	      {% endif %}
