@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
  
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
@@ -137,7 +137,8 @@ class ArticleIndexPage(RoutablePageMixin, Page):
             FieldPanel('show_in_menus'),
             FieldPanel('search_description'),
         ], heading=_('Common page configuration')),
-        PublishingPanel()
+        PublishingPanel(),
+        PrivacyModalPanel(),
     ]
 
 
@@ -518,7 +519,8 @@ class ArticlePage(SitePage):
             FieldPanel('show_in_menus'),
             FieldPanel('search_description'),
         ], heading=_('Common page configuration')),
-        PublishingPanel()
+        PublishingPanel(),
+        PrivacyModalPanel(),
     ]
 
     # Rebuild settings tab panel - add display/override fields
