@@ -15,6 +15,7 @@
     <div class="lead mb-4">
       {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
     </div>
+    <hr>
   </header>
 {% endblock %}
 
@@ -22,6 +23,7 @@
   <article>
     {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
+  <hr>
 {% endblock %}
 
 {% block page-content-aside-slot-1 %}
