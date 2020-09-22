@@ -27,7 +27,7 @@
     {% for post in articles %}
       {% with post=post.specific %}
 	<div class="container p-0 mx-0 my-4">
-	  <div class="row bg-light p-0 m-0">
+	  <div class="row p-0 m-0">
 	    <div class="col-lg-3 order-2 order-lg-1 p-0 m-0">
 	      {% if post.thumbnail_image %}
 		{% rendition post.thumbnail_image 'fill-300x300' as photo %}
@@ -43,10 +43,18 @@
 	    </div>
 	    <div class="col-lg-9 order-1 order-lg-2 pr-2 m-0">
 	      <h4 class="my-2"><a href="{% pageurl post %}">{{ post.title }}</a></h4>
+	      <hr>
 	      {% page_date_published post %}
 	      {% page_date_revised post %}
 	      {% page_author post %}
-	      <div class="my-2">{% include_block post.intro %}</div>
+	      <hr>
+	      <div class="my-2">
+		{% if post.search_description %}
+		  {% include_block post.search_description with pid='post-search-description' filterspec='width-1200' %}
+		{% else %}
+		  {% include_block post.intro with pid='post-intro' filterspec='width-1200' %}
+		{% endif %}
+	      </div>
 	      <a href="{% pageurl post %}" class="my-2 btn btn-primary">Read More <i class="fa fa-arrow-circle-right"></i></a>
 	    </div>
 	  </div>
