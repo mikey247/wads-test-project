@@ -69,9 +69,9 @@
       {% for page in pages.specific %}
 	<div class="row p-0 m-0">
 	  <div class="col-12 m-0 p-0">
-	    <div class="bg-light p-2 mb-4 {% if not forloop.last %}border-bottom border-primary{% endif %}">
-	      <h4><a href="{% pageurl page %}"><span class="badge badge-primary">{{ forloop.counter }}</span> {{ page.title }}</a></h4>
-	      {% page_content_type page 'page-content-type-inline' %}
+	    <h1 style="border-bottom: 2px solid var(--primary);"><a href="{% pageurl page %}"><span class="badge badge-primary">{{ forloop.counter }}</span></a></h1>
+	    <div class="px-0 mb-3">
+	      <h2><a href="{% pageurl page %}">{{ page.title }}</a><small>{% page_content_type page 'page-content-type-inline' %}</small></h2>
 	      {% if page.content_type|stringformat:'s' == 'event | event page' %}
 		<div class="event-type-inline">
 		  {% include_block page.event_type with view="summary" %}
