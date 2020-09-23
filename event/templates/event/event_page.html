@@ -28,21 +28,9 @@
 
 {% block page-content-main-article %}
   <article>
-    <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
-    </section>
+    {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
+  <hr>
 {% endblock %}
 
 {% block page-content-aside-slot-2-order %}order-1{% endblock %}
