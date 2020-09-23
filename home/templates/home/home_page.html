@@ -48,12 +48,12 @@
       </div>
     {% endif %}
   </div>
-  <div class="container main main-raised">
+  <div class="{{ self.inset_style }} {{ self.inset_bg_colour }}" style="border-radius: {{ self.inset_border_radius }}px;">
     <div class="row">
       <div class="col">
 	<header class="my-4">
-	  <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
-	    {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+	  <div id="inset" class="{{ self.inset_text_colour }} {{ self.inset_text_align }} ">
+	    {% include_block page.inset_content with pid='page-intro' filterspec='width-1200' %}
 	  </div>
 	</header>
       </div>
@@ -61,10 +61,15 @@
   </div>
 {% endblock page-head %}
 
+
 {% block page-content-main-header %}
-  {% if self.display_title %}
-    <h1>{{ self.title }}</h1>
-  {% endif %}
+  <header>
+    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
+    <div class="lead mb-4">
+      {% include_block self.intro with pid='page-intro' filterspec='width-1200' %}
+    </div>
+    <hr>
+  </header>
 {% endblock %}
 
 {% block page-content-main-article %}

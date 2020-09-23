@@ -56,7 +56,7 @@ class HomePage(Page):
     
     splash_content = StreamField(
         sitecore_blocks.SplashBlock,
-        #validators=[ValidateCoreBlocks],
+        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here.'),
     )
@@ -84,18 +84,44 @@ class HomePage(Page):
         validators=[MinValueValidator(0)]
     )
 
-    intro_text_align = models.CharField(
+    # inset fields
+    
+    inset_content = StreamField(
+        sitecore_blocks.SplashBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide content for the splash area here.'),
+    )
+
+    inset_text_align = models.CharField(
         choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
-    intro_text_colour = models.CharField(
+    inset_text_colour = models.CharField(
         choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
         default='text-primary',
         max_length=128
     )
-    
+
+    inset_bg_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        default='bg-transparent',
+        max_length=128
+    )
+
+    inset_border_radius = models.IntegerField(
+        default='15',
+        validators=[MinValueValidator(0)]
+    )
+
+    inset_style = models.CharField(
+        choices=constants.INSET_STYLE_CLASS_CHOICES,
+        default='container inset inset-raised',
+        max_length=256
+    )
+
     # settings fields
 
     display_title = models.BooleanField(
@@ -134,7 +160,7 @@ class HomePage(Page):
         FieldPanel('search_description'),
     ]
 
-    # Build new splash tab panel
+    # Build new splash and inset tab panel
     
     splash_tab_panel = [
         ImageChooserPanel('splash_image'),
@@ -149,26 +175,32 @@ class HomePage(Page):
                 FieldPanel('splash_border_radius'),
             ]),
         ], heading=_('Splash Settings')),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('intro_text_align'),
-                FieldPanel('intro_text_colour'),
-            ]),
-        ], heading=_('Inset Settings')),
     ]
 
-    # Rebuild settings tab panel - add display/override fields
-    
-    settings_tab_panel = [
-        FieldPanel('display_title'),
+    inset_tab_panel = [
+        StreamFieldPanel('inset_content'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('inset_text_align'),
+                FieldPanel('inset_text_colour'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('inset_bg_colour'),
+                FieldPanel('inset_border_radius'),
+            ]),
+            FieldPanel('inset_style'),
+        ], heading=_('Inset Settings')),
     ]
 
     # Rebuild promote tab panel
     
     promote_tab_panel = [
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        MultiFieldPanel([
             FieldPanel('show_in_menus'),
+            FieldPanel('display_title'),
+        ], heading=_('Options')),
     ]
 
     # Build new publish tab panel
@@ -185,8 +217,8 @@ class HomePage(Page):
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(promote_tab_panel, heading='Promote'),
-        ObjectList(settings_tab_panel, heading='Settings'),
         ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(inset_tab_panel, heading='Inset'),
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
