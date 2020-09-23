@@ -4,22 +4,14 @@
 {% block body-class %}article-index-by-date-page{% endblock %}
 
 {% block page-content-main-header %}
-  <div class="container p-0 m-0">
-    <div class="row p-0 m-0">
-      <div class="col-lg-3 d-none d-lg-block order-2 order-lg-1 pl-lg-0">
-      </div>
-      <div class="col-lg-9 order-1 order-lg-2 pr-lg-0">	
-	{% if page.display_title %}
-	  <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
-	{% endif %}
-	{% if page.intro %}
-	  <div class="lead mb-4">
-	    {% include_block page.intro with pid='page-index-intro' filterspec='width-1200' %}
-	  </div>
-	{% endif %}
-      </div>
+  {% if page.display_title %}
+    <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
+  {% endif %}
+  {% if page.intro %}
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='page-index-intro' filterspec='width-1200' %}
     </div>
-  </div>
+  {% endif %}
 {% endblock page-content-main-header %}
 
 {% block page-content-main-article %}
