@@ -90,7 +90,7 @@ class HomePage(Page):
         sitecore_blocks.SplashBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
-        help_text=_('Provide content for the splash area here.'),
+        help_text=_('Provide content for the inset area here.'),
     )
 
     inset_text_align = models.CharField(
