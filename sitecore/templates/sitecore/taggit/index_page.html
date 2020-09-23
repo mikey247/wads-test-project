@@ -1,10 +1,10 @@
 {% extends "sitecore/base/default.html" %}
-{% load rendition site_tags wagtailcore_tags %}
+{% load article_tags event_tags rendition site_tags wagtailcore_tags %}
 
 {% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
-{% block page-content-main-col-style %}pl-0{% endblock %} 
-{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
-{% block page-content-aside-col-style %}pr-0{% endblock %}
+{% block page-content-main-col-size %}col-lg-12{% endblock %}
+{% block page-content-main-col-style %}px-lg-0{% endblock %} 
+{% block page-content-aside %}{% endblock %}
 
 {% block head-title %}
   <title>{{ self.title }}</title>
@@ -12,51 +12,11 @@
 
 {% block page-content-banner %}{% endblock %}
 
-{% block page-content-aside-slot-1 %}
-  <section>
-    {% if slug %}
-      {% if pages.specific|length %}
-	<ul class="list-group">
-	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	    <strong>Showing articles tagged:</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-primary"><i class="fa fa-tag"></i> {{ name }}</span>
-	  </li>
-	  <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	    <strong>Found:</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <h3><span class="badge badge-success">{{pages|length}}</span></h3>
-	  </li>
-	</ul>
-      {% else %}
-	<ul class="list-group">
-	  <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-	    <strong>No articles tagged</strong>
-	  </li>
-	  <li class="list-group-item d-flex justify-content-between align-items-center">
-	    <span class="btn btn-sm my-1 btn-outline-danger text-lowercase"><i class="fa fa-tag"></i> {{ name }}</span>
-	  </li>
-	</ul>
-      {% endif %}
-    {% else %}
-      <ul class="list-group">
-	<li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
-	  <strong>Total number of tags:</strong>
-	</li>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <span class="btn btn-sm my-1 btn-info text-lowercase">{{ tags.all.count }}</span>
-	</li>
-      </ul>
-    {% endif %}
-  </section>
-{% endblock page-content-aside-slot-1 %}
-
 {% block page-content-main-header %}
   <header class="container mb-4 p-0">
     {% if slug %}
-      <h1 class="mb-2"><i class="fas fa-search"></i> Tag Search Results - <i class="fas fa-tag"></i> {{ name }}</h1>
+      <h1 class="mb-2">Tag Search Results for <span class="btn btn-outline-primary disabled"><i class="fas fa-tag"></i> {{ name }}</span></h1>
+      <p class="lead">Found {{pages|length}} item{{pages|length|pluralize}}</p>
     {% else %}
       <h1 class="mb-2"><i class="fas fa-tags"></i> Tag Cloud</h1>
     {% endif %}
@@ -69,37 +29,11 @@
       {% for page in pages.specific %}
 	<div class="row p-0 m-0">
 	  <div class="col-12 m-0 p-0">
-	    <h1 style="border-bottom: 2px solid var(--primary);"><a href="{% pageurl page %}"><span class="badge badge-primary">{{ forloop.counter }}</span></a></h1>
-	    <div class="px-0 mb-3">
-	      <h2><a href="{% pageurl page %}">{{ page.title }}</a><small>{% page_content_type page 'page-content-type-inline' %}</small></h2>
-	      {% if page.content_type|stringformat:'s' == 'event | event page' %}
-		<div class="event-type-inline">
-		  {% include_block page.event_type with view="summary" %}
-		</div>
-		<div class="event-date-range-inline">
-		  <small>
-		    <strong><i class="fas fa-calendar"></i> Event runs: </strong>
-		    {{ page.start_date }}{% if page.duration > 1 %} &mdash; {{ page.end_date }}{% endif %}
-		  </small>
-		</div>
-	      {% else %}
-		{% page_author page 'page-author-inline' %}
-		{% page_date_published page 'page-date-published-inline' %}
-		{% page_date_revised page 'page-date-revised-inline' %}
-	      {% endif %}
-	      <hr>
-	      {% if page.search_description %}
-		<div class="lead">{{ page.search_description }}</div>
-	      {% elif page.intro != "<p></p>" %}
-		<div class="lead">{% include_block page.intro with pid='tag-index-intro' filterspec='width-1200' %}</div>
-	      {% else %}
-		<p class="text-warning">Page has no introductory text or search description.</p>
-	      {% endif %}
-	      
-	      {% if page.tags.all.count %}
-		{% taggit_list page.tags.all slug %}
-	      {% endif %}
-	    </div>
+	    {% if page.content_type|stringformat:'s' == 'article | article page' %}
+	      {% article_blog_summary page show_taggit=True taggit_slug=slug %}
+	    {% elif page.content_type|stringformat:'s' == 'event | event page' %}
+	      {% event_blog_summary page show_taggit=True taggit_slug=slug %}
+	    {% endif %}
 	  </div>
 	</div>
       {% empty %}
@@ -111,9 +45,9 @@
 {% endblock %}
 
 {% block page-content-main-footer-nav %}
-  <footer class="my-4" role="tag cloud">
+  <footer class="my-3" role="tag cloud">
     {% if slug %}
-      <h4>Tag Cloud</h4>
+      <h2>Tag Cloud</h2>
     {% endif %}
     {% taggit_list tags show_count=True %}
   </footer>
