@@ -3,10 +3,10 @@
 
 {% block body-class %}article-splash{% endblock %}
 
-{% if self.article_image %}
+{% if self.splash_image %}
   {% block head-css-extension %}
-    {% rendition self.article_image 'width-1920' as photo %}
-    {% rendition self.article_image 'width-3840' as photo2x %}
+    {% rendition self.splash_image 'width-1920' as photo %}
+    {% rendition self.splash_image 'width-3840' as photo2x %}
     <style>
       @media (max-width: 1919.98px) {
 	.page-header-background {
@@ -28,7 +28,7 @@
 
 {% block page-head %}
   <div class="wrapper">
-    {% if self.article_image %}
+    {% if self.splash_image %}
       <div class="page-header page-header-background">
 	<div class="container p-0 my-0">
 	  <div class="row page-header-row m-0">
@@ -36,7 +36,7 @@
 	      <div id="splash"
 		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
 		   style="border-radius: {{ self.splash_border_radius }}px!important;">
-		{% include_block page.splash_content with pid='page-splash-content' filterspec='width-1200' %}
+		{% include_block page.splash_content with pid='splash-content' filterspec='width-1200' %}
 	      </div>
 	    </div>
 	  </div>
@@ -44,11 +44,13 @@
       </div>
     {% endif %}
   </div>
-  <div class="container inset inset-raised">
+  <div class="{{ self.inset_style }} {{ self.inset_bg_colour }}" style="border-radius: {{ self.inset_border_radius }}px;">
     <div class="row p-0 m-0">
-      <div class="col-12 p-0 my-4">
-	<header class="lead mb-4">
-	  {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+      <div class="col-12 m-0 p-0">
+	<header class="my-4">
+	  <div id="inset" class="{{ self.inset_text_colour }} {{ self.inset_text_align }} ">
+	    {% include_block page.inset_content with pid='page-intro' filterspec='width-1200' %}
+	  </div>
 	</header>
       </div>
     </div>
@@ -56,9 +58,19 @@
 {% endblock page-head %}
 
 {% block page-content-main-header %}
-  {% if self.display_title %}
-    <h1>{{ self.seo_title|default:self.title }}</h1>
-  {% endif %}
+  <header>
+    {% if self.article_image %}
+      {% rendition self.article_image self.article_image_filterspec as photo %}
+      <div class="mb-4">
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
+      </div>
+    {% endif %}
+    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
+    </div>
+    <hr>
+  </header>
 {% endblock %}
 
 {% block page-content-main-article %}
