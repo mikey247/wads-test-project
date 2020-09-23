@@ -1,0 +1,56 @@
+{% load rendition site_tags wagtailcore_tags %}
+<a href="{% pageurl post %}">
+  <h3 class="mb-0" style="border-bottom: 2px solid var(--primary);">
+    <p class="bg-primary text-white px-3 py-0 mb-0" style="display: inline-flex;">
+      {{ post.title }}
+    </p>
+  </h3>
+</a>
+<div class="container p-0 mx-0 mb-3">
+  <div class="row p-0 m-0">
+    <div class="d-none d-md-block col-12 col-md-3 order-md-2 p-0 m-0">
+      {% if post.thumbnail_image %}
+	{% rendition post.thumbnail_image 'fill-300x300' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	</div>
+      {% elif post.article_image %}
+	{% rendition post.article_image 'fill-300x300' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-fluid rounded mx-auto d-block">
+	</div>
+      {% endif %}
+    </div>
+    <div class="d-md-none col-12 col-md-3 order-1 p-0 m-0">
+      {% if post.thumbnail_image %}
+	{% rendition post.thumbnail_image 'fill-600x150' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ post.thumbnail_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block">
+	</div>
+      {% elif post.article_image %}
+	{% rendition post.article_image 'fill-600x150' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ post.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block">
+	</div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-9 order-2 order-md-1 pl-sm-0 py-0 m-0">
+      <div class="my-2">
+	{% if post.search_description %}
+	  {% include_block post.search_description with pid='post-search-description' filterspec='width-1200' %}
+	{% else %}
+	  {% include_block post.intro with pid='post-intro' filterspec='width-1200' %}
+	{% endif %}
+      </div>
+      <hr>
+      {% page_meta_summary post %}
+      {% if show_taggit %}
+	{% if post.tags.all.count %}
+	  {% taggit_list post.tags.all taggit_slug %}
+	{% endif %}
+      {% endif %}
+      <hr>
+      <p class="my-3"><a href="{% pageurl post %}">Read the full article <i class="fa fa-arrow-circle-right"></i></a></p>
+    </div>
+  </div>
+</div>
