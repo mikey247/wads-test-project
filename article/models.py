@@ -416,6 +416,15 @@ class ArticlePage(SitePage):
     
     # splash fields
     
+    splash_image = models.ForeignKey(
+        'captioned_images.CaptionImage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text=_('Provide an image that spans the top of an article page (if splash template selected).'),
+    )
+    
     splash_content = StreamField(
         sitecore_blocks.SplashBlock,
         validators=[ValidateCoreBlocks],
@@ -446,6 +455,44 @@ class ArticlePage(SitePage):
         validators=[MinValueValidator(0)]
     )
 
+    # inset fields
+    
+    inset_content = StreamField(
+        sitecore_blocks.SplashBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide content for the inset area here.'),
+    )
+
+    inset_text_align = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        default='text-center',
+        max_length=128
+    )
+
+    inset_text_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        default='text-primary',
+        max_length=128
+    )
+
+    inset_bg_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        default='bg-transparent',
+        max_length=128
+    )
+
+    inset_border_radius = models.IntegerField(
+        default='15',
+        validators=[MinValueValidator(0)]
+    )
+
+    inset_style = models.CharField(
+        choices=constants.INSET_STYLE_CLASS_CHOICES,
+        default='container inset inset-raised',
+        max_length=256
+    )
+
     # settings fields
 
     display_title = models.BooleanField(
@@ -472,6 +519,7 @@ class ArticlePage(SitePage):
         index.SearchField('intro'),
         index.SearchField('body'),
         index.SearchField('splash_content'),
+        index.SearchField('inset_content'),
     ]
 
     # Append which fields are to be accessible via the REST API
@@ -485,7 +533,9 @@ class ArticlePage(SitePage):
         'body',
         'display_title',
         'render_template',
+        'splash_image',
         'splash_content',
+        'inset_content',
     ]
 
     # admin panels
@@ -510,9 +560,7 @@ class ArticlePage(SitePage):
     # Build new splash tab panel
     
     splash_tab_panel = [
-        ImageChooserPanel('article_image'),
-        FieldPanel('article_image_filterspec'),
-        ImageChooserPanel('thumbnail_image'),
+        ImageChooserPanel('splash_image'),
         StreamFieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
@@ -526,10 +574,27 @@ class ArticlePage(SitePage):
         ], heading=_('Splash Settings')),
     ]
 
+    inset_tab_panel = [
+        StreamFieldPanel('inset_content'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('inset_text_align'),
+                FieldPanel('inset_text_colour'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('inset_bg_colour'),
+                FieldPanel('inset_border_radius'),
+            ]),
+            FieldPanel('inset_style'),
+        ], heading=_('Inset Settings')),
+    ]
+
     # Rebuild settings tab panel - add display/override fields
     
     settings_tab_panel = [
-        FieldPanel('display_title'),
+        ImageChooserPanel('article_image'),
+        FieldPanel('article_image_filterspec'),
+        ImageChooserPanel('thumbnail_image'),
         FieldPanel('render_template'),
         FieldPanel('sidebar_placement'),
     ]
@@ -537,9 +602,12 @@ class ArticlePage(SitePage):
     # Rebuild promote tab panel
     
     promote_tab_panel = [
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        MultiFieldPanel([
             FieldPanel('show_in_menus'),
+            FieldPanel('display_title'),
+        ], heading=_('Options')),
     ]
 
     # Build new publish tab panel
@@ -557,6 +625,7 @@ class ArticlePage(SitePage):
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
         ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(inset_tab_panel, heading='Inset'),
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
