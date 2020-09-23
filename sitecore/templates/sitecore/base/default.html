@@ -46,18 +46,18 @@
 	  <div class="{% block page-content-aside-col-size %}col-lg-3{% endblock %} 
 		      {% block page-content-aside-col-style %}pl-lg-0{% endblock %} 
 		      {% block page-content-aside-col-order %}order-2 order-lg-1{% endblock %}">
-	    <aside>
-	      <div class="row">
+	    <aside class="container m-0 p-0">
+	      <div class="row m-0 p-0">
 		{% block page-content-aside-slots %}
-		  <div class="mb-4 col-12 {% block page-content-aside-slot-1-order %}order-1{% endblock %}">
+		  <div class="col-12 {% block page-content-aside-slot-1-order %}order-1{% endblock %} p-0 mb-3">
 		    {% block page-content-aside-slot-1 %}
 		      {% section_menu template='sitecore/menus/section_menu.html' %}
 		    {% endblock %}
 		  </div>
-		  <div class="mb-4 col-12 {% block page-content-aside-slot-2-order %}order-2{% endblock %}">
+		  <div class="col-12 {% block page-content-aside-slot-2-order %}order-2{% endblock %} p-0 mb-3">
 		    {% block page-content-aside-slot-2 %}{% endblock %}
 		  </div>
-		  <div class="mb-4 col-12 {% block page-content-aside-slot-3-order %}order-3{% endblock %}">
+		  <div class="col-12 {% block page-content-aside-slot-3-order %}order-3{% endblock %} p-0 mb-3">
 		    {% block page-content-aside-slot-3 %}{% endblock %}
 		  </div>
                 {% endblock page-content-aside-slots %}
