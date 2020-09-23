@@ -358,17 +358,38 @@ class ArticlePage(SitePage):
         ('none', 'No sidebars'),
     )
     
-    # meta panel fields
-
-    # includes Page:title
-    # includes SitePage:tags
+    # content fields
+    #   title - inherited
     
+    intro = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+    )
+
+    body = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
+    )
+
+    # meta fields
+    #   tags - inherited
+    #   search_desc inherited
+
     author = models.CharField(
         max_length=255,
         blank=True,
         help_text=_('Use this to override the default author/owner name (free text only).'),
     )
 
+    # promote fields
+    #   slug - inherited
+    #   page_title - inherited
+    #   show_in_menus = inherited
+    
     article_image = models.ForeignKey(
         'captioned_images.CaptionImage',
         null=True,
@@ -393,40 +414,7 @@ class ArticlePage(SitePage):
         help_text=_('Specify an alternative image for the thumbnail in blog listings if the main banner image is not suitable or a different image is desired.'),
     )
     
-    # content panel fields
-    
-    intro = StreamField(
-        sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
-        blank=True,
-        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
-    )
-
-    body = StreamField(
-        sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
-        blank=True,
-        help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
-    )
-
-    # settings tab panel options
-    
-    display_title = models.BooleanField(
-        default=True,
-        help_text=_('Toggle the display of the default title field.'),
-    )
-
-    render_template = models.CharField(
-        max_length=128,
-        default='article_page_default',
-        choices=RENDER_TEMPLATE_CHOICES,
-    )
-
-    sidebar_placement = models.CharField(
-        max_length=128,
-        default='left',
-        choices=SIDEBAR_PLACEMENT_CHOICES,
-    )
+    # splash fields
     
     splash_content = StreamField(
         sitecore_blocks.SplashBlock,
@@ -458,6 +446,24 @@ class ArticlePage(SitePage):
         validators=[MinValueValidator(0)]
     )
 
+    # settings fields
+
+    display_title = models.BooleanField(
+        default=True,
+        help_text=_('Toggle the display of the default title field.'),
+    )
+
+    render_template = models.CharField(
+        max_length=128,
+        default='article_page_default',
+        choices=RENDER_TEMPLATE_CHOICES,
+    )
+
+    sidebar_placement = models.CharField(
+        max_length=128,
+        default='left',
+        choices=SIDEBAR_PLACEMENT_CHOICES,
+    )
 
     # Append which fields are to be searchable
     
@@ -482,59 +488,32 @@ class ArticlePage(SitePage):
         'splash_content',
     ]
 
+    # admin panels
+    # ------------
+    
+    # Rebuild main content tab panel
+
+    content_tab_panel = [
+        FieldPanel('title'),
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('body'),
+    ]
+
     # Build new meta tab panel
     
     meta_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('title'),
-            FieldPanel('tags'),
-            FieldPanel('author'),
-        ], heading="Article Metadata"),
-        MultiFieldPanel([
-            FieldRowPanel([
-                ImageChooserPanel('article_image'),
-            ]),
-            FieldPanel('article_image_filterspec'),
-            ImageChooserPanel('thumbnail_image'),
-        ], heading="Article Banner and Thumbnail"),
+        FieldPanel('tags'),
+        FieldPanel('author'),
+        FieldPanel('search_description'),
     ]
 
-    # Rebuild main content tab panel
+    # Build new splash tab panel
     
-    content_tab_panel = [
-        MultiFieldPanel([
-            StreamFieldPanel('intro')
-        ], heading="Article Introduction and Summary"),
-        MultiFieldPanel([
-            StreamFieldPanel('body')
-        ], heading="Article Main body"),
-    ]
-
-    # Rebuild promote tab panel
-    
-    promote_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
-            FieldPanel('show_in_menus'),
-            FieldPanel('search_description'),
-        ], heading=_('Common page configuration')),
-        PublishingPanel(),
-        PrivacyModalPanel(),
-    ]
-
-    # Rebuild settings tab panel - add display/override fields
-    
-    settings_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('display_title'),
-        ], heading='Page Display Options'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('render_template'),
-                FieldPanel('sidebar_placement'),
-            ]),
-        ], heading='Theme and Layout Options'),
+    splash_tab_panel = [
+        ImageChooserPanel('article_image'),
+        FieldPanel('article_image_filterspec'),
+        ImageChooserPanel('thumbnail_image'),
+        StreamFieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('splash_text_align'),
@@ -544,17 +523,41 @@ class ArticlePage(SitePage):
                 FieldPanel('splash_bg_colour'),
                 FieldPanel('splash_border_radius'),
             ]),
-            StreamFieldPanel('splash_content'),
-        ], heading='Splash Content and Options'),
+        ], heading=_('Splash Settings')),
     ]
 
+    # Rebuild settings tab panel - add display/override fields
+    
+    settings_tab_panel = [
+        FieldPanel('display_title'),
+        FieldPanel('render_template'),
+        FieldPanel('sidebar_placement'),
+    ]
+
+    # Rebuild promote tab panel
+    
+    promote_tab_panel = [
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('show_in_menus'),
+    ]
+
+    # Build new publish tab panel
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+    
     # Rebuild edit_handler so we have all tabs
     
     edit_handler = TabbedInterface([
-        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
 
