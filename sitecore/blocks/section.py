@@ -174,28 +174,28 @@ class TwoColStructValue(blocks.StructValue):
     def col_one_layout(self):
         col_ratio = self.get('col_ratio')
         if col_ratio == '1:2':
-            return "col-md-4"
+            return "col-12 col-md-4 pl-md-0 m-0"
         elif col_ratio == '1:3':
-            return "col-md-3"
+            return "col-12 col-md-3 pl-md-0 m-0"
         elif col_ratio == '2:1':
-            return "col-md-8"
+            return "col-12 col-md-8 pl-md-0 m-0"
         elif col_ratio == '3:1':
-            return "col-md-9"
+            return "col-12 col-md-9 pl-md-0 m-0"
         else:
-            return "col-md-6"
+            return "col-12 col-md-6 pl-md-0 m-0"
 
     def col_two_layout(self):
         col_ratio = self.get('col_ratio')
         if col_ratio == '1:2':
-            return "col-md-8"
+            return "col-12 col-md-8 pr-md-0 m-0"
         elif col_ratio == '1:3':
-            return "col-md-9"
+            return "col-12 col-md-9 pr-md-0 m-0"
         elif col_ratio == '2:1':
-            return "col-md-4"
+            return "col-12 col-md-4 pr-md-0 m-0"
         elif col_ratio == '3:1':
-            return "col-md-3"
+            return "col-12 col-md-3 pr-md-0 m-0"
         else:
-            return "col-md-6"
+            return "col-12 col-md-6 pr-md-0 m-0"
         
         
 class TwoColBlock(blocks.StructBlock):
