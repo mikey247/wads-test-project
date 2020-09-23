@@ -138,6 +138,12 @@ i.fa-reddit-square {
     color: #ff5c06;
 }
 
+/* figure caption correction */
+
+.figure-caption {
+    color: inherit;
+}
+
 /* go full width on images for mobile */
 
 @media (max-width: 575.98px) {
@@ -249,6 +255,18 @@ i.fa-reddit-square {
     
     .display-4 {
 	font-size: 2.5rem;
+    }
+}
+
+@media (min-width: 576px) {
+    .container.inset.inset-raised {
+	max-width: 570px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container.inset.inset-raised {
+	max-width: 750px;
     }
 }
 
