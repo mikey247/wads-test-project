@@ -1,0 +1,18 @@
+<div class="{{ div_class }}">
+  <strong>
+    {% if page.author %}
+      {{ page.author }}
+    {% else %}
+      {% if page.owner.get_full_name %}{{ page.owner.get_full_name }}{% else %}{{ page.owner }}{% endif %},
+    {% endif %}
+    {% if page.latest_revision_created_at %}
+      <time datetime="{{ page.latest_revision_created_at|date:'c' }}">
+	{{ page.latest_revision_created_at|date:"DATE_FORMAT" }}
+      </time>
+    {% else %}
+      <time datetime="{{ page.first_published_at|date:'c' }}">
+	{{ page.first_published_at|date:"DATE_FORMAT" }}
+      </time>
+    {% endif %}
+  </strong>
+</div>  

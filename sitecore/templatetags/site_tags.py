@@ -108,6 +108,14 @@ def index_pagination(context, page_res, page_range):
    }
 
 
+# Renders the page author (using author alias if provided) with published_date (or revised if present) in simple clean one-line
+@register.inclusion_tag('sitecore/tags/page_meta_summary.html', takes_context=True)
+def page_meta_summary(context, page, div_class='page-meta'):
+    return {
+        'page': page,
+    }
+
+
 # Renders the page author using author alias if provided; othjerwise fallback to owner.get_full_name; fallback to owner (username)
 @register.inclusion_tag('sitecore/tags/page_author.html', takes_context=True)
 def page_author(context, page, div_class='page-author'):
