@@ -1,0 +1,78 @@
+{% load rendition site_tags wagtailcore_tags %}
+
+</h3>
+<a href="{% pageurl event %}">
+  <h3 class="mb-0" style="border-bottom: 2px solid var(--primary);">
+    <p class="bg-primary text-white px-3 py-0 mb-0" style="display: inline-flex;">
+      {{ event.title }}
+    </p>
+  </h3>
+</a>
+<div class="container p-0 mx-0 mb-3">
+  <div class="row p-0 m-0">
+    <div class="d-none d-md-block col-12 col-md-3 order-md-2 p-0 m-0">
+      {% if event.thumbnail_image %}
+	{% rendition event.thumbnail_image 'fill-300x300' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ event.thumbnail_image.alt_text }}" class="img-fluid mx-auto d-block">
+	</div>
+      {% elif event.event_image %}
+	{% rendition event.event_image 'fill-300x300' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ event.event_image.alt_text }}" class="img-fluid mx-auto d-block">
+	</div>
+      {% endif %}
+    </div>
+    <div class="d-md-none col-12 col-md-3 order-1 p-0 m-0">
+      {% if event.thumbnail_image %}
+	{% rendition event.thumbnail_image 'fill-600x150' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ event.thumbnail_image.alt_text }}" class="img-full-width-md img-fluid d-block">
+	</div>
+      {% elif event.event_image %}
+	{% rendition event.event_image 'fill-600x150' as photo %}
+	<div class="m-0">
+	  <img src="{{ photo.url }}" alt="{{ event.event_image.alt_text }}" class="img-full-width-md img-fluid d-block">
+	</div>
+      {% endif %}
+    </div>
+    <div class="col-12 col-md-9 order-2 order-md-1 pl-sm-0 py-0 m-0">
+      <h4 class="mt-2"><span>
+	<i class="fas fa-calendar"></i> {{ event.start_date }}{% if event.duration > 1 %} &mdash; {{ event.end_date }}
+	{% else %}
+	  {% for block in event.dates %}
+	    {% with block.value as date %}
+	      <i class="fas fa-clock"></i>  {{ date.start_time|date:'H:i' }} &mdash; {{ date.end_time|date:"H:i" }}
+	    {% endwith %}
+	  {% endfor %}
+	{% endif %}
+      </span>
+      </h4>
+      <h4 class="mt-2"><span>
+	<i class="fas fa-map-marker"></i> {{ event.location }}
+      </span>
+      </h4>
+      <div class="my-3">
+	{% if event.search_description %}
+	  {% include_block event.search_description with pid='event-search-description' filterspec='width-1200' %}
+	{% elif event.intro != "<p></p>" %}
+	  {% include_block event.intro with pid='event-intro' filterspec='width-1200' %}
+	{% else %}
+	  <p class="text-warning">Page has no introductory text or search description.</p>
+	{% endif %}
+      </div>
+      <hr>
+      <div class="my-3">
+	<h4>{% include_block event.event_type with view="summary" %}</h4>
+      </div>
+      <hr>
+      {% if show_taggit %}
+	{% if event.tags.all.count %}
+	  {% taggit_list event.tags.all taggit_slug %}
+	{% endif %}
+      {% endif %}
+      <hr>
+      <p class="my-3"><a href="{% pageurl event %}">View all the details and register <i class="fa fa-arrow-circle-right"></i></a></p>
+    </div>
+  </div>
+</div>  
