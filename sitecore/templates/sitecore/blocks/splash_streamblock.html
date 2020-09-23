@@ -1,7 +1,7 @@
 {% load rendition wagtailcore_tags wagtailimages_tags %}
 {% with pid as ppid %}
   {% for block in self %}
-    <div class="mb-4 splash-block">
+    <div class="mt-3 px-md-2 py-0 splash-block">
       {% include_block block with ppid=ppid pid=forloop.counter0 filterspec=filterspec %}
     </div>
   {% endfor %}

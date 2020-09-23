@@ -1,6 +1,6 @@
 {% load rendition %}
 {% rendition block.value filterspec as photo %}
-<figure class="figure">
+<figure class="figure" style="word-break: break-all">
   <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
   <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
   <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
