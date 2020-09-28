@@ -75,29 +75,26 @@ class TagIndexPage(RoutablePageMixin, Page):
     # Rebuild promote tab panel
     
     promote_tab_panel = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('search_description'),
         MultiFieldPanel([
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
             FieldPanel('show_in_menus'),
-            FieldPanel('search_description'),
-        ], heading=_('Common page configuration')),
-        PublishingPanel(),
-        PrivacyModalPanel(),
+        ], heading=_('Options')),
     ]
 
     settings_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('per_page'),
-        ], heading='Tag Index Options'),
+        FieldPanel('per_page'),
+        FieldPanel('sidebar_placement'),
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
-        ], heading='Page Display Options'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('sidebar_placement'),
-            ]),
-        ], heading='Theme and Layout Options'),
+        ], heading='Options'),
+    ]
+    
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
     ]
 
     # Rebuild edit_handler so we have all tabs
@@ -106,6 +103,7 @@ class TagIndexPage(RoutablePageMixin, Page):
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
 

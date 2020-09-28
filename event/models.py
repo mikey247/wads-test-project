@@ -27,7 +27,7 @@ from taggit.models import TaggedItemBase
 
 class EventIndexPage(Page):
     
-    desc = StreamField(
+    intro = StreamField(
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
@@ -109,7 +109,7 @@ class EventIndexPage(Page):
         verbose_name='Display Title'
         )
     
-    display_desc = models.BooleanField(
+    display_intro = models.BooleanField(
         default=False, 
         verbose_name='Display Intro'
         )
@@ -179,39 +179,37 @@ class EventIndexPage(Page):
         return context
 
     
-    content_panels = Page.content_panels + [
-        FieldPanel('desc', classname="full"),
+    content_tab_panel = [
+        FieldPanel('title'),
+        ImageChooserPanel('listing_image'),
+        StreamFieldPanel('intro'),
+    ]
+
+    promote_tab_panel = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('search_description'),
+        MultiFieldPanel([
+            FieldPanel('show_in_menus'),
+        ], heading=_('Options')),
+    ]
+
+    settings_tab_panel = [
         FieldPanel('per_page'),
         FieldPanel('events_date_filter'),
         FieldPanel('events_date_order'),
         PageChooserPanel('index_root_page', 'event.EventIndexPage'),
-    ]
-
-    promote_tab_panel = Page.promote_panels + [
-        ImageChooserPanel('listing_image'),
-    ]
-
-    settings_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('per_page'),
-            FieldPanel('events_date_filter'),
-            FieldPanel('events_date_order'),
-            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
-        ], heading='Event Index Options'
-        ),
         MultiFieldPanel([
             FieldPanel('display_title'),
-            FieldPanel('display_desc'),
-        ], heading='Page Display Options'),
+            FieldPanel('display_intro'),
+        ], heading='Options'),
     ]
-
 
     publish_tab_panel = [
         PublishingPanel(),
         PrivacyModalPanel(),
     ]
 
-        
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
@@ -531,7 +529,6 @@ class EventPage(SitePage):
     ]
 
     edit_handler = TabbedInterface([
-#        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(publish_tab_panel, heading='Publish'),

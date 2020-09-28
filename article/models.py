@@ -130,43 +130,34 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     # Rebuild main content tab panel
     
     content_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('title'),
-            StreamFieldPanel('intro')
-        ], heading="Article Index Title and Introduction"),
+        FieldPanel('title'),
+        StreamFieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
     
     promote_tab_panel = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('search_description'),
         MultiFieldPanel([
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
             FieldPanel('show_in_menus'),
-            FieldPanel('search_description'),
-        ], heading=_('Common page configuration')),
+        ], heading=_('Options')),
     ]
 
     settings_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('per_page'),
-        ], heading='Article Index Options'),
+        FieldPanel('per_page'),
+        FieldPanel('sidebar_placement'),
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
-        ], heading='Page Display Options'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('sidebar_placement'),
-            ]),
-        ], heading='Theme and Layout Options'),
+        ], heading='Options'),
     ]
 
     publish_tab_panel = [
         PublishingPanel(),
         PrivacyModalPanel(),
     ]
-
 
     # Rebuild edit_handler so we have all tabs
     
