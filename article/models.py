@@ -85,6 +85,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
         articles_all = self.get_children().live().order_by('-first_published_at')
+        articles_count = len(articles_all)
 
         # get the paginator obj and the current page number
         paginator = Paginator(articles_all, self.per_page) 
@@ -117,6 +118,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
             
         context['paginator_count'] = paginator.num_pages
         context['articles_paginated'] = articles_paginated
+        context['articles_count'] = articles_count
         
         return context
 
