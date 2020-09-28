@@ -250,7 +250,7 @@ class GalleryBlock(blocks.StructBlock):
     )
 
     gallery_image_title = blocks.BooleanBlock(
-        required=False.
+        required=False,
         help_text="Show Image Title",
     )
 
