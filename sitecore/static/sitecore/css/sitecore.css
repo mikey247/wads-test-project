@@ -1,5 +1,13 @@
 /* nav options */
 
+.navbar {
+    font-size: 1rem;
+}
+
+.dropdown-item {
+    font-size: 1rem;
+}
+
 nav.navbar-transparent {
     transition: 1000ms ease;
     background-color: transparent!important;
@@ -7,6 +15,14 @@ nav.navbar-transparent {
 
 nav.navbar-opaque {
     transition: 1000ms ease;
+}
+
+.navbar-dark .navbar-nav .show>.nav-link, .navbar-dark .navbar-nav .active>.nav-link, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .nav-link.active {
+    border-bottom: 1px solid #fff;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,0.9);
 }
 
 /* splash page header and inset */
