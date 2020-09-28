@@ -4,39 +4,15 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-# from django import forms
-# from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
-# from django.db import models
-# from django.utils.encoding import force_text
-# from django.utils.functional import cached_property
-# from django.utils.safestring import mark_safe
-# from django.utils.translation import ugettext_lazy as _
-
-# from django_select2.forms import Select2Widget
-
-# from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-# from wagtail.contrib.table_block.blocks import TableBlock
 from wagtail.core import blocks
-# from wagtail.core.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
-# from wagtail.snippets.models import register_snippet
-
-# from pygments import highlight
-# from pygments.formatters import get_formatter_by_name
-# from pygments.lexers import get_lexer_by_name
-
-# from sitecore import constants
-# from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
-
-# from taggit.managers import TaggableManager
-# from taggit.models import TaggedItemBase
 
 from .links import LinkBlock
 from .text import BSCodeBlock, BSHeadingBlock, BSBlockquoteBlock
 from .text import MarkdownAndShortcodeTextBlock, TextSnippet
-from .embedded import CarouselSnippet, IconCardDeckSnippet
+from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
 
@@ -51,7 +27,6 @@ class SplashBlock(blocks.StreamBlock):
                   'display-1','display-2','display-3','display-4', 
                   'h1', 'h2', 'h3', 'h4',],
         label='Rich Text Paragraph',
-        #validators=[ParseShortcodes],
     )
     image =  ImageChooserBlock(
         template='sitecore/blocks/rendition.html'
@@ -64,11 +39,12 @@ class SplashBlock(blocks.StreamBlock):
     )
     carousel = SnippetChooserBlock(
         CarouselSnippet,
-        #group='3. Embedded Content',
         template='sitecore/blocks/carousel.html'
     )
 
-    two_cols = TwoColBlock(group='Section Blocks')
+    two_cols = TwoColBlock(
+        #group='Section Blocks'
+    )
 
     # Override methods
 
@@ -114,6 +90,10 @@ class CoreBlock(blocks.StreamBlock):
         group='3. Embedded Content',
     )
 
+    gallery = GalleryBlock(
+        group='3. Embedded Content'
+    )
+
     carousel = SnippetChooserBlock(
         CarouselSnippet,
         group='3. Embedded Content',
@@ -131,13 +111,13 @@ class CoreBlock(blocks.StreamBlock):
         template='sitecore/tags/text_snippet.html'
         )
 
-    tab = TabBlock(group='Section Blocks')
+    tab = TabBlock(group='4. Section Blocks')
 
-    pill = PillBlock(group='Section Blocks')
+    pill = PillBlock(group='4. Section Blocks')
 
-    accordion = AccordionBlock(group='Section Blocks')
+    accordion = AccordionBlock(group='4. Section Blocks')
 
-    two_cols = TwoColBlock(group='Section Blocks')
+    two_cols = TwoColBlock(group='4. Section Blocks')
 
     # Override methods
 
