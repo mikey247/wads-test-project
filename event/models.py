@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -26,9 +26,17 @@ from taggit.models import TaggedItemBase
 
 
 class EventIndexPage(Page):
-    desc = RichTextField(blank=True)
+    
+    desc = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
+        verbose_name='Intro'
+    )
     
     per_page = models.PositiveSmallIntegerField(default=10,
+                                                verbose_name='Events per Page',
                                                 validators=[
                                                     MinValueValidator(1),
                                                     MaxValueValidator(100)
@@ -96,10 +104,21 @@ class EventIndexPage(Page):
         related_name='+'
     )
 
-    display_title = models.BooleanField(default=True)
-    display_desc = models.BooleanField(default=False)
+    display_title = models.BooleanField(
+        default=True, 
+        verbose_name='Display Title'
+        )
+    
+    display_desc = models.BooleanField(
+        default=False, 
+        verbose_name='Display Intro'
+        )
 
-    no_listing_text = RichTextField(blank=True)
+    no_listing_text = RichTextField(
+        blank=True,
+        verbose_name='No Event Text',      
+        help_text='Text to display when there are no events listed.',
+        )
 
     
     def get_context(self, request):
@@ -168,15 +187,38 @@ class EventIndexPage(Page):
         PageChooserPanel('index_root_page', 'event.EventIndexPage'),
     ]
 
-    promote_panels = Page.promote_panels + [
+    promote_tab_panel = Page.promote_panels + [
         ImageChooserPanel('listing_image'),
+    ]
+
+    settings_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('per_page'),
+            FieldPanel('events_date_filter'),
+            FieldPanel('events_date_order'),
+            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+        ], heading='Event Index Options'
+        ),
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_desc'),
-            FieldPanel('no_listing_text', classname="full"),
         ], heading='Page Display Options'),
     ]
-    
+
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+
+        
+    edit_handler = TabbedInterface([
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(publish_tab_panel, heading='Publish'),
+    ])
+
 
 class EventDateTimeBlock(blocks.StructBlock):
     """Documentation for EventDateTimeBlock
@@ -468,23 +510,32 @@ class EventPage(SitePage):
 
     # Admin UI panels
     
-    content_panels = SitePage.content_panels + [
+    content_tab_panel = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
+            ImageChooserPanel('event_image'),
             FieldPanel('intro'),
             FieldPanel('location'),
             FieldPanel('location_link'),
             StreamFieldPanel('dates'),
             StreamFieldPanel('event_type'),
         ], heading="Event Details"),
-        MultiFieldPanel([
             StreamFieldPanel('body')
-        ], heading="Main body (Streamfield)"),
     ]
 
-    promote_panels = SitePage.promote_panels + [
-        ImageChooserPanel('event_image'),
+    promote_tab_panel = SitePage.promote_panels
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
     ]
+
+    edit_handler = TabbedInterface([
+#        ObjectList(meta_tab_panel, heading='Meta'),
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(publish_tab_panel, heading='Publish'),
+    ])
 
     # base_form_class:
     # Use the override base_form_class for additional non-form model fields.

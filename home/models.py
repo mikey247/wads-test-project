@@ -108,6 +108,7 @@ class HomePage(Page):
     inset_bg_colour = models.CharField(
         choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
+        verbose_name='Inset background colour',
         max_length=128
     )
 
@@ -181,6 +182,9 @@ class HomePage(Page):
         StreamFieldPanel('inset_content'),
         MultiFieldPanel([
             FieldRowPanel([
+                FieldPanel('inset_style')
+                ]),
+            FieldRowPanel([
                 FieldPanel('inset_text_align'),
                 FieldPanel('inset_text_colour'),
             ]),
@@ -188,7 +192,6 @@ class HomePage(Page):
                 FieldPanel('inset_bg_colour'),
                 FieldPanel('inset_border_radius'),
             ]),
-            FieldPanel('inset_style'),
         ], heading=_('Inset Settings')),
     ]
 
@@ -215,10 +218,10 @@ class HomePage(Page):
     
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
-        ObjectList(meta_tab_panel, heading='Meta'),
-        ObjectList(promote_tab_panel, heading='Promote'),
-        ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(splash_tab_panel, heading='Splash Image'),
         ObjectList(inset_tab_panel, heading='Inset'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 

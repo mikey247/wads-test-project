@@ -64,9 +64,11 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+        verbose_name='Intro'
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
+                                                verbose_name='Articles per Page',
                                                 validators=[
                                                     MinValueValidator(1),
                                                     MaxValueValidator(100)
@@ -131,7 +133,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         MultiFieldPanel([
             FieldPanel('title'),
             StreamFieldPanel('intro')
-        ], heading="Article Introduction and Summary"),
+        ], heading="Article Index Title and Introduction"),
     ]
 
     # Rebuild promote tab panel
@@ -143,10 +145,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
             FieldPanel('show_in_menus'),
             FieldPanel('search_description'),
         ], heading=_('Common page configuration')),
-        PublishingPanel(),
-        PrivacyModalPanel(),
     ]
-
 
     settings_tab_panel = [
         MultiFieldPanel([
@@ -163,12 +162,19 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         ], heading='Theme and Layout Options'),
     ]
 
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+
+
     # Rebuild edit_handler so we have all tabs
     
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
     def get_template(self, request):
@@ -479,6 +485,7 @@ class ArticlePage(SitePage):
     inset_bg_colour = models.CharField(
         choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
+        verbose_name='Inset background colour',
         max_length=128
     )
 
@@ -621,11 +628,11 @@ class ArticlePage(SitePage):
     
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
-        ObjectList(meta_tab_panel, heading='Meta'),
-        ObjectList(promote_tab_panel, heading='Promote'),
-        ObjectList(settings_tab_panel, heading='Settings'),
-        ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(splash_tab_panel, heading='Splash Image'),
         ObjectList(inset_tab_panel, heading='Inset'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(meta_tab_panel, heading='Meta'),
+        ObjectList(settings_tab_panel, heading='Settings'),
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
