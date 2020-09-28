@@ -123,15 +123,7 @@ class EventIndexPage(Page):
     
     def get_context(self, request):
         # Update content to include only published events; ordered by reverse-date
-
-        # TODO: filter on current/future events
-        # TODO: Build separate past event list
-        
         context = super(EventIndexPage, self).get_context(request)
-        # doesn't work:
-        # all_events = self.get_children().live().specific().order_by('-end_date')
-        # does work:
-        # all_events = EventPage.objects.live().child_of(self).order_by('-start_date')
 
         event_order = self.events_date_order
         today = datetime.date.today()
@@ -141,53 +133,58 @@ class EventIndexPage(Page):
             index_root = self
             
         if self.events_date_filter == self.EVENTS_FILTER_CURRENT_AND_FUTURE:
-            all_events = EventPage.objects.live().child_of(index_root).filter(end_date__gte=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(end_date__gte=today).order_by(event_order)
 
         elif self.events_date_filter == self.EVENTS_FILTER_FUTURE:
-            all_events = EventPage.objects.live().child_of(index_root).filter(start_date__gt=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(start_date__gt=today).order_by(event_order)
             
         elif self.events_date_filter == self.EVENTS_FILTER_PAST_AND_CURRENT:
-            all_events = EventPage.objects.live().child_of(index_root).filter(start_date__lte=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(start_date__lte=today).order_by(event_order)
 
         else: # self.EVENTS_FILTER_PAST
-            all_events = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
+
+        events_count = len(events_all)
 
         # get the paginator obj and the current page number
-        paginator = Paginator(all_events, self.per_page) 
-        page = request.GET.get('page')
-        index = int(page)-1 if page is not None else 0
+        paginator = Paginator(events_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
         
         # get list of events for the desired page
         try:
-            events = paginator.page(page)
+            events_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            events = paginator.page(1)
+            events_paginated = paginator.page(1)
         except EmptyPage:
-            events = paginator.page(paginator.num_pages)
+            events_paginated = paginator.page(paginator.num_pages)
 
         # limit page_range of the paginator (hard-coded to 3 pages both ways)
-        max_index = len(paginator.page_range)
-        start_index = max(0, index - 3)
-        end_index = min(max_index, start_index + 7)
-
-        # build new page range from calculated range but also include first/last pages if not in range
-        context['page_range'] = []
-        if start_index > 0:
-            context['page_range'].append(1)
-        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
-        if end_index < max_index:
-            context['page_range'].append(max_index)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
             
-        context['events'] = events
+        context['paginator_count'] = paginator.num_pages
+        context['events_count'] = events_count
+        context['events_paginated'] = events_paginated
 
         return context
 
-    content_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('title'),
-            StreamFieldPanel('desc'),
-            FieldPanel('no_listing_text', classname="full"),
-        ], heading="Event Index Title and Introduction"),
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('desc', classname="full"),
+        FieldPanel('per_page'),
+        FieldPanel('events_date_filter'),
+        FieldPanel('events_date_order'),
+        PageChooserPanel('index_root_page', 'event.EventIndexPage'),
     ]
 
     promote_tab_panel = Page.promote_panels + [
@@ -216,12 +213,12 @@ class EventIndexPage(Page):
 
         
     edit_handler = TabbedInterface([
-#        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
+
 
 class EventDateTimeBlock(blocks.StructBlock):
     """Documentation for EventDateTimeBlock

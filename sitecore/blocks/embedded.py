@@ -107,6 +107,7 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
 
     class Meta:
         template = 'sitecore/blocks/carousel_simple_slide.html'
+        icon = 'table'
 
 
 @register_snippet
@@ -185,7 +186,6 @@ class CarouselSnippet(models.Model):
     
     slides = StreamField(
         [
-#            ('slide_block', CarouselSlideBlock()),
             ('simple_slide', CarouselSimpleSlideBlock()),
         ],
         null=True,
@@ -234,6 +234,41 @@ class CarouselSnippet(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class GalleryBlock(blocks.StructBlock):
+    GALLERY_FILTERSPEC_CHOICES = [
+        ("original", '3 images in a row / original image size'),
+        ("fill-300x300", '3 images in a row / 300 x 300 px'),            
+    ]
+
+    gallery_type = blocks.ChoiceBlock(
+        choices = GALLERY_FILTERSPEC_CHOICES,
+        help_text = 'Choose Gallery display style',
+        label = 'Gallery Style',
+    )
+
+    gallery_image_title = blocks.BooleanBlock(
+        required=False.
+        help_text="Show Image Title",
+    )
+
+    gallery_image_caption = blocks.BooleanBlock(
+        required=False,
+        help_text="Show Image Caption",
+    )
+
+    gallery_images = blocks.ListBlock(
+        ImageChooserBlock(),
+        label='Gallery Images'
+    )
+
+    
+    class Meta:
+        icon = 'image'
+        label = 'Gallery'
+        template = 'sitecore/blocks/gallery_block.html'
 
 
 

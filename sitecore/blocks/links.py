@@ -95,5 +95,3 @@ class LinkBlock(blocks.StructBlock):
 
     class Meta:
         value_class = LinkStructValue
-        
-

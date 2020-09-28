@@ -66,10 +66,6 @@ class BSHeadingBlock(blocks.StructBlock):
         #form_classname = 'heading-block struct-block'
 
 
-
-
-
-
 class BSBlockquoteBlock(blocks.StructBlock):
     """
     Block for supporting full Bootstrap 4 <blockquote> markup
@@ -131,6 +127,7 @@ class BSBlockquoteBlock(blocks.StructBlock):
         template = 'sitecore/blocks/blockquote.html'
 
 
+
 class CSVIntListCharBlock(blocks.FieldBlock):
     """
     Adds the Django forms.CharField WITH the validate_comma_separated_integer_list validator to a StreamField block.
@@ -150,6 +147,7 @@ class CSVIntListCharBlock(blocks.FieldBlock):
 
     def get_searchable_content(self, value):
         return [force_text(value)]
+
 
 
 class Select2ChoiceBlock(blocks.FieldBlock):
@@ -270,6 +268,7 @@ class Select2ChoiceBlock(blocks.FieldBlock):
         icon = "placeholder"
 
 
+
 class BSCodeBlock(blocks.StructBlock):
     """
     Code highlighting block in, using pygments library wrapped in Bootstrap 3 markup
@@ -287,7 +286,8 @@ class BSCodeBlock(blocks.StructBlock):
     lang = Select2ChoiceBlock(
         choices=LANGUAGE_CHOICES,
         required=True,
-        default=''
+        default='',
+        label='Language'
     )
 
     code = blocks.TextBlock(
@@ -295,7 +295,8 @@ class BSCodeBlock(blocks.StructBlock):
     )
 
     hl_lines = CSVIntListCharBlock(
-        required=False
+        required=False,
+        label='Highlighted Lines'
     )
 
     line_nums = blocks.BooleanBlock(
@@ -319,6 +320,7 @@ class BSCodeBlock(blocks.StructBlock):
         return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
 
 
+    
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
     """
     Modifies the RichTextBlock so that the main CharField is also passed through the ParseShortcodes validator.

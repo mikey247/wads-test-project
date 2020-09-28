@@ -17,7 +17,7 @@
     {% if page.display_desc %}
       <div class="lead">{{ page.desc|richtext }}</div>
     {% endif %}
-    {% if not events|length %}
+    {% if not events_count %}
       <div class="alert alert-info" role="alert">
 	{{ page.no_listing_text|richtext }}
       </div>
@@ -27,10 +27,10 @@
 
 {% block page-content-main-article %}
   <article>
-    {% for event in events %}
+    {% for event in events_paginated %}
       <div class="row p-0 m-0">
 	<div class="col-12 m-0 p-0">
-	  {% event_blog_summary event show_taggit=True taggit_slug=slug %}
+	  {% event_blog_summary event show_taggit=True %}
 	</div>
       </div>
     {% endfor %}    
@@ -38,7 +38,9 @@
 {% endblock page-content-main-article %}
 
 {% block page-content-main-footer-nav %}
-  <footer class="my-4" role="pagination">
-    {% index_pagination events page_range %}
-  </footer>
+  {% if paginator_count > 1 %}
+    <footer class="my-4" role="pagination">
+      {% index_pagination events_paginated pagination_range page.url %}
+    </footer>
+  {% endif %}
 {% endblock page-content-main-footer-nav %}

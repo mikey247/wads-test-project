@@ -86,35 +86,41 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
-        all_articles = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by('-first_published_at')
+        articles_count = len(articles_all)
 
         # get the paginator obj and the current page number
-        paginator = Paginator(all_articles, self.per_page) 
-        page = request.GET.get('page')
-        index = int(page)-1 if page is not None else 0
+        paginator = Paginator(articles_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
         
         # get list of articles for the desired page
         try:
-            articles = paginator.page(page)
+            articles_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            articles = paginator.page(1)
+            articles_paginated = paginator.page(1)
         except EmptyPage:
-            articles = paginator.page(paginator.num_pages)
+            articles_paginated = paginator.page(paginator.num_pages)
 
         # limit page_range of the paginator (hard-coded to 3 pages both ways)
-        max_index = len(paginator.page_range)
-        start_index = max(0, index - 3)
-        end_index = min(max_index, start_index + 7)
-
-        # build new page range from calculated range but also include first/last pages if not in range
-        context['page_range'] = []
-        if start_index > 0:
-            context['page_range'].append(1)
-        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
-        if end_index < max_index:
-            context['page_range'].append(max_index)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # pass total number of pages
+        context['paginator_count'] = paginator.num_pages
+        
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
             
-        context['articles'] = articles
+        context['paginator_count'] = paginator.num_pages
+        context['articles_paginated'] = articles_paginated
+        context['articles_count'] = articles_count
         
         return context
 
@@ -141,32 +147,19 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         ], heading=_('Common page configuration')),
     ]
 
-
     settings_tab_panel = [
         MultiFieldPanel([
             FieldPanel('per_page'),
         ], heading='Article Index Options'),
         MultiFieldPanel([
-            FieldRowPanel([
-#                FieldPanel('render_template'),
-                FieldPanel('sidebar_placement'),
-            ]),
-        ], heading='Theme and Layout Options'),
-        MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
         ], heading='Page Display Options'),
-#        MultiFieldPanel([
-#            FieldRowPanel([
-#                FieldPanel('splash_text_align'),
-#                FieldPanel('splash_text_colour'),
-#            ]),
-#            FieldRowPanel([
-#                FieldPanel('splash_bg_colour'),
-#                FieldPanel('splash_border_radius'),
-#            ]),
-#            StreamFieldPanel('splash_content'),
-#        ], heading='Splash Content and Options'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('sidebar_placement'),
+            ]),
+        ], heading='Theme and Layout Options'),
     ]
 
     publish_tab_panel = [
@@ -178,7 +171,6 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     # Rebuild edit_handler so we have all tabs
     
     edit_handler = TabbedInterface([
-#        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(content_tab_panel, heading='Content'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
@@ -213,45 +205,52 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexByDatePage, self).get_context(request)
-        all_articles = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by('-first_published_at')
 
         if year:
-            all_articles = all_articles.filter(first_published_at__year=year)
+            articles_all = articles_all.filter(first_published_at__year=year)
         if month:
-            all_articles = all_articles.filter(first_published_at__month=month)
+            articles_all = articles_all.filter(first_published_at__month=month)
         if day:
-            all_articles = all_articles.filter(first_published_at__day=day)
+            articles_all = articles_all.filter(first_published_at__day=day)
+
+        articles_count = len(articles_all)
 
         # get the paginator obj and the current page number
-        paginator = Paginator(all_articles, self.per_page) 
-        page = request.GET.get('page')
-        index = int(page)-1 if page is not None else 0
+        paginator = Paginator(articles_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
         
         # get list of articles for the desired page
         try:
-            articles = paginator.page(page)
+            articles_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            articles = paginator.page(1)
+            articles_paginated = paginator.page(1)
         except EmptyPage:
-            articles = paginator.page(paginator.num_pages)
+            articles_paginated = paginator.page(paginator.num_pages)
 
         # limit page_range of the paginator (hard-coded to 3 pages both ways)
-        max_index = len(paginator.page_range)
-        start_index = max(0, index - 3)
-        end_index = min(max_index, start_index + 7)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # pass total number of pages
+        context['paginator_count'] = paginator.num_pages
 
-        # build new page range from calculated range but also include first/last pages if not in range
-        context['page_range'] = []
-        if start_index > 0:
-            context['page_range'].append(1)
-        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
-        if end_index < max_index:
-            context['page_range'].append(max_index)
-            
-        context['articles'] = articles
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
+
         context['year'] = year
         context['month'] = month
         context['day'] = day
+
+        context['articles_paginated'] = articles_paginated
+        context['articles_count'] = articles_count
         
         return context
 

@@ -101,10 +101,12 @@ def social_share_list(context, page):
 
 # Renders the page pagination block based on the paginator resource
 @register.inclusion_tag('sitecore/tags/index_pagination.html', takes_context=True)
-def index_pagination(context, page_res, page_range):
+def index_pagination(context, page_res, page_range, url_path, url_params=''):
    return {
        'page_res': page_res,
        'page_range': page_range,
+       'url_path': url_path,
+       'url_params': url_params,
    }
 
 

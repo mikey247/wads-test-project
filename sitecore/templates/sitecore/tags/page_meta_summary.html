@@ -1,7 +1,7 @@
 <div class="{{ div_class }}">
   <strong>
     {% if page.author %}
-      {{ page.author }}
+      {{ page.author }},
     {% else %}
       {% if page.owner.get_full_name %}{{ page.owner.get_full_name }}{% else %}{{ page.owner }}{% endif %},
     {% endif %}
