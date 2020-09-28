@@ -127,3 +127,16 @@ BOOTSTRAP4_BUTTON_SIZE_CHOICES = (
     ('btn-sm', 'Small'),
     ('btn-lg', 'Large'),
 )
+
+BOOTSTRAP4_TWOCOL_RATIO_CHOICES = (
+    ('1:1', '1:1'),
+    ('2:1', '2:1'),
+    ('1:2', '1:2'),
+    ('3:1', '3:1'),
+    ('1:3', '1:3'),
+)
+
+INSET_STYLE_CLASS_CHOICES = (
+    ('container inset inset-raised', 'Standard Raised Inset'),
+    ('container-fluid inset inset-raised', 'Wide Raised Inset'),
+)

@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-    'wagtailimporter',
+    'pg_copy',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     
 #    'debug_toolbar',
     'django_extensions',
-    'django_select2'
+    'django_select2',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ MIDDLEWARE = [
 
 #    'debug_toolbar.middleware.DebugToolbarMiddleware',
     
-    'wagtail.core.middleware.SiteMiddleware',
+# deprecated:   'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
@@ -147,7 +148,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 

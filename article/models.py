@@ -12,7 +12,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
  
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
@@ -52,7 +52,20 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     
     """
     
-    desc = RichTextField(blank=True)
+    SIDEBAR_PLACEMENT_DEFAULT='left'
+    SIDEBAR_PLACEMENT_CHOICES = (
+        ('left', 'Single sidebar (To left of main content'),
+        ('right', 'Single sidebar (To right of main content'),
+        ('none', 'No sidebars'),
+    )
+    
+    intro = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+    )
+
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 validators=[
                                                     MinValueValidator(1),
@@ -60,40 +73,110 @@ class ArticleIndexPage(RoutablePageMixin, Page):
                                                 ])
 
     display_title = models.BooleanField(default=True)
-    display_desc = models.BooleanField(default=False)
+    display_intro = models.BooleanField(default=False)
+    
+    sidebar_placement = models.CharField(
+        max_length=128,
+        default='left',
+        choices=SIDEBAR_PLACEMENT_CHOICES,
+    )
     
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
-        all_articles = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by('-first_published_at')
+        articles_count = len(articles_all)
 
-        paginator = Paginator(all_articles, self.per_page) 
-
-        page = request.GET.get('page')
+        # get the paginator obj and the current page number
+        paginator = Paginator(articles_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
+        
+        # get list of articles for the desired page
         try:
-            articles = paginator.page(page)
+            articles_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            articles = paginator.page(1)
+            articles_paginated = paginator.page(1)
         except EmptyPage:
-            articles= paginator.page(paginator.num_pages)
+            articles_paginated = paginator.page(paginator.num_pages)
 
-        context['articles'] = articles
+        # limit page_range of the paginator (hard-coded to 3 pages both ways)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # pass total number of pages
+        context['paginator_count'] = paginator.num_pages
+        
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
+            
+        context['paginator_count'] = paginator.num_pages
+        context['articles_paginated'] = articles_paginated
+        context['articles_count'] = articles_count
         
         return context
 
-    content_panels = Page.content_panels + [
-        FieldPanel('desc', classname="full"),
-        FieldPanel('per_page'),
+
+    # Build new meta tab panel
+    
+    # Rebuild main content tab panel
+    
+    content_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('title'),
+            StreamFieldPanel('intro')
+        ], heading="Article Introduction and Summary"),
     ]
 
-    promote_panels = Page.promote_panels + [
+    # Rebuild promote tab panel
+    
+    promote_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('show_in_menus'),
+            FieldPanel('search_description'),
+        ], heading=_('Common page configuration')),
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+
+
+    settings_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('per_page'),
+        ], heading='Article Index Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
-            FieldPanel('display_desc'),
+            FieldPanel('display_intro'),
         ], heading='Page Display Options'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('sidebar_placement'),
+            ]),
+        ], heading='Theme and Layout Options'),
     ]
 
+    # Rebuild edit_handler so we have all tabs
+    
+    edit_handler = TabbedInterface([
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+    ])
 
+    def get_template(self, request):
+        return f'article/article_index_page_{self.sidebar_placement}.html'
+
+
+
+    
 
 class ArticleIndexByDatePage(ArticleIndexPage):
     """
@@ -116,45 +199,52 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexByDatePage, self).get_context(request)
-        all_articles = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by('-first_published_at')
 
         if year:
-            all_articles = all_articles.filter(first_published_at__year=year)
+            articles_all = articles_all.filter(first_published_at__year=year)
         if month:
-            all_articles = all_articles.filter(first_published_at__month=month)
+            articles_all = articles_all.filter(first_published_at__month=month)
         if day:
-            all_articles = all_articles.filter(first_published_at__day=day)
+            articles_all = articles_all.filter(first_published_at__day=day)
+
+        articles_count = len(articles_all)
 
         # get the paginator obj and the current page number
-        paginator = Paginator(all_articles, self.per_page) 
-        page = request.GET.get('page')
-        index = int(page)-1 if page is not None else 0
+        paginator = Paginator(articles_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
         
         # get list of articles for the desired page
         try:
-            articles = paginator.page(page)
+            articles_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            articles = paginator.page(1)
+            articles_paginated = paginator.page(1)
         except EmptyPage:
-            articles = paginator.page(paginator.num_pages)
+            articles_paginated = paginator.page(paginator.num_pages)
 
         # limit page_range of the paginator (hard-coded to 3 pages both ways)
-        max_index = len(paginator.page_range)
-        start_index = max(0, index - 3)
-        end_index = min(max_index, start_index + 7)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # pass total number of pages
+        context['paginator_count'] = paginator.num_pages
 
-        # build new page range from calculated range but also include first/last pages if not in range
-        context['page_range'] = []
-        if start_index > 0:
-            context['page_range'].append(1)
-        context['page_range'] = context['page_range'] + list(paginator.page_range)[start_index:end_index]
-        if end_index < max_index:
-            context['page_range'].append(max_index)
-            
-        context['articles'] = articles
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
+
         context['year'] = year
         context['month'] = month
         context['day'] = day
+
+        context['articles_paginated'] = articles_paginated
+        context['articles_count'] = articles_count
         
         return context
 
@@ -213,6 +303,9 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         return sub_article_page[0].serve(request)
 
 
+    def get_template(self, request):
+        return f'article/article_index_by_date_page_{self.sidebar_placement}.html'
+
     # Control what child pages can be created under this index page
     # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
     #   as this may produce odd urls e.g., /articles/2020/01/01/other-index/2020/01/04
@@ -265,17 +358,38 @@ class ArticlePage(SitePage):
         ('none', 'No sidebars'),
     )
     
-    # meta panel fields
-
-    # includes Page:title
-    # includes SitePage:tags
+    # content fields
+    #   title - inherited
     
+    intro = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+    )
+
+    body = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
+    )
+
+    # meta fields
+    #   tags - inherited
+    #   search_desc inherited
+
     author = models.CharField(
         max_length=255,
         blank=True,
         help_text=_('Use this to override the default author/owner name (free text only).'),
     )
 
+    # promote fields
+    #   slug - inherited
+    #   page_title - inherited
+    #   show_in_menus = inherited
+    
     article_image = models.ForeignKey(
         'captioned_images.CaptionImage',
         null=True,
@@ -300,39 +414,15 @@ class ArticlePage(SitePage):
         help_text=_('Specify an alternative image for the thumbnail in blog listings if the main banner image is not suitable or a different image is desired.'),
     )
     
-    # content panel fields
+    # splash fields
     
-    intro = StreamField(
-        sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
+    splash_image = models.ForeignKey(
+        'captioned_images.CaptionImage',
+        null=True,
         blank=True,
-        help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
-    )
-
-    body = StreamField(
-        sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
-        blank=True,
-        help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
-    )
-
-    # settings tab panel options
-    
-    display_title = models.BooleanField(
-        default=True,
-        help_text=_('Toggle the display of the default title field.'),
-    )
-
-    render_template = models.CharField(
-        max_length=128,
-        default='article_page_default',
-        choices=RENDER_TEMPLATE_CHOICES,
-    )
-
-    sidebar_placement = models.CharField(
-        max_length=128,
-        default='left',
-        choices=SIDEBAR_PLACEMENT_CHOICES,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text=_('Provide an image that spans the top of an article page (if splash template selected).'),
     )
     
     splash_content = StreamField(
@@ -365,6 +455,62 @@ class ArticlePage(SitePage):
         validators=[MinValueValidator(0)]
     )
 
+    # inset fields
+    
+    inset_content = StreamField(
+        sitecore_blocks.SplashBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide content for the inset area here.'),
+    )
+
+    inset_text_align = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        default='text-center',
+        max_length=128
+    )
+
+    inset_text_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        default='text-primary',
+        max_length=128
+    )
+
+    inset_bg_colour = models.CharField(
+        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        default='bg-transparent',
+        max_length=128
+    )
+
+    inset_border_radius = models.IntegerField(
+        default='15',
+        validators=[MinValueValidator(0)]
+    )
+
+    inset_style = models.CharField(
+        choices=constants.INSET_STYLE_CLASS_CHOICES,
+        default='container inset inset-raised',
+        max_length=256
+    )
+
+    # settings fields
+
+    display_title = models.BooleanField(
+        default=True,
+        help_text=_('Toggle the display of the default title field.'),
+    )
+
+    render_template = models.CharField(
+        max_length=128,
+        default='article_page_default',
+        choices=RENDER_TEMPLATE_CHOICES,
+    )
+
+    sidebar_placement = models.CharField(
+        max_length=128,
+        default='left',
+        choices=SIDEBAR_PLACEMENT_CHOICES,
+    )
 
     # Append which fields are to be searchable
     
@@ -372,74 +518,50 @@ class ArticlePage(SitePage):
         index.SearchField('author'),
         index.SearchField('intro'),
         index.SearchField('body'),
+        index.SearchField('splash_content'),
+        index.SearchField('inset_content'),
     ]
 
     # Append which fields are to be accessible via the REST API
 
-    api_fields = SitePage.search_fields + [
+    api_fields = SitePage.api_fields + [
         'author',
         'article_image',
-        'article_image_resize',
+        'article_image_filterspec',
         'thumbnail_image',
         'intro',
         'body',
         'display_title',
         'render_template',
+        'splash_image',
         'splash_content',
+        'inset_content',
+    ]
+
+    # admin panels
+    # ------------
+    
+    # Rebuild main content tab panel
+
+    content_tab_panel = [
+        FieldPanel('title'),
+        StreamFieldPanel('intro'),
+        StreamFieldPanel('body'),
     ]
 
     # Build new meta tab panel
     
     meta_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('title'),
-            FieldPanel('tags'),
-            FieldPanel('author'),
-        ], heading="Article Metadata"),
-        MultiFieldPanel([
-            FieldRowPanel([
-                ImageChooserPanel('article_image'),
-            ]),
-            FieldPanel('article_image_filterspec'),
-            ImageChooserPanel('thumbnail_image'),
-        ], heading="Article Banner and Thumbnail"),
+        FieldPanel('tags'),
+        FieldPanel('author'),
+        FieldPanel('search_description'),
     ]
 
-    # Rebuild main content tab panel
+    # Build new splash tab panel
     
-    content_tab_panel = [
-        MultiFieldPanel([
-            StreamFieldPanel('intro')
-        ], heading="Article Introduction and Summary"),
-        MultiFieldPanel([
-            StreamFieldPanel('body')
-        ], heading="Article Main body"),
-    ]
-
-    # Rebuild promote tab panel
-    
-    promote_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('slug'),
-            FieldPanel('seo_title'),
-            FieldPanel('show_in_menus'),
-            FieldPanel('search_description'),
-        ], heading=_('Common page configuration')),
-        PublishingPanel()
-    ]
-
-    # Rebuild settings tab panel - add display/override fields
-    
-    settings_tab_panel = [
-        MultiFieldPanel([
-            FieldPanel('display_title'),
-        ], heading='Page Display Options'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('render_template'),
-                FieldPanel('sidebar_placement'),
-            ]),
-        ], heading='Theme and Layout Options'),
+    splash_tab_panel = [
+        ImageChooserPanel('splash_image'),
+        StreamFieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('splash_text_align'),
@@ -449,17 +571,62 @@ class ArticlePage(SitePage):
                 FieldPanel('splash_bg_colour'),
                 FieldPanel('splash_border_radius'),
             ]),
-            StreamFieldPanel('splash_content'),
-        ], heading='Splash Content and Options'),
+        ], heading=_('Splash Settings')),
     ]
 
+    inset_tab_panel = [
+        StreamFieldPanel('inset_content'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('inset_text_align'),
+                FieldPanel('inset_text_colour'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('inset_bg_colour'),
+                FieldPanel('inset_border_radius'),
+            ]),
+            FieldPanel('inset_style'),
+        ], heading=_('Inset Settings')),
+    ]
+
+    # Rebuild settings tab panel - add display/override fields
+    
+    settings_tab_panel = [
+        ImageChooserPanel('article_image'),
+        FieldPanel('article_image_filterspec'),
+        ImageChooserPanel('thumbnail_image'),
+        FieldPanel('render_template'),
+        FieldPanel('sidebar_placement'),
+    ]
+
+    # Rebuild promote tab panel
+    
+    promote_tab_panel = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        MultiFieldPanel([
+            FieldPanel('show_in_menus'),
+            FieldPanel('display_title'),
+        ], heading=_('Options')),
+    ]
+
+    # Build new publish tab panel
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+    
     # Rebuild edit_handler so we have all tabs
     
     edit_handler = TabbedInterface([
-        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(meta_tab_panel, heading='Meta'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(splash_tab_panel, heading='Splash'),
+        ObjectList(inset_tab_panel, heading='Inset'),
+        ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
 

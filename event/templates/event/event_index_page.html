@@ -1,5 +1,5 @@
 {% extends "sitecore/base/default.html" %}
-{% load rendition wagtailcore_tags wagtailimages_tags site_tags %}
+{% load event_tags rendition wagtailcore_tags wagtailimages_tags site_tags %}
 
 {% block body-class %}event-index-page{% endblock %}
 
@@ -8,58 +8,39 @@
     {% if self.listing_image %}
       {% rendition self.listing_image 'fill-1200x300' as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ self.listing_image.alt_text }}" class="img-fluid">
+	<img src="{{ photo.url }}" alt="{{ self.listing_image.alt_text }}" class="img-full-width-md rounded img-fluid">
       </div>
     {% endif %}
     {% if page.display_title %}
       <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
-      {% endif %}
+    {% endif %}
     {% if page.display_desc %}
       <div class="lead">{{ page.desc|richtext }}</div>
     {% endif %}
-    {% if not events|length %}
+    {% if not events_count %}
       <div class="alert alert-info" role="alert">
 	{{ page.no_listing_text|richtext }}
       </div>
     {% endif %}  
   </header>
-{% endblock %}
+{% endblock page-content-main-header %}
 
 {% block page-content-main-article %}
   <article>
-    {% for post in events %}
-      <section>
-      {% with event=post.specific %}
-	<div class="media bg-light mt-0 mb-4 pr-2 ">
-	  <div class="py-0">
-	    <div class="bg-dark px-3 py-4 mr-2 text-light text-center">
-	      <h2><i class="fas fa-calendar"></i></h2>
-	      {% if event.duration == 1 %}
-		<h4>{{ event.start_date|date:'d' }} {{ event.start_date|date:'M'|upper }}</h4>
-	      {% else %}
-		{% if event.in_same_month %}
-		  <h5>{{ event.start_date|date:'d' }} &mdash; {{ event.end_date|date:'d' }}</h5>
-		  <h5>{{ event.start_date|date:'M'|upper }}</h5>
-		{% else %}
-		  <h5>{{ event.start_date|date:'d' }} {{ event.start_date|date:'M'|upper }}<br/>&mdash;<br/>
-		    {{ event.end_date|date:'d' }} {{ event.end_date|date:'M'|upper }}</h5>
-		{% endif %}
-	      {% endif %}
-	      <h2>{{ event.start_date|date:'Y' }}</h2>
-	    </div>
-	  </div>
-	  <div class="media-body py-2">
-	    <h3 class="mt-0">{{ event.title }}</h3>
-	    {% for block in event.event_type %}
-	      {% include_block block with view="summary" running=event.running passed=event.passed %}
-	    {% endfor %}
-	    &nbsp;<span class="badge badge-primary">{{ event.duration }} day event</span>
-	    &nbsp;<span class="text-secondary"><a href="{{ event.location_link }}"><i class="fa fa-map-marker"></i> {{ event.location }}</a></span>
-	    <p>{{ event.intro|richtext }}</p>
-	    <a href="{% pageurl event %}" class="btn btn-sm btn-primary">Read More <i class="fas fa-chevron-right"></i></a>
-	  </div>
-	</section>
-      {% endwith %}
-    {% endfor %}
+    {% for event in events_paginated %}
+      <div class="row p-0 m-0">
+	<div class="col-12 m-0 p-0">
+	  {% event_blog_summary event show_taggit=True %}
+	</div>
+      </div>
+    {% endfor %}    
   </article>
-{% endblock %}
+{% endblock page-content-main-article %}
+
+{% block page-content-main-footer-nav %}
+  {% if paginator_count > 1 %}
+    <footer class="my-4" role="pagination">
+      {% index_pagination events_paginated pagination_range page.url %}
+    </footer>
+  {% endif %}
+{% endblock page-content-main-footer-nav %}

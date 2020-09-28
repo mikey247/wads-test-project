@@ -1,63 +1,36 @@
 {% extends "sitecore/base/default.html" %}
-{% load shortcodes article_tags menu_tags site_tags wagtailcore_tags wagtailimages_tags %}
+{% load event_tags menu_tags rendition site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}event-page{% endblock %}
 
 {% block page-content-main-header %}
   <header>
     {% if page.event_image %}
-      {% image page.event_image fill-1200x300 as photo %}
+      {% rendition page.event_image 'fill-1200x300' as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ page.event_image.alt_text }}" class="img-fluid">
+	<img src="{{ photo.url }}" alt="{{ page.event_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
       </div>
     {% endif %}
-    <div class="media mb-4">
-      <div class="bg-primary px-4 py-4 mr-2 text-light text-center">
-	<h1><i class="fas fa-calendar"></i></h1>
-	{% if page.duration == 1 %}
-	  <h3>{{ page.start_date|date:'d' }} {{ page.start_date|date:'M'|upper }}</h3>
-	{% else %}
-	  {% if page.in_same_month %}
-	    <h4>{{ page.start_date|date:'d' }} &mdash; {{ page.end_date|date:'d' }}</h4>
-	    <h4>{{ page.start_date|date:'M'|upper }}</h4>
-	  {% else %}
-	    <h4>{{ page.start_date|date:'d' }} {{ page.start_date|date:'M'|upper }}<br/>&mdash;<br/>
-	      {{ page.end_date|date:'d' }} {{ page.end_date|date:'M'|upper }}</h4>
-	  {% endif %}
-	{% endif %}
-	<h1>{{ page.start_date|date:'Y' }}</h1>
-      </div>
-      <div class="media-body pl-2">
-	<h1 class="mt-0">{{ self.seo_title|default:self.title }}</h1>
-	<div class="lead">{{ page.intro|richtext }}</div>
-	<h6 class="text-primary"><i class="fas fa-map-marker"></i> <a href="{{ page.location_link }}">{{ page.location }}</a></h6>
-	{% for block in page.dates %}
-	  {% with block.value as date %}
-	    <h6 class="text-secondary"><i class="fas fa-calendar"></i> {{ date.date }} <i class="fas fa-clock"></i>  {{ date.start_time }} &mdash; {{ date.end_time }}</h6>
-	  {% endwith %} 
-	{% endfor %}
-      </div>
+    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='event-intro' filterspec='width-1200' %}
     </div>
+    <hr>
+    {% for block in page.dates %}
+      {% with block.value as date %}
+	<h4 class="text-secondary"><i class="fas fa-calendar"></i> {{ date.date }} <i class="fas fa-clock"></i>  {{ date.start_time|date:'H:i' }} &mdash; {{ date.end_time|date:'H:i' }}</h4>
+      {% endwith %} 
+    {% endfor %}
+    <h4 class="text-primary"><i class="fas fa-map-marker"></i> <a href="{{ page.location_link }}">{{ page.location }}</a></h4>
+    <hr>
   </header>
 {% endblock %}
 
 {% block page-content-main-article %}
   <article>
-    <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ block.value.alt_text }}">
-      <b> <figcaption class="figure-caption">{{ block.value.title }}</figcaption> </b>
-      <i> <figcaption class="figure-caption">{{ block.value.caption }}</figcaption> </i>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
-    </section>
+    {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
+  <hr>
 {% endblock %}
 
 {% block page-content-aside-slot-2-order %}order-1{% endblock %}
@@ -93,13 +66,13 @@
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><strong><i class="fas fa-calendar"></i> Published:</strong> {{ page.first_published_at }}</small>
+	{% page_date_published page %}
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-	{% if page.latest_revision_created_at %}
-	  <small><strong><i class="fas fa-calendar-alt"></i> Revised:</strong> {{ page.latest_revision_created_at }}</small>
-	{% endif %}
-      </li>
+      {% if page.latest_revision_created_at %}
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+	  {% page_date_revised page %}
+	</li>
+      {% endif %}
     </ul>
   </section>
 {% endblock page-content-aside-slot-3 %}

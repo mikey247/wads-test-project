@@ -1,0 +1,8 @@
+{% load social_share %}
+<div class="my-3">
+  {% post_to_facebook page.url_path %}
+  {% post_to_twitter 'Article from VR@Manchester: {{ page.title }}.' page.url_path %}
+  {% post_to_linkedin page.url_path %}
+  {% post_to_reddit 'Article from VR@Manchester: {{ page.title }}.' page.url_path %}
+  {% send_email 'Article from VR@Manchester' page.title page.url_path %}
+</div>
