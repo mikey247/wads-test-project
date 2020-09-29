@@ -1,4 +1,4 @@
 # Additional packages as required for PRODUCTION mode
-#elasticsearch==6.4.0
+django-pg-copy==0.3.0
 psycopg2==2.8.5
 redis==3.5.3
