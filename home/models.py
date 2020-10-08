@@ -36,7 +36,7 @@ class HomePage(Page):
 
     # meta fields
     #   tags - inherited
-    #   search_desc inherited
+    #   search_description inherited
 
     # promote fields
     #   slug - inherited
@@ -84,6 +84,11 @@ class HomePage(Page):
         validators=[MinValueValidator(0)]
     )
 
+    splash_height = models.IntegerField(
+        default='50',
+        validators=[MinValueValidator(10)]
+    )
+    
     # inset fields
     
     inset_content = StreamField(
@@ -139,9 +144,23 @@ class HomePage(Page):
     ]
 
     api_fields = [
-        'splash_content',
         'intro',
         'body',
+        'search_description',
+        'splash_image',
+        'splash_content',
+        'splash_text_align',
+        'splash_text_colour',
+        'splash_bg_colour',
+        'splash_border_radius',
+        'splash_height',
+        'inset_content',
+        'inset_text_align',
+        'inset_text_colour',
+        'inset_bg_colour',
+        'inset_border_radius',
+        'show_in_menus',
+        'display_title',
     ]
 
     # admin panels
@@ -174,6 +193,9 @@ class HomePage(Page):
             FieldRowPanel([
                 FieldPanel('splash_bg_colour'),
                 FieldPanel('splash_border_radius'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('splash_height'),
             ]),
         ], heading=_('Splash Settings')),
     ]
@@ -225,6 +247,6 @@ class HomePage(Page):
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
-    
+    # restrict HomePage model to being a HomePage ONLY
     
     parent_page_types = ['wagtailcore.Page']
