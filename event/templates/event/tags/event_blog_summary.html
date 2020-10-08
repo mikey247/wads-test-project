@@ -72,7 +72,9 @@
 	{% endif %}
       {% endif %}
       <hr>
-      <p class="my-3"><a href="{% pageurl event %}">View all the details and register <i class="fa fa-arrow-circle-right"></i></a></p>
+      <div class="my-3">
+	<p><a href="{% pageurl event %}">{% include_block event.event_type with view="readmore" %}</a></p>
+      </div>
     </div>
   </div>
 </div>  
