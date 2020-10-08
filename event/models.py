@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -107,18 +107,18 @@ class EventIndexPage(Page):
     display_title = models.BooleanField(
         default=True, 
         verbose_name='Display Title'
-        )
+    )
     
     display_intro = models.BooleanField(
         default=False, 
         verbose_name='Display Intro'
-        )
+    )
 
     no_listing_text = RichTextField(
         blank=True,
-        verbose_name='No Event Text',      
-        help_text='Text to display when there are no events listed.',
-        )
+        verbose_name='No Listing Text',      
+        help_text='Warning text to display when there are no events that can be listed.',
+    )
 
     
     def get_context(self, request):
@@ -195,14 +195,17 @@ class EventIndexPage(Page):
     ]
 
     settings_tab_panel = [
-        FieldPanel('per_page'),
-        FieldPanel('events_date_filter'),
-        FieldPanel('events_date_order'),
-        PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+        MultiFieldPanel([
+            FieldPanel('no_listing_text'),
+            FieldPanel('per_page'),
+            FieldPanel('events_date_filter'),
+            FieldPanel('events_date_order'),
+            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+        ], heading='Listing Display Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
-        ], heading='Options'),
+        ], heading='Page Options'),
     ]
 
     publish_tab_panel = [
@@ -217,6 +220,10 @@ class EventIndexPage(Page):
         ObjectList(publish_tab_panel, heading='Publish'),
     ])
 
+    # restrict page types that can lie under an EventIndexPage
+    subpage_types = ['event.EventPage', 'event.EventIndexPage']
+
+    
 
 class EventDateTimeBlock(blocks.StructBlock):
     """Documentation for EventDateTimeBlock
@@ -542,6 +549,8 @@ class EventPage(SitePage):
 
     base_form_class = EventPageForm
 
+    # restrict page types that can lie under an EventPage
+    subpage_types = ['article.ArticlePage']
     parent_page_types = ['event.EventIndexPage']
     
     # get_context:
