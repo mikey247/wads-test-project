@@ -18,10 +18,13 @@
     <hr>
     {% for block in page.dates %}
       {% with block.value as date %}
-	<h4 class="text-secondary"><i class="fas fa-calendar"></i> {{ date.date }} <i class="fas fa-clock"></i>  {{ date.start_time|date:'H:i' }} &mdash; {{ date.end_time|date:'H:i' }}</h4>
+	<h4><i class="fas fa-calendar"></i> {{ date.date }} <i class="fas fa-clock"></i>  {{ date.start_time|date:'H:i' }} &mdash; {{ date.end_time|date:'H:i' }}</h4>
       {% endwith %} 
     {% endfor %}
-    <h4 class="text-primary"><i class="fas fa-map-marker"></i> <a href="{{ page.location_link }}">{{ page.location }}</a></h4>
+    <h4>
+      {% if page.location_link %}<a href="{{ page.location_link }}"><i class="fas fa-map-marker"></i> {{ page.location }}</a>
+      {% else %}<i class="fas fa-map-marker"></i> {{ page.location }}{% endif %}
+    </h4>
     <hr>
   </header>
 {% endblock %}
@@ -77,13 +80,24 @@
   </section>
 {% endblock page-content-aside-slot-3 %}
 
-{% block page-content-main-footer %}
-  <footer role="tags">
-    {% if page.tags.all.count %}
+{% if page.tags.all.count %}
+  {% block page-content-main-footer-meta %}
+    <footer role="tags">
       {% taggit_list page.tags %}
-    {% endif %}
-  </footer>
+    </footer>
+  {% endblock page-content-main-footer-meta %}
+{% endif %}
 
-  <p><a href="{{ page.get_parent.url }}">Return to event index</a></p>
+{% block page-content-main-footer-social %}
+  <footer role="social">
+    {% social_share_list page %}
+  </footer>
+{% endblock page-content-main-footer-social %}
   
-{% endblock %}
+{% block page-content-main-footer-nav %}
+  <footer role="nav">
+    <div class="my-3">
+      <p><strong><a href="{{ page.get_parent.url }}"><i class="fas fa-level-up-alt"></i> Return to {{ page.get_parent.title }}</a></strong></p>
+    </div>
+  </footer>
+{% endblock page-content-main-footer-nav %}
