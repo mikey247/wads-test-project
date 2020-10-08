@@ -10,14 +10,14 @@
     <style>
       @media (max-width: 1919.98px) {
 	.page-header-background {
-	  min-height: 50vh;
+	  min-height: {% if page.splash_height %}{{ page.splash_height }}{% else %}50{% endif %}vh;
 	  background-attachment: fixed;
 	  background-image: url({{ photo.url }});
 	}
       }
       @media (min-width: 1920px) {
 	.page-header-background {
-	  min-height: 50vh;
+	  min-height: {% if page.splash_height %}{{ page.splash_height }}{% else %}50{% endif %}vh;
 	  background-attachment: fixed;
 	  background-image: url({{ photo2x.url }});
 	}
@@ -44,17 +44,19 @@
       </div>
     {% endif %}
   </div>
-  <div class="{{ self.inset_style }} {{ self.inset_bg_colour }}" style="border-radius: {{ self.inset_border_radius }}px;">
-    <div class="row p-0 m-0">
-      <div class="col-12 m-0 p-0">
-	<header class="my-4">
-	  <div id="inset" class="{{ self.inset_text_colour }} {{ self.inset_text_align }} ">
-	    {% include_block page.inset_content with pid='page-intro' filterspec='width-1200' %}
-	  </div>
-	</header>
+  {% if page.inset_content|length %}
+    <div class="{{ self.inset_style }} {{ self.inset_bg_colour }}" style="border-radius: {{ self.inset_border_radius }}px;">
+      <div class="row p-0 m-0">
+	<div class="col-12 m-0 p-0">
+	  <header class="my-4">
+	    <div id="inset" class="{{ self.inset_text_colour }} {{ self.inset_text_align }} ">
+	      {% include_block page.inset_content with pid='page-intro' filterspec='width-1200' %}
+	    </div>
+	  </header>
+	</div>
       </div>
     </div>
-  </div>
+  {% endif %}
 {% endblock page-head %}
 
 {% block page-content-main-header %}
