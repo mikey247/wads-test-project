@@ -452,6 +452,11 @@ class ArticlePage(SitePage):
         validators=[MinValueValidator(0)]
     )
 
+    splash_height = models.IntegerField(
+        default='50',
+        validators=[MinValueValidator(10)]
+    )
+    
     # inset fields
     
     inset_content = StreamField(
@@ -529,11 +534,22 @@ class ArticlePage(SitePage):
         'thumbnail_image',
         'intro',
         'body',
+        'search_description',
+        'show_in_menus',
         'display_title',
         'render_template',
         'splash_image',
         'splash_content',
+        'splash_text_align',
+        'splash_text_colour',
+        'splash_bg_colour',
+        'splash_border_radius',
+        'splash_height',
         'inset_content',
+        'inset_text_align',
+        'inset_text_colour',
+        'inset_bg_colour',
+        'inset_border_radius',
     ]
 
     # admin panels
@@ -568,6 +584,9 @@ class ArticlePage(SitePage):
             FieldRowPanel([
                 FieldPanel('splash_bg_colour'),
                 FieldPanel('splash_border_radius'),
+            ]),
+            FieldRowPanel([
+                FieldPanel('splash_height'),
             ]),
         ], heading=_('Splash Settings')),
     ]
@@ -619,7 +638,7 @@ class ArticlePage(SitePage):
     
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
-        ObjectList(splash_tab_panel, heading='Splash Image'),
+        ObjectList(splash_tab_panel, heading='Splash'),
         ObjectList(inset_tab_panel, heading='Inset'),
         ObjectList(promote_tab_panel, heading='Promote'),
         ObjectList(meta_tab_panel, heading='Meta'),
