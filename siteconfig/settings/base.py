@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-    'pg_copy',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,7 +63,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-#    'debug_toolbar',
     'django_extensions',
     'django_select2',
     'django_social_share',
@@ -80,9 +78,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
-#    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    
-# deprecated:   'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
