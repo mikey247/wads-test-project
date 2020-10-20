@@ -105,8 +105,8 @@ CACHES = {
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.search.backends.<POSTGRES OR ELASTICSEARCHn>',
-        'INDEX': 'wagtail',
+        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'INDEX': '<insert index name here>',
     },
 }
 
@@ -222,3 +222,9 @@ WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = False
 WAGTAIL_PASSWORD_RESET_ENABLED = False
 WAGTAILUSERS_PASSWORD_ENABLED = False
 
+DATE_FORMAT = 'dS F Y'
+TIME_FORMAT = 'H:i:s'
+DATETIME_FORMAT = 'dS F Y H:i:s'
+SHORT_DATE_FORMAT = 'd/m/y'
+SHORT_TIME_FORMAT = 'H:i'
+SHORT_DATETIME_FORMAT = 'd/m/y H:i'
