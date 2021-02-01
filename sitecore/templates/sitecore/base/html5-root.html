@@ -35,6 +35,12 @@
     <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
     
     {% block head-css %}
+      <!--Additional fonts-->
+      <!-- adds Opens Sans Font // uncomment to enable -->
+
+      <!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet"> -->
+      
       <!-- Bootswatch Themed CSS -->
       {% if settings.sitecore.SiteSettings.bootstrap_theme != 'default' %}
 	<link rel="stylesheet" type="text/css"
