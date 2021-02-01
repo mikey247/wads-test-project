@@ -14,7 +14,7 @@ BOOTSTRAP4_THEME_CHOICES = [
     (bsw_theme,'Bootswatch: '+bsw_theme) for bsw_theme in
     ["cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
      "lux", "materia", "minty", "pulse", "sandstone", "simplex", "sketchy", "slate",
-     "solar", "spacelab", "superhero", "united", "yeti",]
+     "solar", "spacelab", "superhero", "uomhum", "united", "yeti",]
 ]
 
 PYGMENTS_THEME_CHOICES = [
