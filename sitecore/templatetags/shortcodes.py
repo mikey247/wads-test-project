@@ -16,7 +16,7 @@ def handler(context, content, pargs, kwargs):
 def handler(context, content, pargs, kwargs):
     try:
         mode = html.escape(pargs[0])
-        if mode is 'block':
+        if mode == 'block':
             enable_pre = True
         else:
             enable_pre = False

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.postgres_search',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.styleguide',
     'wagtail.api.v2',
@@ -178,6 +179,8 @@ MEDIA_URL = '/media/'
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'sitecore/registration/login.html'
 WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
+
+PASSWORD_REQUIRED_TEMPLATE = 'sitecore/registration/password_required.html'
 
 AUTH_USER_MODEL = 'siteuser.User'
 

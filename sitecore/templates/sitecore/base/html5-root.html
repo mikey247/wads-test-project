@@ -24,6 +24,12 @@
       {% endif %}
     {% endblock %}
 
+    {% block head-meta-seo %}
+      <meta name="description" content="{{ settings.sitecore.SiteSettings.meta_description }}">
+      <meta name="keywords" content="{{ settings.sitecore.SiteSettings.meta_keywords }}">
+      <meta name="author" content="{{ settings.sitecore.SiteSettings.meta_author }}">
+    {% endblock head-meta-seo %}
+	
     {% block head-cookie-consent %}
       <link rel="stylesheet" type="text/css" href="{% static 'sitecore/cookieconsent/css/cookieconsent.min.css' %}" />
     {% endblock %}
