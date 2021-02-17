@@ -13,70 +13,15 @@ For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.
     apt install libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
     apt install automake libtool libffi-dev curl git tmux gettext
     apt install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6 // or closest version
-    apt install openjdk-8-jre
-    apt install elasticsearch
     apt install redis-server
     apt install python3-yaml libyaml-dev
 
-**Note: Java required for elasticsearch**
-
 **Note: YAML required if planning to use YAML format for fixtures**
-
-**Note: Specific version of elasticsearch may be required for it to work.**
 
 Optional for dev mode and testing of Django/Wagtail default database setting:
 
     apt install sqlite3
     apt install sqlitebrowser
-
-## Configure elasticsearch
-
-Create service:
-
-    update-rc.d elasticsearch defaults 95 10
-
-**Elastic Search regularly has default settings that cause the service to fail immediately. Typically it attempts to use all available memory which is subsequently not allocated by the system.**
-
-Edit `/etc/default/elasticsearch`:
-
-    START_DAEMON=true
-    ES_HEAP_SIZE=256m
-
-Edit `/etc/elasticsearch/elasticsearch.yml`:
-
-    network.bind_host: 127.0.0.1
-
-Restart service:
-
-    service elasticsearch restart
-    
-OR
-
-    systemctl restart elasticsearch.service
-
-Test service:
-
-    curl -X GET 'http://localhost:9200'
-
-Should see response similar to:
-
-```
-#!JSON
-	{
-	"status" : 200,
-	"name" : "Grandmaster",
-	"cluster_name" : "elasticsearch",
-	"version" : {
-		"number" : "1.7.2",
-		"build_hash" : "e43676b1385b8125d647f593f7202acbd816e8ec",
-		"build_timestamp" : "2015-09-14T09:49:53Z",
-		"build_snapshot" : false,
-		"lucene_version" : "4.10.4"
-	},
-	"tagline" : "You Know, for Search"
-	}
-
-```
 
 **Note: Connection refused is likely when wrong version is installed (see above).**
 	
@@ -302,7 +247,7 @@ Perform initial migration:
 
 	./manage.py migrate
 
-Superuser, elasticsearch and static commands:
+Superuser and static commands:
 
 	./manage.py createsuperuser
 		{overseer/**password**}
@@ -339,7 +284,7 @@ Go to:
 
 Need to consider:
 *	le-ssl cert renewal...
-*	elasticsearch update_index
+*	update_index
 *	session clearout
 
 ## Site Administration
@@ -363,5 +308,4 @@ You should now have a new home page.
 
 # References
 
-* https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-14-04
 * http://www.revsys.com/writings/quicktips/ssh-tunnel.html -
