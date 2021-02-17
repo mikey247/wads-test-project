@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
+    'pg_copy',
 
     'django.contrib.admin',
     'django.contrib.auth',
