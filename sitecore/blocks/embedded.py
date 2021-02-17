@@ -240,7 +240,8 @@ class CarouselSnippet(models.Model):
 class GalleryBlock(blocks.StructBlock):
     GALLERY_FILTERSPEC_CHOICES = [
         ("original", '3 images in a row / original image size'),
-        ("fill-300x300", '3 images in a row / 300 x 300 px'),            
+        ("fill-300x300", '3 images in a row / 300 x 300 px'),
+        ("max-600x600", '3 images in a row / 600 x 600 px'),                        
     ]
 
     gallery_type = blocks.ChoiceBlock(
