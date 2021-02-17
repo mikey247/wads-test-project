@@ -114,6 +114,24 @@ class SiteSettings(BaseSetting):
         help_text='Google Analytics Tracking ID (UA-#########-#)'
     )
 
+    meta_description = models.CharField(
+        max_length = 1024,
+        blank=True,
+        help_text='Page head meta-description field for SEO. Not visible but machine readable.'
+    )
+
+    meta_keywords = models.CharField(
+        max_length = 1024,
+        blank=True,
+        help_text='Page head meta-keywords field for SEO. Comma separated list of terms. Not visible but machine readable.'
+    )
+
+    meta_author = models.CharField(
+        max_length = 1024,
+        blank=True,
+        help_text='Page head meta-author field for SEO. Comma separated list of names and organisations. Not visible but machine readable.'
+    )
+
     # create the panels
 
     branding_tab_panel = [
@@ -137,6 +155,9 @@ class SiteSettings(BaseSetting):
 
     analytics_tab_panel = [
         FieldPanel('ga_tracking_id'),
+        FieldPanel('meta_description'),
+        FieldPanel('meta_keywords'),
+        FieldPanel('meta_author'),
     ]
 
     social_tab_panel = [
