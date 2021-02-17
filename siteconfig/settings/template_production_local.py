@@ -228,3 +228,13 @@ DATETIME_FORMAT = 'dS F Y H:i:s'
 SHORT_DATE_FORMAT = 'd/m/y'
 SHORT_TIME_FORMAT = 'H:i'
 SHORT_DATETIME_FORMAT = 'd/m/y H:i'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = WAGTAIL_SITE_NAME + '<no-reply@manchester.ac.uk>'
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '<INSERT SECRET KEY HERE>'

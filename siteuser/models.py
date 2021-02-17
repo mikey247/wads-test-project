@@ -9,4 +9,4 @@ class User(AbstractUser):
     job_title = models.CharField(verbose_name='job_title', max_length=255)
     country = models.CharField(verbose_name='country', max_length=255)
     twitter = models.CharField(verbose_name='twitter', max_length=128)
-    
+    receive_submission_notify_email = models.BooleanField(verbose_name='Receive Notifications of Submissions', default=False)
