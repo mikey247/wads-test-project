@@ -180,6 +180,8 @@ MEDIA_URL = '/media/'
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'sitecore/registration/login.html'
 WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
 
+PASSWORD_REQUIRED_TEMPLATE = 'sitecore/registration/password_required.html'
+
 AUTH_USER_MODEL = 'siteuser.User'
 
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
