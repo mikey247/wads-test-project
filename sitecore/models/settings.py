@@ -12,6 +12,41 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from sitecore import constants
 
+from siteconfig.settings.local import DEFAULT_FROM_EMAIL
+
+
+@register_setting(icon = 'mail')
+class EmailSettings(BaseSetting):
+
+        def get_context(self, request):
+            context = super(EmailSettings, self).get_context(request)
+            context['site'] = Site.find_for_request(request)
+            return context
+
+        class Meta:
+            verbose_name = 'Email Settings'
+
+        from_email = models.CharField(
+            default=DEFAULT_FROM_EMAIL,
+            help_text='The email you want to use to send the emails. Leave as default if you haven\'t set-up a shared mailbox',
+            max_length=512
+        )
+
+        # Approved Email
+
+        approval_email_subject = models.CharField(
+            max_length = 256,
+            blank=True,
+            verbose_name='Approval Email - Subject Header',
+            help_text='Subject header to send an email.'
+        )
+
+        approval_email_content = models.TextField(
+            blank=True,
+            verbose_name= 'Approval Email - Content',
+            help_text='Email content to send to users.'
+        )
+        
 
 @register_setting
 class SiteSettings(BaseSetting):

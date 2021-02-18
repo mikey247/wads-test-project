@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
+    'pg_copy',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -187,6 +188,6 @@ AUTH_USER_MODEL = 'siteuser.User'
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
 WAGTAILIMAGES_IMAGE_MODEL = 'captioned_images.CaptionImage'
-WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter']
+WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'receive_submission_notify_email']
 
 LOGIN_REDIRECT_URL = '/'
