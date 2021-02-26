@@ -46,7 +46,7 @@ class HomePage(Page):
     # splash fields
     
     splash_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

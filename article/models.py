@@ -388,7 +388,7 @@ class ArticlePage(SitePage):
     #   show_in_menus = inherited
     
     article_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -403,7 +403,7 @@ class ArticlePage(SitePage):
     )
     
     thumbnail_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -414,7 +414,7 @@ class ArticlePage(SitePage):
     # splash fields
     
     splash_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
