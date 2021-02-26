@@ -80,7 +80,7 @@ class SiteSettings(BaseSetting):
     )
 
     brand_logo = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
