@@ -28,8 +28,7 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
-    'captioned_images',
-
+    
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -75,7 +74,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -187,7 +185,7 @@ AUTH_USER_MODEL = 'siteuser.User'
 
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
-WAGTAILIMAGES_IMAGE_MODEL = 'captioned_images.CaptionImage'
+WAGTAILIMAGES_IMAGE_MODEL = 'sitecore.SiteImage'
 WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'receive_submission_notify_email']
 
 LOGIN_REDIRECT_URL = '/'

@@ -3,8 +3,8 @@ from django.db import models
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
 # Create your models here.
 
-
-class CaptionImage(AbstractImage):
+# previously captioned_images app
+class SiteImage(AbstractImage):
     # Add any extra fields to image here
 
     # eg. To add a caption field:
@@ -29,7 +29,7 @@ class CaptionImage(AbstractImage):
 
 
 class CustomRendition(AbstractRendition):
-    image = models.ForeignKey(CaptionImage, on_delete=models.CASCADE, related_name='renditions')
+    image = models.ForeignKey(SiteImage, on_delete=models.CASCADE, related_name='renditions')
 
     class Meta:
         unique_together = (

@@ -97,7 +97,7 @@ class EventIndexPage(Page):
     )
 
     listing_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -442,7 +442,7 @@ class EventPage(SitePage):
     # )
 
     event_image = models.ForeignKey(
-        'captioned_images.CaptionImage',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
