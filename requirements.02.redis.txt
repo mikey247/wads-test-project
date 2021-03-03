@@ -1,0 +1,4 @@
+# Optional redis cache packages for Django 3.1.7 and wagtail 2.12.2 as of 20210302
+
+django-redis==4.12.1
+redis==3.5.3
