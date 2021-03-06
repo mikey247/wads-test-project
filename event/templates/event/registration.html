@@ -9,6 +9,7 @@
   {% else %}
     <span class="badge badge-success">{{ self.open_text }}</span>
   {% endif %}
+{% elif view == "readmore" %}View all the details{% if not self.closed %} and register{% endif %} <i class="fa fa-arrow-circle-right"></i>
 {% else %}
   <section>
     <ul class="list-group">
@@ -64,7 +65,7 @@
       <strong><i class="fas fa-user-clock"></i> Closing Date</strong>
 	</li>
 	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <h3><i class="fas fa-calendar"></i> {{ self.closing_date }}</h3>
+	  <h4><i class="fas fa-calendar"></i> {{ self.closing_date }}</h4>
 	</li>
 	{% if self.is_not_yet_open %}
 	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info"><strong>{{ self.not_yet_open_text }}</strong></li>

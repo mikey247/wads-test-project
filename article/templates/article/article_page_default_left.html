@@ -1,86 +1,70 @@
-{% extends "sitecore/base_default.html" %}
-{% load shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load article_tags rendition site_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block body-class %}article-page{% endblock %}
 
 {% block page-content-main-header %}
   <header>
     {% if self.article_image %}
-      {% if self.article_image_resize == 'fill-1200x300' %}
-	{% image self.article_image fill-1200x300 as photo %}
-      {% elif self.article_image_resize == 'fill-1200x150' %}
-	{% image self.article_image fill-1200x150 as photo %}
-      {% else %}
-	{% image self.article_image max-1200x300 as photo %}
-      {% endif %}
-      
+      {% rendition self.article_image self.article_image_filterspec as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ photo.alt }}" class="img-fluid rounded mx-auto d-block" >
+	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
     <div class="lead mb-4">
-      {% for block in page.intro %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.intro with pid='page-intro' filterspec='width-1200' %}
     </div>
+    <hr>
   </header>
 {% endblock %}
 
 {% block page-content-main-article %}
   <article>
-    {% for block in page.body %}
-      <div class="mb-4">
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      </div>
-    {% endfor %}
+    {% include_block page.body with pid='page-body' filterspec='width-1200' %}
   </article>
+  <hr>
 {% endblock %}
 
 {% block page-content-aside-slot-1 %}
   <section>
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	<strong>Article Details</strong>
+	<strong><i class="fas fa-info-circle"></i> Article Details</strong>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
 	{% page_author page %}
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	<small><span class="text-secondary"><i class="fas fa-calendar"></i> Published:</span> {{ page.first_published_at }}</small>
+	{% page_date_published page %}
       </li>
       {% if page.latest_revision_created_at %}
 	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <small><span class="text-secondary"><i class="fas fa-calendar-alt"></i> Revised:</span> {{ page.latest_revision_created_at }}</small>
+	  {% page_date_revised page %}
 	</li>
       {% endif %}
     </ul>
   </section>
 {% endblock %}
 
-{% block page-content-main-footer %}
-  <footer role="tags">
-    {% if page.tags.all.count %}
+{% if page.tags.all.count %}
+  {% block page-content-main-footer-meta %}
+    <footer role="tags">
       {% taggit_list page.tags %}
-    {% endif %}
-  </footer>
+    </footer>
+  {% endblock page-content-main-footer-meta %}
+{% endif %}
 
-  <p><a href="{{ page.get_parent.url }}">Return to article index</a></p>
+{% block page-content-main-footer-social %}
+  <footer role="social">
+    {% social_share_list page %}
+  </footer>
+{% endblock page-content-main-footer-social %}
   
-{% endblock %}
+{% block page-content-main-footer-nav %}
+  <footer role="nav">
+    <div class="my-3">
+      <p><strong><a href="{{ page.get_parent.url }}"><i class="fas fa-level-up-alt"></i> Return to {{ page.get_parent.title }}</a></strong></p>
+    </div>
+  </footer>
+{% endblock page-content-main-footer-nav %}

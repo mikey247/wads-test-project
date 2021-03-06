@@ -1,0 +1,31 @@
+{% extends "sitecore/base/default.html" %}
+{% load article_tags rendition wagtailcore_tags wagtailimages_tags site_tags %}
+
+{% block body-class %}article-index-page{% endblock %}
+
+{% block page-content-main-header %}
+  {% if page.display_title %}
+    <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
+  {% endif %}
+  {% if page.display_intro and page.intro %}
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='article-index-intro' filterspec='width-1200' %}
+    </div>
+  {% endif %}
+{% endblock page-content-main-header %}
+
+{% block page-content-main-article %}
+  {% for post in articles_paginated %}
+    {% with post=post.specific %}
+      {% article_blog_summary post %}
+    {% endwith %}
+  {% endfor %}
+{% endblock page-content-main-article %}
+
+{% block page-content-main-footer-nav %}
+  {% if paginator_count > 1 %}
+    <footer class="my-4" role="pagination">
+      {% index_pagination articles_paginated paginator_range page.url %}  
+    </footer>
+  {% endif %}
+{% endblock page-content-main-footer-nav %}

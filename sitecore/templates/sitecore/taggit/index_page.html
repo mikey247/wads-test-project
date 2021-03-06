@@ -1,0 +1,69 @@
+{% extends "sitecore/base/default.html" %}
+{% load article_tags event_tags rendition site_tags wagtailcore_tags %}
+
+{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
+{% block page-content-main-col-size %}col-lg-12{% endblock %}
+{% block page-content-main-col-style %}px-lg-0{% endblock %} 
+{% block page-content-aside %}{% endblock %}
+
+{% block head-title %}
+  <title>{{ self.title }}</title>
+{% endblock %}
+
+{% block page-content-banner %}{% endblock %}
+
+{% block page-content-main-header %}
+  <header class="container mb-4 p-0">
+    {% if self.display_title %}
+      {% if tag_name %}
+	<h1 class="mb-2">Tag Search Results for <span class="btn btn-outline-primary disabled"><i class="fas fa-tag"></i> {{ tag_name }}</span></h1>
+      {% else %}
+	<h1 class="mb-2">Tag Cloud</h1>
+      {% endif %}
+    {% endif %}
+    {% if self.display_intro and self.intro %}
+      <div class="lead mb-4">
+	{% include_block self.intro with pid='tag-index-intro' filterspec='width-1200' %}
+      </div>
+    {% endif %}
+  </header>
+{% endblock %}
+
+{% block page-content-main-article %}
+  {% if tag_name %}
+    <article class="container m-0 p-0">
+      <p class="lead">Found total of {{ results_count }} item{{results_count|pluralize}}{% if paginator_count > 1 %} and showing {{results_paginated|length}} item{{results_paginated|length|pluralize}} on page {{ results_paginated.number }} of {{ paginator_count }}{% endif %}</p>
+      {% for result in results_paginated %}
+	{% with result=result.specific %}
+	  <div class="row p-0 m-0">
+	    <div class="col-12 m-0 p-0">
+	      {% if result.content_type|stringformat:'s' == 'article | article page' %}
+		{% article_blog_summary result show_taggit=True taggit_slug=tag_slug %}
+	      {% elif result.content_type|stringformat:'s' == 'event | event page' %}
+		{% event_blog_summary result show_taggit=True taggit_slug=tag_slug %}
+	      {% endif %}
+	    </div>
+	  </div>
+	{% endwith %}
+      {% empty %}
+	<h1 class="text-warning">No items found with that tag.</h1>
+      {% endfor %}
+    </article>
+  {% endif %}
+{% endblock %}
+
+{% block page-content-main-footer-nav %}
+  {% if paginator_count > 1 %}
+    <footer class="my-4" role="pagination">
+      {% index_pagination results_paginated paginator_range self.url %}  
+    </footer>
+  {% endif %}
+  
+  <footer class="my-3" role="tag cloud">
+    {% if tag_name %}
+      <hr>
+      <h1>Tag Cloud</h1>
+    {% endif %}
+    {% taggit_list tags show_count=True %}
+  </footer>
+{% endblock page-content-main-footer-nav %}

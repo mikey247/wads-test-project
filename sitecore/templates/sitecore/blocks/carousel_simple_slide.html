@@ -1,0 +1,34 @@
+{% load shortcodes wagtailcore_tags wagtailimages_tags sekizai_tags %}
+{% if self.apply_css_effect %}
+  {% addtoblock "head-css-dynamic" %}
+  <style>.carousel-item-{{ slide_idx }}:after { {{ self.css_effect }} }</style>
+  {% endaddtoblock %}
+{% endif %}
+{% image self.image fill-1200x400 as photo %}
+<img class="d-block w-100" src="{{ photo.url }}" alt="{{ self.image.alt_text }}">
+<div class="carousel-caption">
+  {% if self.title %}
+    {% include_block self.title with colour=self.title_colour only %}   
+  {% endif %}
+  <div class="d-none d-md-block">
+    {% if self.body %}
+      <span class="{{ self.body_colour }}">
+	{% markdown_shortcodes self.body|safe %}
+      </span>
+    {% endif %}
+  </div>
+  {% with self.link.resolve_link as link %}
+    {% if link.url %}
+      <div class="d-none d-md-block">
+	<a href="{{ link.url }}" class="btn {{ self.link_bg_colour }} {{ self.link_text_colour }} {{ self.link_border_colour }} btn-sm">
+	  {{ link.title }} <i class="{{ link.icon }}"></i>
+	</a>
+      </div>
+      <div class="d-md-none">
+	<a href="{{ link.url }}" class="btn {{ self.link_bg_colour }} {{ self.link_text_colour }} {{ self.link_border_colour }} btn-sm">
+	  {{ link.short }} <i class="{{ link.icon }}"></i>
+	</a>
+      </div>
+    {% endif %}
+  {% endwith %}
+</div>

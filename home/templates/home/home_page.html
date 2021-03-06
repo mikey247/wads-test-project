@@ -1,40 +1,46 @@
-{% extends "sitecore/base_default.html" %}
-{% load shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
+{% extends "sitecore/base/default.html" %}
+{% load rendition shortcodes article_tags site_tags static wagtailcore_tags wagtailimages_tags %}
 
 {% block head-title %}
   <title>{{ self.title }}</title>
 {% endblock %}
 
-{% block body-class %}article-splash{% endblock %}
+{% block body-class %}home-splash{% endblock %}
 
-{% block navbar %}
-  {% get_site_root as site_root %}
-  {% top_menu parent=site_root transparent=False calling_page=self  %}
-{% endblock %}
+{% if self.splash_image %}
+  {% block head-css-extension %}
+    {% rendition self.splash_image 'width-1920' as photo %}
+    {% rendition self.splash_image 'width-3840' as photo2x %}
+    <style>
+      @media (max-width: 1919.98px) {
+	.page-header-background {
+	  min-height: {% if page.splash_height %}{{ page.splash_height }}{% else %}50{% endif %}vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo.url }});
+	}
+      }
+      @media (min-width: 1920px) {
+	.page-header-background {
+	  min-height: {% if page.splash_height %}{{ page.splash_height }}{% else %}50{% endif %}vh;
+	  background-attachment: fixed;
+	  background-image: url({{ photo2x.url }});
+	}
+      }
+    </style>
+  {% endblock %}
+{% endif %}
 
 {% block page-head %}
   <div class="wrapper">
     {% if self.splash_image %}
-      {% image self.splash_image fill-1600x600 as photo %}
-      <div class="page-header parallax-window" data-parallax="scroll" data-image-src="{{ photo.url }}" style="background: transparent;">
-	<div class="container">
-	  <div class="row">
-	    <div class="col-lg-8 p-0 ml-auto mr-auto">
-	      <div
-		  id="splash"
-		  class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
-		  style="border-radius: {{ self.splash_border_radius }}px!important;">
-		  {% for block in page.splash_content %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		  {% endfor %}
+      <div class="page-header page-header-background">
+	<div class="container p-0 my-0">
+	  <div class="row page-header-row m-0">
+	    <div class="col-lg-12 p-0 mx-auto">
+	      <div id="splash"
+		   class="{{ self.splash_text_align }} {{ self.splash_text_colour }} {{ self.splash_bg_colour }} splash-shadow"
+		   style="border-radius: {{ self.splash_border_radius }}px!important;">
+		{% include_block page.splash_content with pid='splash-content' filterspec='width-1200' %}
 	      </div>
 	    </div>
 	  </div>
@@ -42,129 +48,40 @@
       </div>
     {% endif %}
   </div>
-  <div class="main main-raised">
-    <section>
-      <div class="container">
-	<div class="row">
-	  <div class="col">
-	    <header class="my-4">
-	      <div id="intro" class="lead {{ self.intro_text_align }} {{ self.intro_text_colour }}">
-		{% for block in page.intro %}
-		  {% if block.block_type == 'image' %}
-		    {% image block.value width-1200 as photo %}
-		    <figure class="figure">
-		      <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-		      <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-		    </figure>
-		  {% else %}
-		    {% include_block block %}
-		  {% endif %}
-		{% endfor %}
-	      </div>
-	    </header>
-	  </div>
+  {% if page.inset_content|length %}
+    <div class="{{ self.inset_style }} {{ self.inset_bg_colour }}" style="border-radius: {{ self.inset_border_radius }}px;">
+      <div class="row">
+	<div class="col">
+	  <header class="my-4">
+	    <div id="inset" class="{{ self.inset_text_colour }} {{ self.inset_text_align }} ">
+	      {% include_block page.inset_content with pid='page-intro' filterspec='width-1200' %}
+	    </div>
+	  </header>
 	</div>
       </div>
-    </section>
-  </div>
+    </div>
+  {% endif %}
 {% endblock page-head %}
 
+
 {% block page-content-main-header %}
-  {% if self.display_title %}
-    <h1>{{ self.title }}</h1>
-  {% endif %}
+  <header>
+    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
+    <div class="lead mb-4">
+      {% include_block self.intro with pid='page-intro' filterspec='width-1200' %}
+    </div>
+    <hr>
+  </header>
 {% endblock %}
 
 {% block page-content-main-article %}
   <article>
     <section class="my-4">
-      {% for block in page.body %}
-	{% if block.block_type == 'image' %}
-	  {% image block.value width-1200 as photo %}
-	  <figure class="figure">
-	    <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ photo.alt }}">
-	    <figcaption class="figure-caption">{{ photo.alt }}</figcaption>
-	  </figure>
-	{% else %}
-	  {% include_block block %}
-	{% endif %}
-      {% endfor %}
+      {% include_block page.body with pid='page-body' filterspec='width-1200' %}
     </section>
   </article>
 {% endblock %}
 
-{% block page-content-main-col-size %}col-lg-8{% endblock %}
-{% block page-content-aside-col-size %}col-lg-4{% endblock %}
-{% block page-content-main-col-order %}order-1 order-lg-1{% endblock %}
-{% block page-content-aside-col-order %}order-2 order-lg-2{% endblock %}
-
-{% block page-content-aside-slot-1 %}
-<a class="twitter-timeline" data-lang="en" data-height="1000" href="https://twitter.com/UoM_eResearch?ref_src=twsrc%5Etfw">Tweets by UoM_eResearch</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-{% endblock %}
-
-{% block head-css-extension %}
-  <style>
-    body {
-      padding-top: 0!important;
-    }
-    
-    .page-header {
-      height: 75vh;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      background-position: 50%;
-      background-size: cover;
-    }
-    
-    nav.navbar-transparent {
-      transition: 1000ms ease;
-      background-color: transparent!important;
-    }
-
-    nav.navbar-opaque {
-      transition: 1000ms ease;
-    }
-
-    .main {
-      background: #fff;
-      position: relative;
-      z-index: 3;
-    }
-
-    .main-raised {
-      margin: -60px 30px 0;
-      border-radius: 6px;
-      box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
-    }
-
-    div.splash-shadow h1 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h2 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h3 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h4 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h5 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-    div.splash-shadow h6 {
-      text-shadow: 2px 2px #1c3577b8;
-    }
-  </style>
-{% endblock %}
-
-{% block body-js-extension %}
-  <script src="{% static 'sitecore/parallax.js-1.5.0/parallax.min.js' %}"></script>
-  <script>
-    //document.getElementById("splash").querySelectorAll("h1,h2,h3,h4,h5,h6").forEach(H => H.setAttribute("class", "text-white"));
-  </script>
-{% endblock %}
+{% block page-content-main-col-size %}col-lg-12{% endblock %}
+{% block page-content-main-col-style %}px-lg-0{% endblock %}
+{% block page-content-aside %}{% endblock %}

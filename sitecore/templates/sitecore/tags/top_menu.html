@@ -1,0 +1,69 @@
+{% load site_tags static wagtailcore_tags wagtailimages_tags %}
+
+<div class="container p-0 my-4 h-100">
+  <div class="brand-content row p-0 m-0 h-100 justify-content-center align-items-center">
+    <div class="brand-logo col-6 col-lg-3 order-1 order-lg-1 pl-3 pl-lg-0 mb-4 mb-lg-0">
+      
+      {% if navcfg.brand_link and navcfg.brand_logo %}
+        <a href="{{navcfg.brand_link}}"> 
+          {% image navcfg.brand_logo max-169x72 as photo %}
+          <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
+        </a>
+      {% else %}
+        {% image navcfg.brand_logo max-169x72 as photo %}
+        <img src="{{ photo.url }}" alt="{{ navcfg.brand_logo.alt_text }}">
+      {% endif %}
+      
+    </div>
+
+    <div class="brand-name col-12 col-lg-6 order-3 order-lg-2">
+      {% if navcfg.brand_name %}<h1>{{ navcfg.brand_name }}</h1>{% endif %}
+    </div>
+
+    <div class="brand-search-field col-6 col-lg-3 order-2 order-lg-3 pr-3 pr-lg-0 mb-4 mb-lg-0">
+      <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: column; align-items: flex-end;" action="{% slugurl 'search' %}" method="get">
+	<input type="text" name="query" {% if search_query %} value="{{ search_query }}"{% endif %}
+	       class="form-control mr-sm-0" style="text-align: right"
+	       placeholder="Search" aria-label="Search">
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<div class="mt-4">
+  <nav
+      {% if navcfg.transparent is True %}class="navbar nav-fill navbar-expand-lg navbar-dark {{ navcfg.bg }} navbar-transparent"
+      {% else %}class="navbar navbar-expand-lg {{ navcfg.textmode }} {{ navcfg.bg }}"
+      {% endif %}>
+    
+    <div class="{{ navcfg.outerclass }} p-0">
+      <a style="width: auto" class="navbar-brand pl-3 pl-lg-0" href="{% pageurl parent %}" title="{{ parent.title }}">
+        {% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% endif %}
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+	<span class="sr-only">Toggle navigation</span>
+	<span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item{% if path == '/' %} active{% endif %}">
+            <a class="nav-link" href="{% pageurl parent %}" title="{{ parent.title }}">Home{% if path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
+          </li>
+          {% for menuitem in menuitems %}
+            <li class="nav-item{% if menuitem.show_dropdown %} dropdown{% endif %}{% if menuitem.active %} active{% endif %}">
+              {% if menuitem.show_dropdown %}
+		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ forloop.counter0 }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menuitem.title }}</a>
+		{% top_menu_children parent=menuitem menu_id="navbarDropdown{{ forloop.counter0 }}" %}
+              {% else %}
+		<a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}{% if menuitem.active %} <span class="sr-only">(current)</span>{% endif %}</a>
+              {% endif %}
+	    </li>       
+	  {% endfor %}
+	</ul>
+      </div>
+    </div>
+    
+  </nav>
+</div>

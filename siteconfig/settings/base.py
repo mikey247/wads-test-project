@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
-
+    
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.postgres_search',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.styleguide',
     'wagtail.api.v2',
@@ -54,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-    'wagtailimporter',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,9 +63,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-#    'debug_toolbar',
     'django_extensions',
     'django_select2',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -73,14 +73,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
-#    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    
-    'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
@@ -146,7 +142,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -179,11 +175,16 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'registration/login.html'
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'sitecore/registration/login.html'
 WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
+
+PASSWORD_REQUIRED_TEMPLATE = 'sitecore/registration/password_required.html'
 
 AUTH_USER_MODEL = 'siteuser.User'
 
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
-WAGTAIL_USER_CUSTOM_FIELDS = ['country', 'twitter']
+WAGTAILIMAGES_IMAGE_MODEL = 'sitecore.SiteImage'
+WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'receive_submission_notify_email']
+
+LOGIN_REDIRECT_URL = '/'

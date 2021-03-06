@@ -14,7 +14,7 @@ BOOTSTRAP4_THEME_CHOICES = [
     (bsw_theme,'Bootswatch: '+bsw_theme) for bsw_theme in
     ["cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
      "lux", "materia", "minty", "pulse", "sandstone", "simplex", "sketchy", "slate",
-     "solar", "spacelab", "superhero", "united", "yeti",]
+     "solar", "spacelab", "superhero", "uomhum", "united", "yeti",]
 ]
 
 PYGMENTS_THEME_CHOICES = [
@@ -126,4 +126,17 @@ BOOTSTRAP4_BUTTON_SIZE_CHOICES = (
     ('', 'Normal'),
     ('btn-sm', 'Small'),
     ('btn-lg', 'Large'),
+)
+
+BOOTSTRAP4_TWOCOL_RATIO_CHOICES = (
+    ('1:1', '1:1'),
+    ('2:1', '2:1'),
+    ('1:2', '1:2'),
+    ('3:1', '3:1'),
+    ('1:3', '1:3'),
+)
+
+INSET_STYLE_CLASS_CHOICES = (
+    ('container inset inset-raised', 'Standard Raised Inset'),
+    ('container-fluid inset inset-raised', 'Wide Raised Inset'),
 )

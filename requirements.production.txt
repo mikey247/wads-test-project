@@ -1,3 +1,0 @@
-# Additional packages as required for PRODUCTION mode
-psycopg2==2.8.4
-redis==3.2.0

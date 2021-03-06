@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -26,9 +26,17 @@ from taggit.models import TaggedItemBase
 
 
 class EventIndexPage(Page):
-    desc = RichTextField(blank=True)
+    
+    intro = StreamField(
+        sitecore_blocks.CoreBlock,
+        validators=[ValidateCoreBlocks],
+        blank=True,
+        help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
+        verbose_name='Intro'
+    )
     
     per_page = models.PositiveSmallIntegerField(default=10,
+                                                verbose_name='Events per Page',
                                                 validators=[
                                                     MinValueValidator(1),
                                                     MaxValueValidator(100)
@@ -89,30 +97,33 @@ class EventIndexPage(Page):
     )
 
     listing_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
 
-    display_title = models.BooleanField(default=True)
-    display_desc = models.BooleanField(default=False)
+    display_title = models.BooleanField(
+        default=True, 
+        verbose_name='Display Title'
+    )
+    
+    display_intro = models.BooleanField(
+        default=False, 
+        verbose_name='Display Intro'
+    )
 
-    no_listing_text = RichTextField(blank=True)
+    no_listing_text = RichTextField(
+        blank=True,
+        verbose_name='No Listing Text',      
+        help_text='Warning text to display when there are no events that can be listed.',
+    )
 
     
     def get_context(self, request):
         # Update content to include only published events; ordered by reverse-date
-
-        # TODO: filter on current/future events
-        # TODO: Build separate past event list
-        
         context = super(EventIndexPage, self).get_context(request)
-        # doesn't work:
-        # all_events = self.get_children().live().specific().order_by('-end_date')
-        # does work:
-        # all_events = EventPage.objects.live().child_of(self).order_by('-start_date')
 
         event_order = self.events_date_order
         today = datetime.date.today()
@@ -122,48 +133,96 @@ class EventIndexPage(Page):
             index_root = self
             
         if self.events_date_filter == self.EVENTS_FILTER_CURRENT_AND_FUTURE:
-            all_events = EventPage.objects.live().child_of(index_root).filter(end_date__gte=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(end_date__gte=today).order_by(event_order)
 
         elif self.events_date_filter == self.EVENTS_FILTER_FUTURE:
-            all_events = EventPage.objects.live().child_of(index_root).filter(start_date__gt=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(start_date__gt=today).order_by(event_order)
             
         elif self.events_date_filter == self.EVENTS_FILTER_PAST_AND_CURRENT:
-            all_events = EventPage.objects.live().child_of(index_root).filter(start_date__lte=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(start_date__lte=today).order_by(event_order)
 
         else: # self.EVENTS_FILTER_PAST
-            all_events = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
+            events_all = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
 
+        events_count = len(events_all)
 
-        paginator = Paginator(all_events, self.per_page) 
-
-        page = request.GET.get('page')
+        # get the paginator obj and the current page number
+        paginator = Paginator(events_all, self.per_page) 
+        page_num = request.GET.get('page')
+        page_index = int(page_num)-1 if page_num is not None else 0
+        
+        # get list of events for the desired page
         try:
-            events = paginator.page(page)
+            events_paginated = paginator.page(page_num)
         except PageNotAnInteger:
-            events = paginator.page(1)
+            events_paginated = paginator.page(1)
         except EmptyPage:
-            events = paginator.page(paginator.num_pages)
+            events_paginated = paginator.page(paginator.num_pages)
 
-        context['events'] = events
+        # limit page_range of the paginator (hard-coded to 3 pages both ways)
+        page_index_max = len(paginator.page_range)
+        page_index_start = max(0, page_index - 3)
+        page_index_end = min(page_index_max, page_index_start + 7)
+        
+        # build new paginator ange from calculated range but also include first/last pages if not in range
+        context['paginator_range'] = []
+        if page_index_start > 0:
+            context['paginator_range'].append(1)
+        context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
+        if page_index_end < page_index_max:
+            context['paginator_range'].append(page_index_max)
+            
+        context['paginator_count'] = paginator.num_pages
+        context['events_count'] = events_count
+        context['events_paginated'] = events_paginated
 
         return context
 
-    content_panels = Page.content_panels + [
-        FieldPanel('desc', classname="full"),
-        FieldPanel('per_page'),
-        FieldPanel('events_date_filter'),
-        FieldPanel('events_date_order'),
-        PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+    
+    content_tab_panel = [
+        FieldPanel('title'),
+        ImageChooserPanel('listing_image'),
+        StreamFieldPanel('intro'),
     ]
 
-    promote_panels = Page.promote_panels + [
-        ImageChooserPanel('listing_image'),
+    promote_tab_panel = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('search_description'),
+        MultiFieldPanel([
+            FieldPanel('show_in_menus'),
+        ], heading=_('Options')),
+    ]
+
+    settings_tab_panel = [
+        MultiFieldPanel([
+            FieldPanel('no_listing_text'),
+            FieldPanel('per_page'),
+            FieldPanel('events_date_filter'),
+            FieldPanel('events_date_order'),
+            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+        ], heading='Listing Display Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
-            FieldPanel('display_desc'),
-            FieldPanel('no_listing_text', classname="full"),
-        ], heading='Page Display Options'),
+            FieldPanel('display_intro'),
+        ], heading='Page Options'),
     ]
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
+    ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(publish_tab_panel, heading='Publish'),
+    ])
+
+    # restrict page types that can lie under an EventIndexPage
+    subpage_types = ['event.EventPage', 'event.EventIndexPage']
+
     
 
 class EventDateTimeBlock(blocks.StructBlock):
@@ -383,7 +442,7 @@ class EventPage(SitePage):
     # )
 
     event_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'sitecore.SiteImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -456,23 +515,31 @@ class EventPage(SitePage):
 
     # Admin UI panels
     
-    content_panels = SitePage.content_panels + [
+    content_tab_panel = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
+            ImageChooserPanel('event_image'),
             FieldPanel('intro'),
             FieldPanel('location'),
             FieldPanel('location_link'),
             StreamFieldPanel('dates'),
             StreamFieldPanel('event_type'),
         ], heading="Event Details"),
-        MultiFieldPanel([
             StreamFieldPanel('body')
-        ], heading="Main body (Streamfield)"),
     ]
 
-    promote_panels = SitePage.promote_panels + [
-        ImageChooserPanel('event_image'),
+    promote_tab_panel = SitePage.promote_panels
+
+    publish_tab_panel = [
+        PublishingPanel(),
+        PrivacyModalPanel(),
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_tab_panel, heading='Content'),
+        ObjectList(promote_tab_panel, heading='Promote'),
+        ObjectList(publish_tab_panel, heading='Publish'),
+    ])
 
     # base_form_class:
     # Use the override base_form_class for additional non-form model fields.
@@ -482,6 +549,8 @@ class EventPage(SitePage):
 
     base_form_class = EventPageForm
 
+    # restrict page types that can lie under an EventPage
+    subpage_types = ['article.ArticlePage']
     parent_page_types = ['event.EventIndexPage']
     
     # get_context:

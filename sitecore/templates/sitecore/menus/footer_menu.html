@@ -1,0 +1,17 @@
+{% load menu_tags %}
+<div class="base-footer">
+  {% if menu_heading %}<h4>{{ menu_heading|safe }}</h4>{% endif %}
+  {% if menu_items %}
+    <ul role="nav" class="list-unstyled">
+      {% for item in menu_items %}
+	<li class="">
+	  {% if item.href == "#" %}
+	    <span class="">{% if item.handle %}<i class="{{ item.handle }}"></i> {% endif %}{{ item.text }}</span>
+	  {% else %}
+	    <a class="text-light" href="{{ item.href }}">{% if item.handle %}<i class="{{ item.handle }}"></i> {% endif %}{{ item.text }}</a>
+	  {% endif %}   
+	</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>

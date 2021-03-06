@@ -1,6 +1,8 @@
+{% load wagtailcore_tags %}
 {% if view == "summary" %}
   {% if running %}<span class="badge badge-info">Event is currently running</span>{% endif %}
-  <span class="badge badge-primary">Open Meeting</span>
+  <span class="badge badge-secondary">Open Meeting</span>
+{% elif view == "readmore" %}View all the details <i class="fa fa-arrow-circle-right"></i>
 {% else %}
   <section>
     <ul class="list-group">

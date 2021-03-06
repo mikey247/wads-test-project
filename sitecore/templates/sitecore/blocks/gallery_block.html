@@ -1,0 +1,33 @@
+{% load rendition shortcodes article_tags site_tags wagtailcore_tags wagtailimages_tags %}
+
+
+<div class="row">
+
+    <!-- 3 in a ROW // original  -->
+  
+{% for image in self.gallery_images %}
+
+<div class="col-md-4">
+
+    {% rendition image self.gallery_type as photo %}
+
+    <figure class="figure">
+        <img src="{{ photo.url }}" class="figure-img img-fluid rounded" alt="{{ image.alt_text }}">
+       
+       {% if self.gallery_image_title == True %}
+        <b> <figcaption class="figure-caption">{{ image.title }}</figcaption> </b>
+        {% endif %}
+
+        {% if self.gallery_image_caption == True %}
+        <i> <figcaption class="figure-caption">{{ image.caption }}</figcaption> </i>
+        {% endif %}
+
+    </figure>
+    
+    </div>
+
+
+{% endfor %}
+
+
+</div>
