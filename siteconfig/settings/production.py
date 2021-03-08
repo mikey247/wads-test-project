@@ -2,14 +2,15 @@ from .base import *
 
 DEBUG = False
 
-INSTALLED_APPS += [
-    'pg_copy',
-]
-
-MIDDLEWARE += [
-]
-
 try:
     from .local import *
 except ImportError:
     pass
+
+# Add any Production ONLY apps and middleware here
+
+# INSTALLED_APPS += [
+# ]
+
+# MIDDLEWARE += [
+# ]
