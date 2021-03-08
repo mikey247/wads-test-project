@@ -21,7 +21,7 @@ class ShortcodeRichTextField(RichTextField):
         if 'validators' in kwargs:
             validators = kwargs.pop('validators')
             if validators:
-                if not ParseShortcodes in validators:
+                if ParseShortcodes not in validators:
                     validators.append(ParseShortcodes)
                 kwargs['validators'] = validators
         else:
@@ -50,7 +50,7 @@ class MarkdownShortcodeCharField(CharField):
         if 'validators' in kwargs:
             validators = kwargs.pop('validators')
             if validators:
-                if not ParseMarkdownAndShortcodes in validators:
+                if ParseMarkdownAndShortcodes not in validators:
                     validators.append(ParseMarkdownAndShortcodes)
                 kwargs['validators'] = validators
         else:
