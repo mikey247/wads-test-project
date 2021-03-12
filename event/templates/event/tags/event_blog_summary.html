@@ -53,6 +53,10 @@
       </span>
       </h4>
       <div class="my-3">
+	<h4>{% include_block event.event_type with view="summary" today_state=event.get_today_state %}</h4>
+      </div>
+      <hr>
+      <div class="my-3">
 	{% if event.search_description %}
 	  {% include_block event.search_description with pid='event-search-description' filterspec='width-1200' %}
 	{% elif event.intro != "<p></p>" %}
@@ -60,10 +64,6 @@
 	{% else %}
 	  <p class="text-warning">Page has no introductory text or search description.</p>
 	{% endif %}
-      </div>
-      <hr>
-      <div class="my-3">
-	<h4>{% include_block event.event_type with view="summary" %}</h4>
       </div>
       <hr>
       {% if show_taggit %}
