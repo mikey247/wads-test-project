@@ -481,9 +481,42 @@ class EventPage(SitePage):
 
     # Model view methods - callable in template views for EventPage and EventIndexPage - preferred over context['name']
     
-    def running(self):
+    def running_today(self):
         return (self.start_date <= datetime.date.today()) & (datetime.date.today() <= self.end_date)
 
+    # Addittional context methods - preferred in context so only called once per page view
+    
+    def get_today_state(self):
+        now_datetime = datetime.datetime.today()
+        now_date = now_datetime.date()
+        now_time = now_datetime.time()
+        if (self.start_date <= now_date) & (now_date <= self.end_date):
+            for day in self.dates:
+                if day.value['date'] == now_date:
+                    state = {
+                        'message': '',
+                        'start_time': day.value['start_time'],
+                        'end_time': day.value['end_time'],
+                        'now': now_datetime,
+                    }
+
+                    if (day.value['start_time'] <= now_time) & (now_time <= day.value['end_time']):
+                        state['message'] = "Today's event is taking place right now"
+                    elif now_datetime < (datetime.datetime.combine(day.value['date'], day.value['start_time']) - datetime.timedelta(hours=1)):
+                        state['message'] = "The event starts later today"
+                    elif now_time < day.value['start_time']:
+                        state['message'] = "Today's event starts soon"
+                    elif now_time > day.value['end_time']:
+                        if day.value['date'] < self.end_date:
+                            state['message'] = "The event has finished for today but continues tomorrow"
+                        else:
+                            state['message'] = "The event has now closed"
+
+                    return state
+        # no matching date blocks found
+        return None
+
+            
     def passed(self):
         return (self.end_date < datetime.date.today())
 
@@ -560,16 +593,8 @@ class EventPage(SitePage):
     def get_context(self, request):
         context = super(EventPage, self).get_context(request)
 
-        # LML: context['name'] entries do work but only when rendering the EventPage directly
-        # Context entries are *not* included on events resulting from the EventIndexPage queryset filters
-        # Preferred method now is to define these as view methods e.g., EventPage: def running():
-        
-        # use the extracted start/end dates and determine if they're in the same month
-        #context['in_same_month'] = (self.start_date.month == self.end_date.month) & (self.start_date.year == self.end_date.year)
+        # Add some context about the event if running today
+        context['today_state'] = self.get_today_state()
 
-        # Flag if event is running or has already taken place
-        #context['running'] = (self.start_date <= datetime.date.today()) & (datetime.date.today() <= self.end_date) 
-        #context['passed'] = (self.end_date < datetime.date.today())
-        
         return context
     

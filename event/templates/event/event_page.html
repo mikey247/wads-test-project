@@ -41,11 +41,13 @@
 {% block page-content-aside-slot-1-order %}order-3{% endblock %}
 
 {% block page-content-aside-slot-2 %}
-  {% if page.running or page.passed %}
+  {% if page.running_today or page.passed %}
     <section>
       <ul class="list-group">
-	{% if page.running %}
-	  <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">The event is currently running</li>
+	{% if page.running_today %}
+	  <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+	    {% if today_state %}{{ today_state.message }}{% endif %}
+	    </li>
 	{% elif page.passed %}
 	  <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">The event has now passed</li>
 	{% endif %}
