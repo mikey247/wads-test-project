@@ -8,13 +8,15 @@ from wagtail.core import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtailcodeblock.blocks import CodeBlock
 
 from .links import LinkBlock
-from .text import BSCodeBlock, BSHeadingBlock, BSBlockquoteBlock
+from .text import BSHeadingBlock, BSBlockquoteBlock
 from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
+
 
 
 class SplashBlock(blocks.StreamBlock):
@@ -86,7 +88,7 @@ class CoreBlock(blocks.StreamBlock):
         group='2. Linked Content',
     )
 
-    code = BSCodeBlock(
+    code = CodeBlock(
         group='3. Embedded Content',
     )
 

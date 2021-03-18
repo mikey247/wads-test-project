@@ -29,6 +29,8 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 #from wagtail.snippets.models import register_snippet
 
+from wagtailcodeblock.blocks import CodeBlock
+
 # from pygments import highlight
 # from pygments.formatters import get_formatter_by_name
 # from pygments.lexers import get_lexer_by_name
@@ -40,7 +42,7 @@ from sitecore import constants
 # from taggit.models import TaggedItemBase
 
 from .text import MarkdownAndShortcodeTextBlock
-from .text import BSCodeBlock, TextSnippet
+from .text import TextSnippet
 
 
 class SubSectionBlock(blocks.StructBlock):
@@ -143,7 +145,7 @@ class NestedCoreBlock(blocks.StreamBlock):
         group='2. Linked Content',
     )
 
-    nested_code = BSCodeBlock(
+    nested_code = CodeBlock(
         group='3. Embedded Content',
     )
 
