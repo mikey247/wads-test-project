@@ -428,8 +428,8 @@ from wagtail.core.blocks import (
 
 from .code_block_settings import (
     get_language_choices,
-    # get_theme,
-    # get_prism_version
+    get_theme,
+    get_prism_version
 )
 
 class CodeBlock(StructBlock):
@@ -488,6 +488,20 @@ class CodeBlock(StructBlock):
 
     @property
     def media(self):
+
+        PRISM_VERSION = get_prism_version()
+        THEME = get_theme()
+        
+        if THEME:
+            prism_theme = "-{theme}".format(theme=THEME)
+        else:
+            prism_theme = ""
+
+        js_list = [
+            "//cdnjs.cloudflare.com/ajax/libs/prism/{prism_version}/prism.min.js".format(
+                prism_version=PRISM_VERSION,
+            ),
+        ]
        
         # Get the languages for the site from Django's settings, or the default in get_language_choices()
         for lang_code, lang_name in get_language_choices():
