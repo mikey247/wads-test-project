@@ -74,7 +74,7 @@ class SiteSettings(BaseSetting):
 
     code_theme = models.CharField(
         max_length = 32,
-        choices=constants.WAGTAIL_CODE_BLOCK_THEME_CHOICES,
+        choices=sorted(constants.WAGTAIL_CODE_BLOCK_THEME_CHOICES),
         help_text='Select a Code Theme for code blocks',
         default= 'coy'
     )
