@@ -74,9 +74,9 @@ class SiteSettings(BaseSetting):
 
     code_theme = models.CharField(
         max_length = 32,
-        choices=constants.PYGMENTS_THEME_CHOICES,
-        help_text='Select a Pygments Theme for code blocks',
-        default=constants.INITIAL_PYGMENTS_THEME
+        choices=constants.WAGTAIL_CODE_BLOCK_THEME_CHOICES,
+        help_text='Select a Code Theme for code blocks',
+        default= 'coy'
     )
 
     brand_logo = models.ForeignKey(

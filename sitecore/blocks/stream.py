@@ -8,10 +8,9 @@ from wagtail.core import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
-from wagtailcodeblock.blocks import CodeBlock
 
 from .links import LinkBlock
-from .text import BSHeadingBlock, BSBlockquoteBlock
+from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
 from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock

@@ -140,3 +140,19 @@ INSET_STYLE_CLASS_CHOICES = (
     ('container inset inset-raised', 'Standard Raised Inset'),
     ('container-fluid inset inset-raised', 'Wide Raised Inset'),
 )
+
+WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
+
+    ('None', 'Default'),
+    ('coy', 'Coy'),
+    ('dark', 'Dark'),
+    ('funky', 'Funky'),
+    ('okaidia', 'Okaidia'),
+    ('solarizedlight', 'Solarized Light'),
+    ('twilight', 'Twilight'),
+
+]
+
+
+
+

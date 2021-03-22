@@ -29,8 +29,6 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 #from wagtail.snippets.models import register_snippet
 
-from wagtailcodeblock.blocks import CodeBlock
-
 # from pygments import highlight
 # from pygments.formatters import get_formatter_by_name
 # from pygments.lexers import get_lexer_by_name
@@ -41,7 +39,7 @@ from sitecore import constants
 # from taggit.managers import TaggableManager
 # from taggit.models import TaggedItemBase
 
-from .text import MarkdownAndShortcodeTextBlock
+from .text import MarkdownAndShortcodeTextBlock, CodeBlock
 from .text import TextSnippet
 
 

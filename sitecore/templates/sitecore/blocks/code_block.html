@@ -1,0 +1,21 @@
+{% load static %}
+{% spaceless %}
+    {% for key, val in self.items %}
+        {% if key == "language" %}
+            <script>
+                language_class_name = 'language-{{ val }}';
+            </script>
+        {% endif %}
+        {% if key == "code" %}
+            <pre class="line-numbers">
+                <code id="target-element-current">{{ val }}</code>
+            </pre>
+            <script>
+                var block_num = (typeof block_num === 'undefined') ? 0 : block_num;
+                block_num++;
+                document.getElementById('target-element-current').className = language_class_name;
+                document.getElementById('target-element-current').id = 'target-element-' + block_num;
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
