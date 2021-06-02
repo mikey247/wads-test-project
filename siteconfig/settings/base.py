@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
-    'wagtailcodeblock',
 
     'django.contrib.admin',
     'django.contrib.auth',
