@@ -47,7 +47,7 @@
                     });
                 </script>
             {% endif %}
-            {% if child.block.meta.identifier == "code" %}
+            <!-- {% if child.block.meta.identifier == "code" %}
                 <script>
                     $(document).ready(function () {
                         populate_target_code('{{ child.id_for_label }}');
@@ -60,7 +60,7 @@
                 <li>
                     <pre><code id="target-element-{{ child.id_for_label }}"></code></pre>
                 </li>
-            {% endif %}
+            {% endif %} -->
         {% endfor %}
     </ul>
 </div>
