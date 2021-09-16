@@ -20,6 +20,11 @@ logger = logging.getLogger('django_auth_ldap')
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
 
+# wads-wagtail Optional Features
+# ------------------------------------------------------------------------
+ENABLE_LDAP = False # True|False
+ENABLE_DEBUG_TOOLBAR = False # True|False
+
 # Security
 # ------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/2.2/topics/security/#ssl-https
@@ -218,9 +223,9 @@ XAUTH_LDAP_GROUPS_FROM_NON_MEMBERSHIP = {
 # For LDAP we do not allow users to reset their passwords (nor can we change them)
 # Also disables password fields in "new user" forms (if enabled)
 
-WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = False
-WAGTAIL_PASSWORD_RESET_ENABLED = False
-WAGTAILUSERS_PASSWORD_ENABLED = False
+#WAGTAIL_PASSWORD_MANAGEMENT_ENABLED = False
+#WAGTAIL_PASSWORD_RESET_ENABLED = False
+#WAGTAILUSERS_PASSWORD_ENABLED = False
 
 DATE_FORMAT = 'dS F Y'
 TIME_FORMAT = 'H:i:s'
