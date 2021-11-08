@@ -140,3 +140,28 @@ INSET_STYLE_CLASS_CHOICES = (
     ('container inset inset-raised', 'Standard Raised Inset'),
     ('container-fluid inset inset-raised', 'Wide Raised Inset'),
 )
+
+# these are sorted alphabetically in the settings model 
+WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
+
+    ('default', 'Default'),
+    ('coy', 'Coy'),
+    ('dark', 'Dark'),
+    ('funky', 'Funky'),
+    ('okaidia', 'Okaidia'),
+    ('solarizedlight', 'Solarized Light'),
+    ('twilight', 'Twilight'),
+    ('darcula', 'Darcula'),
+    ('xonokai', 'Xonokai'),
+    ('atom-dark', 'Atom Dark'),
+    ('duotone-dark', 'Duotone Dark'),
+    ('duotone-light', 'Duotone Light'),
+    ('synthwave84', 'Synthwave \'84'),
+    ('vs', 'Visual Studio'),
+    ('vsc-dark', 'Visual Studio Code Dark'),
+
+]
+
+
+
+

@@ -39,8 +39,8 @@ from sitecore import constants
 # from taggit.managers import TaggableManager
 # from taggit.models import TaggedItemBase
 
-from .text import MarkdownAndShortcodeTextBlock
-from .text import BSCodeBlock, TextSnippet
+from .text import MarkdownAndShortcodeTextBlock, CodeBlock
+from .text import TextSnippet
 
 
 class SubSectionBlock(blocks.StructBlock):
@@ -143,7 +143,7 @@ class NestedCoreBlock(blocks.StreamBlock):
         group='2. Linked Content',
     )
 
-    nested_code = BSCodeBlock(
+    nested_code = CodeBlock(
         group='3. Embedded Content',
     )
 

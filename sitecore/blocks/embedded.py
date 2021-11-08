@@ -28,7 +28,7 @@ from sitecore import constants
 # from taggit.models import TaggedItemBase
 
 from .links import LinkBlock
-from .text import BSCodeBlock, BSHeadingBlock, BSBlockquoteBlock
+from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
 # from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 # from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 # from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
