@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.styleguide',
     'wagtail.api.v2',
 
+    'wagtailautocomplete',
     'wagtailmenus',
     'modelcluster',
     'taggit',
