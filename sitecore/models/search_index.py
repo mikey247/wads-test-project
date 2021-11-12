@@ -24,7 +24,7 @@ from sitecore.parsers import ValidateCoreBlocks
 from .sitepage import SitePage, SitePageTags
 
 
-class SearchIndexPage(Page):
+class SiteSearchIndexPage(Page):
     """
     This defines a search index page for searching content with given search terms
     The ?query= field in the page request is used to search for specific
@@ -106,7 +106,7 @@ class SearchIndexPage(Page):
 
 
     def get_context(self, request, slug=None):
-        context = super(SearchIndexPage, self).get_context(request)
+        context = super(SiteSearchIndexPage, self).get_context(request)
 
         # (1) Retrieve all pages that match search terms
         search_terms = request.GET.get('query', None)

@@ -9,14 +9,14 @@ class SiteImage(AbstractImage):
 
     # eg. To add a caption field:
     alt_text = models.CharField(
-        max_length=255, 
+        max_length=1024,
         blank=True,
         verbose_name = 'Alt Text (for accessibility)' ,
         help_text='Alt text for accessibility purposes. Be as descriptive as possible.',
         )
     
     caption = models.CharField(
-        max_length=255, 
+        max_length=1024, 
         blank=True,
         help_text='Caption for photo credits or extra information.',
         )
@@ -28,7 +28,7 @@ class SiteImage(AbstractImage):
     )
 
 
-class CustomRendition(AbstractRendition):
+class SiteRendition(AbstractRendition):
     image = models.ForeignKey(SiteImage, on_delete=models.CASCADE, related_name='renditions')
 
     class Meta:
