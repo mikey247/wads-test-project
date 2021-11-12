@@ -74,6 +74,11 @@ class CoreBlock(blocks.StreamBlock):
         group='1. Structured Content',
     )
 
+    quote = BSBlockquoteBlock(
+        label='Quote',
+        group='1. Structured Content',
+    )
+    
     image =  ImageChooserBlock(
         group='2. Linked Content',
         template='sitecore/blocks/rendition.html'
