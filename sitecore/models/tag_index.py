@@ -25,7 +25,7 @@ from taggit.models import Tag
 
 from .sitepage import SitePage, SitePageTags
 
-class TagIndexPage(RoutablePageMixin, Page):
+class SiteTagIndexPage(RoutablePageMixin, Page):
     """
     This defines a tag index page for searching content with specific tags and/or displaying the 
     entire shared tag cloud. The ?tag= field in the page request is used to search for specific
@@ -108,7 +108,7 @@ class TagIndexPage(RoutablePageMixin, Page):
 
 
     def get_context(self, request, slug=None):
-        context = super(TagIndexPage, self).get_context(request)
+        context = super(SiteTagIndexPage, self).get_context(request)
 
         # (1) Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
