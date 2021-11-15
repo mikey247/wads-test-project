@@ -12,6 +12,7 @@ def get_language_choices():
         ('cpp', 'C++'),
         ('css', 'CSS'),
         ('diff', 'diff'),
+        ('fortran', 'Fortran'),
         ('git', 'Git'),
         ('html', 'HTML'),
         ('java', 'Java'),
