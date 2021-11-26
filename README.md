@@ -1,311 +1,253 @@
-# Django/Wagtail Setup Notes
+# Introduction
 
-## System Libraries
+Wagtail is an open source CMS that sits on top of Django, the hugely popular Python based web framework. This repository contains the Web Applications Development Service's custom wagtail installation with modifications made to fit within the University of Manchester's technical infrastructure.
 
-These are required libraries in addition to standard ones such as Apache2 and Python 3 (3.4)
+This guide walks through the steps required to set up your own wagtail project locally on your development machine, using this repository as a template.
 
-For Apache2 Server, use mod_wsgi for Python 3 (seperate package to the Python 2.7 one)
+For documentation on deploying the site onto a Research Virtual Machine, consult the wider documentation that can be found [here](https://github.com/UoMResearchIT/wads-wagtail-documentation/blob/main/development-documentation/tutorial/set_up_deploy_env/set_up_deploy.md).
+## Requirements
+### Windows
 
-    apt install apache2-dev
-    apt install python-letsencrypt-apache
-    apt install python-psycopg2
-    apt install build-essential binutils-doc autoconf flex bison libjpeg-dev
-    apt install libfreetype6-dev zlib1g-dev libzmq3-dev libgdbm-dev libncurses5-dev
-    apt install automake libtool libffi-dev curl git tmux gettext
-    apt install postgresql-9.6 postgresql-contrib-9.6 postgresql-doc-9.6 postgresql-server-dev-9.6 // or closest version
-    apt install redis-server
-    apt install python3-yaml libyaml-dev
+    Windows Subsystem Linux (recommended)
 
-**Note: YAML required if planning to use YAML format for fixtures**
+    OR
 
-Optional for dev mode and testing of Django/Wagtail default database setting:
+    Python
+    virtualenv
+    Git Bash
+    Command Line Interface
+    Python IDE / Text editor
 
-    apt install sqlite3
-    apt install sqlitebrowser
+    NOTE: All commands that use "git" are done in Git Bash. It lets you use MinGW/Linux tools with Git at the command line. Other commands can be done in Git Bash as well but you may prefer to use a different CLI.
 
-**Note: Connection refused is likely when wrong version is installed (see above).**
-	
-## Virtual Environment
 
-Create a virtual environment to hold the required version of Python and necessary modules e.g.,
+### Linux / WSL
 
-    cd /var/www/wagtail
-    virtualenv -p /usr/bin/python3 wagtail-env
-    source wagtail-env/bin/activate
-	mkdir siteroot
-	
-## Install Django, Wagtail and Additional Modules
+    Python
+    virtualenv
+    Git
+    Command Line Interface
+    Python IDE / Text editor
 
-    cd /var/www/wagtail/siteroot
-    pip install -r requirements.txt
 
-## Setup Apache2 config
+NOTE - Set-up instructions for Windows Subsystem Linux can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+If you are using a managed laptop you will need access to the BIOS settings to allow virtualization. We recommend using the Ubuntu 20.04 LTS as your distro to match the VM's that will be hosting the deployed site.
 
-### WSGI Module configuration
+## Wagtail Setup
 
-Optionally install the pip version of mod_wsgi, which is more up-to-date than the standard Ubuntu release.
+We will be collecting files the necessary files to run our Wagtail. All projects are based on this `wads-wagtail` repository. This is a version of wagtail that has been developed to suit the needs of the research community. Many features from previous wagtail projects have been back ported. 
 
-    cd /var/www/wagtail
-    source wagtail-env/bin/activate
-    pip install mod_wsgi
+Another repository called [`wagtail-apps`](https://github.com/UoMResearchIT/wagtail-apps) contains web applications that have been made generic so they can be re-used on other projects.
+### 1. Cloning the Repo
 
-Capture the output from the following command:
+We want to create a new version of `wads-wagtail` to serve as the basis of your project.
 
-    sudo -i
-    cd /var/www/wagtail/wagtail-env
-    source bin/activate
-    bin/mod_wsgi-express install-module
-    
-Which will produce output like:
+There are several way to do this. 
 
-    LoadModule wsgi_module "/usr/lib/apache2/modules/mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so"
-    WSGIPythonHome "/var/www/wagtail/wagtail-env"
+#### a. Manual Method
 
-Create the Apache2 module files `/etc/apache2/mods-available/wsgi_express.conf` and `/etc/apache2/mods-available/wsgi_express.load`. Place the `WSGIPythonHome` line in the .conf file and the `LoadModule` line in the .load file.
+Create a new repository on GitHub. Name it `wads-<new_project_name>`
 
-Enable the new module:
+On your computer -
 
-    sudo a2enmod wsgi_express
+`git clone https://github.com/UoMResearchIT/wads-wagtail.git>`
 
-### Site configurations
+`cd wads-wagtail`
 
-Create `/etc/apache2/sites-available/wagtail-le-ssl.conf` for HTTPS site
+`git remote set-url origin https://github.com/UoMResearchIT/<new_project_name>.git`
 
-Use *WSGIDaemonProcess* to specify the python path to the site and the virtualenv
+`git push origin master`
 
-Note: SSL content generated by certbot-auto with Let's Encrypt CA
+Clone your new repository to your computer and work from that.
 
-```
-#!Apache Config
+#### b. Template Method
 
-<IfModule mod_ssl.c>
-<VirtualHost *:443>
+In the `wads-wagtail` repo on Github choose the 'Use this Template' option.
 
-    ServerName <your-host>
+Name the new repo - `wads-<new_project_name>`
 
-    Alias /robots.txt /var/www/wagtail/siteroot/static/robots.txt
-    Alias /favicon.ico /var/www/wagtail/siteroot/static/favicon.ico
+Clone your new repository to your computer and work from that.
 
-    Alias /media /var/www/wagtail/siteroot/media/
-    Alias /static /var/www/wagtail/siteroot/static/
+NOTE - using the template option will mean losing the version history of the `wads-wagtail` repo.
 
-    <Directory /var/www/wagtail/siteroot/static>
-        Require all granted
-    </Directory>
+#### c. Import Method
 
-    <Directory /var/www/wagtail/siteroot/media>
-        Require all granted
-    </Directory>
+In the top right of Github, click the '+' next to your usename and choose 'Import Directory'.
 
-    <Directory /var/www/wagtail/siteroot/sitecore>
-        <Files wsgi.py>
-	    Require all granted
-	</Files>
-    </Directory>
+Choose the `wads-wagtail` repo as the one you want to import.
 
-    # Use python-home as preferred method; alternative fails on some Python/wsgi versions
+Name the new repo - `wads-<new_project_name>`
 
-    WSGIDaemonProcess wagtailapp python-home=/var/www/wagtail/wagtail-env python-path=/var/www/wagtail/siteroot
-    WSGIProcessGroup wagtailapp
-    WSGIScriptAlias / /var/www/wagtail/siteroot/siteconfig/wsgi.py process-group=wagtailapp
+Clone your new repository to your computer and work from that.
 
-    LogLevel warn
-    ErrorLog /var/log/apache2/wagtail-error_log
-    CustomLog /var/log/apache2/wagtail-access_log common
+NOTE - there can be issues using this method due to GitHub Authentication. Choose the manual method if this is the case and you want to preserve version history.
 
-    # SSLCertificateFile /etc/letsencrypt/live/<your-host>/cert.pem
-    # SSLCertificateKeyFile /etc/letsencrypt/live/<your-host>/privkey.pem
-    # Include /etc/letsencrypt/options-ssl-apache.conf
-    # SSLCertificateChainFile /etc/letsencrypt/live/<your-host>/chain.pem
+### 2. Setting up your Development Environment
 
-</VirtualHost>
-</IfModule>
-```
+Depending on how you created your project repo you may have a few stray branches. You will need a minimum of 3.
 
-Create `/etc/apache2/sites-available/wagtail.conf` for HTTP redirect
+`main` - the main branch
+`deploy` - the deploy branch that will be used on the sites VM
+`wads-wagtail-main` - the main branch of the `wads-wagtail` repo. Used to bring any new changes or fixes that have been made in `wads-wagtail` to your project.
 
-```
-#!Apache Config
-<VirtualHost your.fqdn:80>
+If you haven't got a `deploy` branch, create it with -
 
-  ServerName your.fqdn
+`git checkout main`
+`git checkout -b deploy`
+`git push origin deploy`
 
-  Alias /.well-known/ /var/www/wagtail/siteroot/static/.well-known/
-  <Directory /var/www/wagtail/siteroot/static/.well-known/>
-     Require all granted
-  </Directory>
+To create the upstream `wads-wagtail-main` branch - 
 
-  LogLevel warn
-  ErrorLog /var/log/apache2/wagtail-error_log
-  CustomLog /var/log/apache2/wagtail-access_log common
+`git checkout -b wads-wagtail-main`
+`git fetch upstream main`
+`git branch --set-upstream-to=upstream/main`
 
-  # RewriteEngine on
-  # RewriteCond %{SERVER_NAME} =your.fqdn
-  # RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
-```
-
-Create the directory `/var/www/wagtail/siteroot/static/.well-known` to let the SSL certbot place webroot tests.
+then to confirm
 
-## SSL Certificate
+`git remote -v`
 
-Enable the SSL module:
+revert to main
 
-    sudo a2enmod ssl
+`git checkout main`
 
-Enable the sites:
 
-    sudo a2ensite wagtail.conf
-    sudo a2ensite wagtail-le-ssl.conf
-    sudo service apache2 restart
+Now we have all the files and branches, we need to install the necessary packages; create a database, superuser, and start a development server to make sure everything is working.
 
-Ensure the firewall is open for ports 80 and 443 (HTTP and HTTPS traffic) so that the CA challenges can be made.
+#### a. Install packages
 
-Run certbot to obtain the SSL certificate:
+We will be creating a virtual environment to contain all the required packages. All commands that utilise python will require the virtual environment to be activated.
 
-    sudo certbot --authenticator webroot --installer apache
+##### Windows
 
-1. When asked, select the site (your.fqdn) you wish to acquire a certificate for.
-1. Select the option to enter the webroot.
-1. Provide the file system path the directory containing the `.well-known/` directory e.g., `/var/www/wagtail/siteroot/static`
-1. Choose whether or not to redirect HTTP to HTTPS (recommended)
+`virtualenv <virtualenv_name>`
 
-Assuming the challenges succeeded, both of the Apache configurations should have been modified by the certbot script, producing content similar to the commented `SSLCertificate` code and `Rewrite` lines in the configurations above. They should point to newly created certificates in `/etc/letsencrpyt/live/your.fqdn/*`.
+`<virtualenv_name>\Scripts\activate`
 
-## Django/Wagtail Configuration
+`pip install -r requirements.00.core.txt`
 
-### Prepare development or production mode
+`pip install -r requirements.01.dev.txt`
 
-Default `/var/www/wagtail/siteroot/siteconfig/wsgi.py` is good as is for development mode, but requires a minor edit for production mode:
+NOTE - the other two requirement files aren't necessary for development and may cause issues on Windows as they require specific Linux-based packages to be installed.
 
-    #os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sitecore.settings.dev")
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sitecore.settings.production")
+##### Linux / WSL
 
-### Configure postgresql for wagtail app
+`virtualenv <virtualenv_name>`
 
-	su - postgres
-	psql
-	postgres=#
-		CREATE DATABASE wagtail;
-		CREATE USER wagtail WITH PASSWORD '***********';
-		ALTER ROLE wagtail SET client_encoding TO 'utf8';
-		ALTER ROLE wagtail SET default_transaction_isolation TO 'read committed';
-		ALTER ROLE wagtail SET timezone TO 'UTC';
-		GRANT ALL PRIVILEGES ON DATABASE wagtail TO wagtail;
-		\q
-	exit
+`source <virtualenv_name>/bin/activate`
 
+`pip install -r requirements.00.core.txt`
 
-### Configure local settings
+`pip install -r requirements.01.dev.txt`
 
-Generate a new SECRET_KEY at http://www.miniwebtool.com/django-secret-key-generator/ and using the `siteconfig/settings/local.template` file, create `siteconfig/settings/local.py` and edit the required fields to set/confirm:
+NOTE - the other two requirements aren't necessary for development but can be installed in a Linux environment if you wish.
 
-* SECRET_KEY
-* SECURE_SSL_REDIRECT
-* SESSION_COOKIE_SECURE
-* CSRF_COOKIE_SECURE
-* SECURE_HSTS_SECONDS
-* DATABASE
-  * NAME
-  * USER
-  * PASSWORD
-  * HOST
-* ALLOWED_HOSTS
-* INTERNAL_IPS
-* LANGUAGE_CODE
-* WAGTAIL_SITE_NAME
-* BASE_URL
-* CACHES
-  * BACKEND
-  * LOCATION
-* WAGTAIL_SEARCH_BACKENDS
-  * BACKEND
-  * INDEX
-* REST_FRAMEWORK
-  * DEFAULT_PERMISSION_CLASSES
-  * PAGE_SIZE
-  * DEFAULT_PAGINATION_CLASS
+#### b. Create a database
 
-**Note: Do NOT INCLUDE local.py in any git repos!**
-	
-### Initialise django, wagtail and the applications
+##### Windows
 
-	cd /var/www/wagtail/siteroot
-	./manage.py makemigrations
-	
-**Usually requires `makemigrations` per app:**
+This will create a sqlite database that can be used for development purposes.
 
-	./manage.py makemigrations siteconfig
-	./manage.py makemigrations sitecore
-	./manage.py makemigrations siteuser
-	./manage.py makemigrations search
+`cd path/to/directory/containing manage.py/file`
 
-	./manage.py makemigrations home
-	./manage.py makemigrations article
-	
-Perform initial migration:
+`python manage.py migrate`
 
-	./manage.py migrate
+##### Linux / WSL
 
-Superuser and static commands:
+Ubuntu includes PostgreSQL by default. To install PostgreSQL on Ubuntu, use the apt-get (or other apt-driving) command -
 
-	./manage.py createsuperuser
-		{overseer/**password**}
-	./manage.py update_index
-	./manage.py collectstatic
+`apt-get install postgresql-12`
 
-If some initial site data is required, optionally load any fixture data if provided:
+Then to set-up the database. Take a note of the database name and password as you will need the details later - 
 
-	./manage.py load_fixtures [TBC]
+- `sudo -i`
+- `su - postgres`
+- `psql`
+- `CREATE DATABASE <database_name>;`
+- `CREATE USER <database_user_name> WITH PASSWORD '<password>';`
+- `ALTER ROLE <database_user_name> SET client_encoding TO 'utf8';`
+- `ALTER ROLE <database_user_name> SET default_transaction_isolation TO 'read committed';`
+- `ALTER ROLE <database_user_name> SET timezone TO 'UTC';`
+- `GRANT ALL PRIVILEGES ON DATABASE <database_name> TO <database_user_name>;`
+- `\q`
+- exit
+- exit
 
-Perform final initial migration:
+After `exit`ing twice you should now be back to your normal user account.
 
-	./manage.py migrate
-	
-### Enable/Start Services
+Then -
 
-	a2ensite wagtail-le-ssl
-	apache2ctl restart
-	
-## Notes for Development Mode
+`cd <path/to/directory/containing manage.py/file>`
 
-If DEBUG is enabled run in dev mode on localhost ONLY. Debug information is output on the pages and may compromise security. Use an SSH tunnel to access via a remote machine and browser.
+`python manage.py migrate`
 
-## Live site
+NOTE - the same process will be used on the VM.
 
-Enable the production settings and **ensure DEBUG mode is DISABLED**, along with any toolbars.
+#### c. Configure local.py
 
-Go to:
-*	https://<your-host> for site
-*	https://<your-host>/admin for Wagtail CMS Admin
-*	https://<your-host>/django-admin for the default Django app admin
-	
-## Service cron jobs (TBC)
+We now need to configure your `local.py`. You may have noticed that it doesn't exist and is included in the `.gitignore`.
 
-Need to consider:
-*	le-ssl cert renewal...
-*	update_index
-*	session clearout
+To create it, make a copy of the `template_dev_local.py` and name it `local.py`. 
 
-## Site Administration
+Fill in the details as needed such as the site name, base url, database details etc.
 
-1. Login to the /admin page using the superuser account created earlier. By default Wagtail installs a basic home page and needs to be replaced.
-1. On the left-hand admin menu, select *Pages* and then *Pages* in the pop-out menu.
-1. The **Root** page should now display a list of pages including the default *Welcome to your new Wagtail site*
-1. Select *ADD CHILD PAGE*
-1. Select *Home page* as the type of page (model) to use.
-1. Provide a title, and at least one Body block (Markdown paragraph is recommended)
-1. Select *Publish* in the menu at the bottom of the page.
-1. Back on the main left-hand admin menu, select *Settings* and *Sites*
-1. On the **SITES** page, select the *locahost* site to edit it.
-1. Uncheck the *Is default site*.
-1. Select *SAVE*.
-1. Back on the **SITES** page, select *ADD A SITE*
-1. Enter the your.fqdn (or localhost), the port (80 for HTTP, 443 for HTTPS), the site name, then select the newly created home page. Check *Is default site* if required (recommended).
-1. Select *SAVE*
+For the Secret Key a good tool to use is - https://miniwebtool.com/django-secret-key-generator/
 
-You should now have a new home page.
+NOTE - if you are on Windows you can comment out the DATABASES setting.
 
-# References
+#### d. Create a superuser
 
-* http://www.revsys.com/writings/quicktips/ssh-tunnel.html -
+`python manage.py createsuperuser`
+
+Enter details when prompted. Then - 
+
+`python manage.py migrate`
+
+NOTE - you can do the `createsuperuser` command above before the `migrate` command if you want to cut down on number of migration files.
+
+#### d. run the development server
+
+`python manage.py runserver`
+
+Go to http://127.0.0.1:8000 and you should be greeted with the default homepage. 
+
+You can then go to http://127.0.0.1:8000/admin to access the Wagtail CMS using the superuser username and password created earlier.
+
+NOTE - you can run the server on `localhost` as well using - `python manage.py runserver 0.0.0.0:8080`. If it throws up an error you may need to add `0.0.0.0` to the `ALLOWED_HOSTS` in your `local.py` file.
+
+## Next Steps
+### Developing for Wagtail
+
+Now you have a development copy of wagtail ready to start building your project.
+
+Developing for Wagtail follows a general development pipeline - 
+
+1. develop your app or feature on a separate branch to `main`
+2. if there are changes to the database run the `makemigrations` and `migrate` commands
+3. test your work in the browser
+4. repeat the first 3 steps until complete
+
+When the development work is done push it to GitHub WITHOUT the migration files. The reason for this is we want to keep the migration files on the server 
+as clean as possible and not contain all the tests we have done in development.
+
+ then -
+
+1. create a pull request to merge into `main`
+2. merge `main` into `deploy`
+
+On a clean version of the repo separate from where you have done your development work do the `./manage.py makemigrations`
+
+1. on the VM where the site is hosted pull your changes down with `git pull`
+2. do a `./manage.py migrate` to migrate the changes to the live database
+3. if you have made any changes in the `static` folder you will need to also run the `./manage.py collectstatic` command.
+
+### How To's
+
+For help, you can check out the various 'How To's' in the main [`wads-wagtail` documentation](https://github.com/UoMResearchIT/wads-wagtail-documentation/tree/main/development-documentation/how-to).
+
+If there are any gaps, feel free to create a pull request. We want to make the documentation as accessible as possible.
+### Deploying to a RVM
+
+A guide for deploying to a RVM can be found in the  [`wads-wagtail` documentation](https://github.com/UoMResearchIT/wads-wagtail-documentation/blob/main/development-documentation/tutorial/set_up_deploy_env/set_up_deploy.md) as well.
+
+
+
