@@ -6,6 +6,7 @@ This guide walks through the steps required to set up your own wagtail project l
 
 For documentation on deploying the site onto a Research Virtual Machine, consult the wider documentation that can be found [here](https://github.com/UoMResearchIT/wads-wagtail-documentation/blob/main/development-documentation/tutorial/set_up_deploy_env/set_up_deploy.md).
 ## Requirements
+
 ### Windows
 
     Windows Subsystem Linux (recommended)
@@ -30,14 +31,17 @@ For documentation on deploying the site onto a Research Virtual Machine, consult
     Python IDE / Text editor
 
 
-NOTE - Set-up instructions for Windows Subsystem Linux can be found [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+NOTE - Set-up instructions for Windows Subsystem Linux can be found here - https://docs.microsoft.com/en-us/windows/wsl/install-win10
 If you are using a managed laptop you will need access to the BIOS settings to allow virtualization. We recommend using the Ubuntu 20.04 LTS as your distro to match the VM's that will be hosting the deployed site.
+
 
 ## Wagtail Setup
 
-We will be collecting files the necessary files to run our Wagtail. All projects are based on this `wads-wagtail` repository. This is a version of wagtail that has been developed to suit the needs of the research community. Many features from previous wagtail projects have been back ported. 
+We will be collecting files the necessary files to run our Wagtail. All projects are based on the core `wads-wagtail` repository. This is a version of wagtail that has been developed to suit the needs of the 
+research community. Many features from previous wagtail projects have been back ported. 
 
 Another repository called [`wagtail-apps`](https://github.com/UoMResearchIT/wagtail-apps) contains web applications that have been made generic so they can be re-used on other projects.
+
 ### 1. Cloning the Repo
 
 We want to create a new version of `wads-wagtail` to serve as the basis of your project.
@@ -50,13 +54,17 @@ Create a new repository on GitHub. Name it `wads-<new_project_name>`
 
 On your computer -
 
-`git clone https://github.com/UoMResearchIT/wads-wagtail.git>`
+`git clone https://github.com/UoMResearchIT/wads-wagtail.git`
 
 `cd wads-wagtail`
 
 `git remote set-url origin https://github.com/UoMResearchIT/<new_project_name>.git`
 
-`git push origin master`
+`git remote add upstream https://github.com/UoMResearchIT/wads-wagtail.git`
+
+`git push origin main`
+
+
 
 Clone your new repository to your computer and work from that.
 
@@ -72,7 +80,7 @@ NOTE - using the template option will mean losing the version history of the `wa
 
 #### c. Import Method
 
-In the top right of Github, click the '+' next to your usename and choose 'Import Directory'.
+In the top right of Github, click the '+' next to your username and choose 'Import Directory'.
 
 Choose the `wads-wagtail` repo as the one you want to import.
 
@@ -84,36 +92,78 @@ NOTE - there can be issues using this method due to GitHub Authentication. Choos
 
 ### 2. Setting up your Development Environment
 
+#### a. edit .git/info/exclude
+
+As all RSE's have different development environments it is a good idea to add certain files and directories to the the `.git/info/exclude` file.
+
+This includes things like -
+
+- IDE setup directories e.g. `.idea` or `.vscode`
+- __pycache__ files
+- python virtual environment directories (if the environment is in the same directory as the git repo)
+
+Adding these to the `exlcude` file allows for a streamlined repo that is easily reproducible and cuts down on a bloated `.gitignore` file.
+
+An example would look like - 
+
+    *-venv
+    *-env
+    .vscode
+    __pycache__
+#### b. Set up required branches
+
 Depending on how you created your project repo you may have a few stray branches. You will need a minimum of 3.
 
-`main` - the main branch
-`deploy` - the deploy branch that will be used on the sites VM
+`main` - the main branch\
+`deploy` - the deploy branch that will be used on the sites VM\
 `wads-wagtail-main` - the main branch of the `wads-wagtail` repo. Used to bring any new changes or fixes that have been made in `wads-wagtail` to your project.
 
 If you haven't got a `deploy` branch, create it with -
 
 `git checkout main`
+
 `git checkout -b deploy`
+
 `git push origin deploy`
 
 To create the upstream `wads-wagtail-main` branch - 
 
-`git checkout -b wads-wagtail-main`
-`git fetch upstream main`
-`git branch --set-upstream-to=upstream/main`
+1. Check if you have the wads-wagtail repo set up as an upstream for your repo 
 
-then to confirm
+    (this depends on how you cloned your repo in the steps above):
 
-`git remote -v`
+    `git remote -v`
+    
+    If the following is in the list:
+    
+    `upstream	https://github.com/UoMResearchIT/wads-wagtail.git (fetch)`
+    
+    `upstream	https://github.com/UoMResearchIT/wads-wagtail.git (push)`
+    
+    ... you are OK. If not you need to add the upstream with the following command:
 
-revert to main
+    `git remote add upstream https://github.com/UoMResearchIT/wads-wagtail.git`
 
-`git checkout main`
+2. Fetch the upstream code:
+
+    `git checkout -b wads-wagtail-main`
+
+    `git fetch upstream main`
+
+    `git branch --set-upstream-to=upstream/main`
+
+    Confirm upstream has been set-up:
+
+    `git remote -v`
+
+    Revert to main:
+
+    `git checkout main`
 
 
 Now we have all the files and branches, we need to install the necessary packages; create a database, superuser, and start a development server to make sure everything is working.
 
-#### a. Install packages
+#### c. Install packages
 
 We will be creating a virtual environment to contain all the required packages. All commands that utilise python will require the virtual environment to be activated.
 
@@ -127,7 +177,7 @@ We will be creating a virtual environment to contain all the required packages. 
 
 `pip install -r requirements.01.dev.txt`
 
-NOTE - the other two requirement files aren't necessary for development and may cause issues on Windows as they require specific Linux-based packages to be installed.
+NOTE - the other two requirements aren't necessary for development and may cause issues on Windows as they require specific Linux-based packages to be installed.
 
 ##### Linux / WSL
 
@@ -139,9 +189,23 @@ NOTE - the other two requirement files aren't necessary for development and may 
 
 `pip install -r requirements.01.dev.txt`
 
-NOTE - the other two requirements aren't necessary for development but can be installed in a Linux environment if you wish.
+NOTE - the other two requirements aren't necessary for development but can be installed in a Linux environment.
 
-#### b. Create a database
+
+#### d. Configure local.py
+
+We now need to configure your `local.py`. You may have noticed that it doesn't exist and is included in the `.gitignore`.
+
+To create it, make a copy of the `template_dev_local.py` and name it `local.py`. 
+
+Fill in the details as needed such as the site name, base url, database details etc.
+
+For the Secret Key a good tool to use is - https://miniwebtool.com/django-secret-key-generator/
+
+NOTE - if you are on Windows you can comment out the DATABASES setting.
+
+
+#### e. Create a database
 
 ##### Windows
 
@@ -178,23 +242,16 @@ Then -
 
 `cd <path/to/directory/containing manage.py/file>`
 
+`python manage.py makemigrations article`
+`python manage.py makemigrations event`
+`python manage.py makemigrations home`
+`python manage.py makemigrations siteuser`
+
 `python manage.py migrate`
 
 NOTE - the same process will be used on the VM.
 
-#### c. Configure local.py
-
-We now need to configure your `local.py`. You may have noticed that it doesn't exist and is included in the `.gitignore`.
-
-To create it, make a copy of the `template_dev_local.py` and name it `local.py`. 
-
-Fill in the details as needed such as the site name, base url, database details etc.
-
-For the Secret Key a good tool to use is - https://miniwebtool.com/django-secret-key-generator/
-
-NOTE - if you are on Windows you can comment out the DATABASES setting.
-
-#### d. Create a superuser
+#### f. Create a superuser
 
 `python manage.py createsuperuser`
 
@@ -204,7 +261,7 @@ Enter details when prompted. Then -
 
 NOTE - you can do the `createsuperuser` command above before the `migrate` command if you want to cut down on number of migration files.
 
-#### d. run the development server
+#### g. run the development server
 
 `python manage.py runserver`
 
@@ -213,6 +270,25 @@ Go to http://127.0.0.1:8000 and you should be greeted with the default homepage.
 You can then go to http://127.0.0.1:8000/admin to access the Wagtail CMS using the superuser username and password created earlier.
 
 NOTE - you can run the server on `localhost` as well using - `python manage.py runserver 0.0.0.0:8080`. If it throws up an error you may need to add `0.0.0.0` to the `ALLOWED_HOSTS` in your `local.py` file.
+
+#### OPTIONAL - Set-up homepage
+
+You can set-up the homepage manually  -
+
+1. Login to the /admin page using the superuser account created earlier. By default Wagtail installs a basic home page and needs to be replaced.
+2. On the left-hand admin menu, select Pages and then Pages in the pop-out menu.
+3. The Root page should now display a list of pages including the default Welcome to your new Wagtail site
+4. Select ADD CHILD PAGE
+5. Select Home page as the type of page (model) to use.
+6. Provide a title, and at least one Body block (Markdown paragraph is recommended)
+7. Select Publish in the menu at the bottom of the page.
+8. Back on the main left-hand admin menu, select Settings and Sites
+9. On the SITES page, select the locahost site to edit it.
+10. Uncheck the Is default site.
+11. Select SAVE.
+12. Back on the SITES page, select ADD A SITE
+13. Enter the your.fqdn (or localhost), the port (80 for HTTP, 443 for HTTPS), the site name, then select the newly created home page. Check Is default site if required (recommended).
+14. Select SAVE
 
 ## Next Steps
 ### Developing for Wagtail
@@ -248,6 +324,3 @@ If there are any gaps, feel free to create a pull request. We want to make the d
 ### Deploying to a RVM
 
 A guide for deploying to a RVM can be found in the  [`wads-wagtail` documentation](https://github.com/UoMResearchIT/wads-wagtail-documentation/blob/main/development-documentation/tutorial/set_up_deploy_env/set_up_deploy.md) as well.
-
-
-
