@@ -58,13 +58,11 @@ On your computer -
 
 `cd wads-wagtail`
 
-`git remote set-url origin https://github.com/UoMResearchIT/<new_project_name>.git`
+`git remote set-url origin https://github.com/UoMResearchIT/wads-wagtail-<new_project_name>.git`
 
 `git remote add upstream https://github.com/UoMResearchIT/wads-wagtail.git`
 
 `git push origin main`
-
-
 
 Clone your new repository to your computer and work from that.
 
@@ -72,7 +70,7 @@ Clone your new repository to your computer and work from that.
 
 In the `wads-wagtail` repo on Github choose the 'Use this Template' option.
 
-Name the new repo - `wads-<new_project_name>`
+Name the new repo - `wads-wagtail-<new_project_name>`
 
 Clone your new repository to your computer and work from that.
 
@@ -84,7 +82,7 @@ In the top right of Github, click the '+' next to your username and choose 'Impo
 
 Choose the `wads-wagtail` repo as the one you want to import.
 
-Name the new repo - `wads-<new_project_name>`
+Name the new repo - `wads-wagtail-<new_project_name>`
 
 Clone your new repository to your computer and work from that.
 
