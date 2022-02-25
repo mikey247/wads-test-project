@@ -25,11 +25,6 @@ BASE_URL = '<INSERT BASE_URL HERE>' # usually localhost for dev
 
 SECRET_KEY = '<INSERT KEY_HERE>'
 
-# Email
-# ------------------------------------------------------------------------
-
-DEFAULT_FROM_EMAIL = f'{WAGTAIL_SITE_NAME} - <no-reply@manchester.ac.uk>'
-
 # Database
 # ------------------------------------------------------------------------
 # Use Postgresql by default rather than sqlite3
