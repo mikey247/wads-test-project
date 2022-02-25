@@ -442,7 +442,7 @@ class CodeBlock(StructBlock):
                         prism_version=PRISM_VERSION,
                         prism_theme=prism_theme,
                     ),
-                    "wagtailcodeblock/css/wagtail-code-block.min.css",
+                    "sitecore/wagtailcodeblock/css/wagtail-code-block.min.css",
                 ]
             }
         )
