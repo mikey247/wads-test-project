@@ -1,5 +1,3 @@
-from pygments.styles import get_all_styles
-
 """
 Sitecore constants module to define several Bootstrap 4, Django and Wagtail constants
 :Authors: Louise Lever <louise.lever@manchester.ac.uk>
@@ -17,12 +15,8 @@ BOOTSTRAP4_THEME_CHOICES = [
      "solar", "spacelab", "superhero", "uomhum", "united", "yeti",]
 ]
 
-PYGMENTS_THEME_CHOICES = [
-    (pygment_style,pygment_style) for pygment_style in list(get_all_styles())
-]
 
 INITIAL_BOOTSTRAP4_THEME = 'pulse'
-INITIAL_PYGMENTS_THEME = 'monokai'
 
 # Navbar settings
 

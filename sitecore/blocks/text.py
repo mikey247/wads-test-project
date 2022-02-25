@@ -127,30 +127,6 @@ class BSBlockquoteBlock(blocks.StructBlock):
         icon = 'openquote'
         template = 'sitecore/blocks/blockquote.html'
 
-
-
-class CSVIntListCharBlock(blocks.FieldBlock):
-    """
-    Adds the Django forms.CharField WITH the validate_comma_separated_integer_list validator to a StreamField block.
-    This enables the BSCodeBlock below to include a field allowing entry of code lines to be highlighted.
-    Note: The default blocks.CharBlock does not include any validators nor does it allow them to be passed as arguments.
-    """
-
-    def __init__(self, required=True, help_text=None, max_length=None, min_length=None, **kwargs):
-        self.field = forms.CharField(
-            required=required,
-            validators=[validate_comma_separated_integer_list],
-            help_text=help_text,
-            max_length=max_length,
-            min_length=min_length
-        )
-        super(CSVIntListCharBlock, self).__init__(**kwargs)
-
-    def get_searchable_content(self, value):
-        return [force_text(value)]
-
-
-
 class Select2ChoiceBlock(blocks.FieldBlock):
     """
     Modifies the ChoiceBlock to specify use of the Select2Widget, to provide autocomplete for
@@ -267,60 +243,6 @@ class Select2ChoiceBlock(blocks.FieldBlock):
         # block is being used for. Feel encouraged to specify an icon in your
         # descendant block type
         icon = "placeholder"
-
-
-
-class BSCodeBlock(blocks.StructBlock):
-    """
-    Code highlighting block in, using pygments library wrapped in Bootstrap 3 markup
-    Options include language selection, a comma separated list of integers for lines to be highlighted
-    and a toggle for display of all line numbers or not.
-    """
-
-    LANGUAGE_CHOICES = (
-        ('', 'Please select a language for syntax highlighting'),
-        ('python3', 'Python'),
-        ('javascript', 'JavaScript'),
-        ('bash', 'Bash'),
-    )
-
-    lang = Select2ChoiceBlock(
-        choices=LANGUAGE_CHOICES,
-        required=True,
-        default='',
-        label='Language'
-    )
-
-    code = blocks.TextBlock(
-        required=True
-    )
-
-    hl_lines = CSVIntListCharBlock(
-        required=False,
-        label='Highlighted Lines'
-    )
-
-    line_nums = blocks.BooleanBlock(
-        required=False,
-        help_text=_('Check to include line numbers')
-    )
-
-    class Meta:
-        icon = 'doc-full-inverse'
-        
-
-    def render(self, value, context=None):
-        src = value['code'].strip('\n')
-        lang = value['lang']
-        linenos = value['line_nums']
-
-        pyg_lexer = get_lexer_by_name(lang)
-        hl_lines = value['hl_lines'].split(',') if value['hl_lines'] else []
-        pyg_formatter = get_formatter_by_name('html', hl_lines=hl_lines, linespans="line-num", cssclass='highlight', style='default', noclasses=False, wrapcode=True)
-        
-        return mark_safe(highlight(src, pyg_lexer, pyg_formatter))
-
-
     
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
     """
