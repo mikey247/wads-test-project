@@ -1,4 +1,4 @@
-from .text import BSCodeBlock, BSHeadingBlock, BSBlockquoteBlock, CSVIntListCharBlock
+from .text import BSHeadingBlock, BSBlockquoteBlock
 from .text import MarkdownAndShortcodeTextBlock, Select2ChoiceBlock, ShortcodeRichTextBlock, TextSnippetTag, TextSnippet
 
 from .links import LinkStructValue, LinkBlock

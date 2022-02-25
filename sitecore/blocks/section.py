@@ -29,10 +29,6 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 #from wagtail.snippets.models import register_snippet
 
-# from pygments import highlight
-# from pygments.formatters import get_formatter_by_name
-# from pygments.lexers import get_lexer_by_name
-
 from sitecore import constants
 # from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
