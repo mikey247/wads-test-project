@@ -1,6 +1,6 @@
-CREATE DATABASE <DATABSENAME>;
-CREATE USER <DATABSENAME> WITH PASSWORD '<PASSWORD>';
-ALTER ROLE <DATABSENAME> SET default_transaction_isolation TO 'read committed';
-ALTER ROLE <DATABSENAME> SET client_encoding TO 'utf8';
-ALTER ROLE <DATABSENAME> SET timezone TO 'utc';
-GRANT ALL PRIVILEGES ON DATABASE <DATABSENAME> TO <DATABSENAME>;
+CREATE DATABASE <database_name>;
+CREATE USER <username> WITH PASSWORD '<password>';
+ALTER ROLE <username> SET default_transaction_isolation TO 'read committed';
+ALTER ROLE <username> SET client_encoding TO 'utf8';
+ALTER ROLE <username> SET timezone TO 'utc';
+GRANT ALL PRIVILEGES ON DATABASE <database_name> TO <username>;
