@@ -1,4 +1,4 @@
-# Optional ldap authentication packages for Django 3.1.7 and wagtail 2.12.3 as of 20210311
+# Optional ldap authentication packages for Django 3.2.12 and wagtail 2.15.3 as of 20220201
 
-django-auth-ldap==2.3.0
-python-ldap==3.3.1
+django-auth-ldap==4.0.0
+python-ldap==3.4.0
