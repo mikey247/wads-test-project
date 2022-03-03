@@ -72,31 +72,31 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
     # Slide text and button styles
 
     title_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-white',
     )
     
     body_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-light',
     )
     
     link_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-light',
     )
     
     link_bg_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         required=False,
         default='bg-primary',
     )
 
     link_border_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         required=False,
         default='',
     )
@@ -126,13 +126,13 @@ class CarouselSnippet(models.Model):
     )
 
     title_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-dark',
         max_length=128
     )
     
     title_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
@@ -380,25 +380,25 @@ class IconCardDeckSnippet(models.Model):
     # Card Deck and per-card styling options (for all cards in deck)
     
     text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-light',
         max_length=128
     )
     
     bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         max_length=128
     )
 
     border_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         default='',
         blank=True,
         max_length=128
@@ -411,19 +411,19 @@ class IconCardDeckSnippet(models.Model):
     )
 
     icon_size_unit = models.CharField(
-        choices=constants.BOOTSTRAP4_UNIT_CHOICES,
+        choices=constants.BOOTSTRAP5_UNIT_CHOICES,
         default='rem',
         max_length=128
     )
     
     button_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BUTTON_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BUTTON_COLOUR_CHOICES,
         default='btn btn-primary',
         max_length=128
     )
 
     button_size = models.CharField(
-        choices=constants.BOOTSTRAP4_BUTTON_SIZE_CHOICES,
+        choices=constants.BOOTSTRAP5_BUTTON_SIZE_CHOICES,
         default='',
         blank=True,
         max_length=128

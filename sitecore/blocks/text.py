@@ -12,7 +12,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.forms import Media
 
-from wagtail.admin.edit_handlers import FieldPanel # , FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
+from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core import blocks
 from wagtail.snippets.models import register_snippet
 
@@ -23,6 +23,9 @@ from taggit.models import TaggedItemBase
 
 from sitecore import constants
 from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
+
+from .code_block_settings import get_language_choices, get_theme, get_prism_version
+
 
 
 class BSHeadingBlock(blocks.StructBlock):
@@ -89,30 +92,30 @@ class BSBlockquoteBlock(blocks.StructBlock):
     # Blockquote display options
     
     quote_align = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
     )
 
     quote_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-dark',
     )
     
     footer_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-secondary',
     )
     
     bg_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         required=False,
         default='bg-light',
     )
 
     border_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         default='',
         required=False,
     )
@@ -342,19 +345,9 @@ class TextSnippet(models.Model):
 
 
 
-from wagtail.core.blocks import (
-    StructBlock,
-    TextBlock,
-    ChoiceBlock,
-)
 
-from .code_block_settings import (
-    get_language_choices,
-    get_theme,
-    get_prism_version
-)
 
-class CodeBlock(StructBlock):
+class CodeBlock(blocks.StructBlock):
     """
     A Wagtail StreamField block for code syntax highlighting using PrismJS.
     """
@@ -377,14 +370,14 @@ class CodeBlock(StructBlock):
         language_choices, language_default = self.get_language_choice_list(**kwargs)
 
         local_blocks.extend([
-            ('language', ChoiceBlock(
+            ('language', blocks.ChoiceBlock(
                 choices=language_choices,
                 help_text=_('Coding language'),
                 label=_('Language'),
                 default=language_default,
                 identifier='language',
             )),
-            ('code', TextBlock(label=_('Code'), identifier='code')),
+            ('code', blocks.TextBlock(label=_('Code'), identifier='code')),
         ])
 
         super().__init__(local_blocks, **kwargs)

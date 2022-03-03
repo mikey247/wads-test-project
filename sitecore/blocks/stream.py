@@ -59,7 +59,6 @@ class SplashBlock(blocks.StreamBlock):
         template = 'sitecore/blocks/splash_streamblock.html'
 
 
-        
 class CoreBlock(blocks.StreamBlock):
     """
     Re-usable core Block for collecting standard and custom streamfield support into one place
@@ -115,7 +114,7 @@ class CoreBlock(blocks.StreamBlock):
         TextSnippet,
         group = '3. Embedded Content',
         template='sitecore/tags/text_snippet.html'
-        )
+    )
 
     tab = TabBlock(group='4. Section Blocks')
 
