@@ -17,7 +17,7 @@
 {% block page-content-main-article %}
   {% for post in articles_paginated %}
     {% with post=post.specific %}
-      {% article_blog_summary post %}
+      {% article_blog_summary post show_taggit=True %}
     {% endwith %}
   {% endfor %}
 {% endblock page-content-main-article %}
