@@ -36,7 +36,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ArticleIndexPage(RoutablePageMixin, Page):
+class ArticleIndexPage(RoutablePageMixin, SitePage):
     """
     This model represents Article Index Page, for use within the Django/Wagtail sites.
     The index page will list any child pages in a "blog" style list, using content from the child page.
@@ -51,6 +51,8 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     urls to conform to a yyyy/mm/dd/slug format. 
     
     """
+
+    # presentation/settings choices
     
     SIDEBAR_PLACEMENT_DEFAULT='left'
     SIDEBAR_PLACEMENT_CHOICES = (
@@ -58,7 +60,23 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         ('right', 'Single sidebar (To right of main content'),
         ('none', 'No sidebars'),
     )
+
+    LAYOUT_STYLE_DEFAULT='blog'
+    LAYOUT_STYLE_CHOICES = (
+        ('blog', 'Blog Listing'),
+        ('card', 'Card (Style 1)'),
+    )
+
+    LISTING_ORDER_DEFAULT='path'
+    LISTING_ORDER_CHOICES = (
+        (LISTING_ORDER_DEFAULT, 'Admin Sort Order'),
+        ('-path', 'Admin Sort Order (reversed)'),
+        ('-first_published_at', 'Publication Date (New to Old)'),
+        ('first_published_at', 'Publication Date (Old to New)'),
+    )
     
+    # additional content fields
+
     intro = StreamField(
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
@@ -67,26 +85,50 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         verbose_name='Intro'
     )
 
-    per_page = models.PositiveSmallIntegerField(default=10,
-                                                verbose_name='Articles per Page',
-                                                validators=[
-                                                    MinValueValidator(1),
-                                                    MaxValueValidator(100)
-                                                ])
+    # presentation/settings fields
+    
+    per_page = models.PositiveSmallIntegerField(
+        default=12,
+        verbose_name='Articles per Page',
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(100)
+        ])
 
     display_title = models.BooleanField(default=True)
     display_intro = models.BooleanField(default=False)
     
     sidebar_placement = models.CharField(
         max_length=128,
-        default='left',
+        default=SIDEBAR_PLACEMENT_DEFAULT,
         choices=SIDEBAR_PLACEMENT_CHOICES,
     )
+
+    layout_style = models.CharField(
+        max_length=128,
+        default=LAYOUT_STYLE_DEFAULT,
+        choices=LAYOUT_STYLE_CHOICES,
+    )
+
+    listing_order = models.CharField(
+        max_length=128,
+        default=LISTING_ORDER_DEFAULT,
+        choices=LISTING_ORDER_CHOICES,
+    )
     
+    default_thumbnail = models.ForeignKey(
+        'sitecore.SiteImage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text=_('Specify a default image for the thumbnail in blog/card listings if the child article does not have one.'),
+    )
+
     def get_context(self, request):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexPage, self).get_context(request)
-        articles_all = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by(self.listing_order)
         articles_count = len(articles_all)
 
         # get the paginator obj and the current page number
@@ -146,12 +188,17 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     ]
 
     settings_tab_panel = [
-        FieldPanel('per_page'),
-        FieldPanel('sidebar_placement'),
+        MultiFieldPanel([
+            FieldPanel('layout_style'),
+            FieldPanel('sidebar_placement'),
+            FieldPanel('per_page'),
+            FieldPanel('listing_order'),
+            ImageChooserPanel('default_thumbnail'),
+        ], heading='Layout and Listing Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
-        ], heading='Options'),
+        ], heading='Main Content Options'),
     ]
 
     publish_tab_panel = [
@@ -169,8 +216,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     ])
 
     def get_template(self, request):
-        return f'article/article_index_page_{self.sidebar_placement}.html'
-
+        return f'article/article_index_page_{self.layout_style}.html'
 
 
     
@@ -196,7 +242,7 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexByDatePage, self).get_context(request)
-        articles_all = self.get_children().live().order_by('-first_published_at')
+        articles_all = self.get_children().live().order_by(self.listing_order)
 
         if year:
             articles_all = articles_all.filter(first_published_at__year=year)
@@ -207,6 +253,19 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
         articles_count = len(articles_all)
 
+        # LML: future upgrade
+        # get count per year
+        # follow that with count per month if year filter given
+        # follow that with count per day if both year and month filter given
+
+        # will require:
+        # from django.db.models import Count
+        # from django.db.models.functions import ExtractYear
+
+        # get counts:
+        # yearly_count = all_articles.annotate(year=ExtractYear('first_published_at')).values('year').annotate(count=Count('id')).order_by('year')
+
+        
         # get the paginator obj and the current page number
         paginator = Paginator(articles_all, self.per_page) 
         page_num = request.GET.get('page')
@@ -252,7 +311,6 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/?$')
     def article_index_by_date(self, request, year, month=None, day=None, name='article-index-by-date'):
-        print("article_index_by_date()")
         return TemplateResponse(
             request,
             self.get_template(request),
@@ -430,19 +488,19 @@ class ArticlePage(SitePage):
     )
 
     splash_text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     splash_text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-white',
         max_length=128
     )
     
     splash_bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         max_length=128
     )
@@ -467,19 +525,19 @@ class ArticlePage(SitePage):
     )
 
     inset_text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     inset_text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-primary',
         max_length=128
     )
 
     inset_bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         verbose_name='Inset background colour',
         max_length=128
