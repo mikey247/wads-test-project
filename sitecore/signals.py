@@ -50,8 +50,8 @@ def map_groupmembership_to_wagtail_groups(sender, **kwargs):
     '''
 
     # Debug prints that appear in ./manage.py runserver logs
-    print("siteconfig/signals.py: @receiver(populate_user) / map_groupmembership_to_wagtail_groups()")
-    print(f'kwargs["user"]: {kwargs["user"]}')
+    #print("siteconfig/signals.py: @receiver(populate_user) / map_groupmembership_to_wagtail_groups()")
+    #print(f'kwargs["user"]: {kwargs["user"]}')
 
     # Save user model so we have a user ID; this is required for group assignment (a many-to-may relationship)
     kwargs['user'].save()
@@ -70,10 +70,10 @@ def map_groupmembership_to_wagtail_groups(sender, **kwargs):
                 for valid_dn in settings.XAUTH_LDAP_GROUPS_FROM_MEMBERSHIP[group_name]:
                     is_member = valid_dn in kwargs['ldap_user'].attrs['groupMembership']
                     if is_member:
-                        print(f'{kwargs["user"]} has groupMembership {valid_dn} so is added to group: {group_name}')
+                        #print(f'{kwargs["user"]} has groupMembership {valid_dn} so is added to group: {group_name}')
                         assign_groups.add(group_name)
                     else:
-                        print(f'{kwargs["user"]} does not have groupMembership {valid_dn} so is NOT added to group: {group_name}')
+                        #print(f'{kwargs["user"]} does not have groupMembership {valid_dn} so is NOT added to group: {group_name}')
                         revoke_groups.add(group_name)
         except ValueError as e:
             raise ImproperlyConfigured(
@@ -90,10 +90,10 @@ def map_groupmembership_to_wagtail_groups(sender, **kwargs):
                 for invalid_dn in settings.XAUTH_LDAP_GROUPS_FROM_NON_MEMBERSHIP[group_name]:
                     is_member = invalid_dn not in kwargs['ldap_user'].attrs['groupMembership']
                     if is_member:
-                        print(f'{kwargs["user"]} does not have groupMembership {invalid_dn} so is added to group: {group_name}')
+                        #print(f'{kwargs["user"]} does not have groupMembership {invalid_dn} so is added to group: {group_name}')
                         assign_groups.add(group_name)
                     else:
-                        print(f'{kwargs["user"]} has groupMembership {invalid_dn} so is NOT added to group: {group_name}')
+                        #print(f'{kwargs["user"]} has groupMembership {invalid_dn} so is NOT added to group: {group_name}')
                         revoke_groups.add(group_name)
         except ValueError as e:
             raise ImproperlyConfigured(
@@ -109,4 +109,4 @@ def map_groupmembership_to_wagtail_groups(sender, **kwargs):
         group = Group.objects.get(name=group_name)
         kwargs['user'].groups.remove(group)
 
-    print("siteconfig/signals.py: @receiver(populate_user) / map_groupmembership_to_wagtail_groups() DONE")
+    #print("siteconfig/signals.py: @receiver(populate_user) / map_groupmembership_to_wagtail_groups() DONE")
