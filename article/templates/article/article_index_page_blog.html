@@ -1,0 +1,71 @@
+{% extends "sitecore/base/default.html" %}
+{% load article_tags menu_tags rendition wagtailcore_tags wagtailimages_tags site_tags %}
+
+{% block body-class %}article-index-page-blog{% endblock %}
+
+{% block page-content-main-header %}
+  {% if page.display_title %}
+    <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
+  {% endif %}
+  {% if page.display_intro and page.intro %}
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='article-index-intro' filterspec='width-1200' %}
+    </div>
+  {% endif %}
+{% endblock page-content-main-header %}
+
+{% block page-content-main-article %}
+  {% for post in articles_paginated %}
+    {% with post=post.specific %}
+      {% article_blog_summary post %}
+    {% endwith %}
+  {% endfor %}
+{% endblock page-content-main-article %}
+
+{% block page-content-main-footer-nav %}
+  {% if paginator_count > 1 %}
+    <footer class="my-4" role="pagination">
+      {% index_pagination articles_paginated paginator_range page.url %}  
+    </footer>
+  {% endif %}
+{% endblock page-content-main-footer-nav %}
+
+{% block page-content-aside-slot-1 %}
+  {% if page.sidebar_placement != "none" %}
+    {% children_menu max_levels=2 template='sitecore/menus/children_menu.html' %}
+    <hr>
+  {% endif %}
+{% endblock %}
+
+{% block page-content-aside %}
+  {% if page.sidebar_placement != "none" %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block page-content-main-col-size %}
+  {% if page.sidebar_placement == "none" %}col-lg-12{% else %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block page-content-main-col-style %}
+  {% if page.sidebar_placement == "none" %}px-lg-0
+  {% elif page.sidebar_placement == "right" %}ps-lg-0
+  {% else %}{{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block page-content-main-col-order %}
+  {% if page.sidebar_placement == "right" %}order-1 order-lg-1
+  {% else %}{{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block page-content-aside-col-order %}
+  {% if page.sidebar_placement == "right" %}order-2 order-lg-2
+  {% else %}{{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block page-content-aside-col-style %}
+  {% if page.sidebar_placement == "right" %}pe-lg-0
+  {% else %}{{ block.super }}
+  {% endif %}
+{% endblock %}
