@@ -63,16 +63,16 @@ class SiteSettings(BaseSetting):
 
     bootstrap_theme = models.CharField(
         max_length = 32,
-        choices=constants.BOOTSTRAP4_THEME_CHOICES,
-        help_text='Select a Bootstrap 4 Theme for the site',
-        default=constants.INITIAL_BOOTSTRAP4_THEME
+        choices=sorted(constants.BOOTSTRAP5_THEME_CHOICES),
+        help_text='Select a Bootstrap Theme for the site',
+        default=constants.INITIAL_BOOTSTRAP5_THEME
     )
 
     code_theme = models.CharField(
         max_length = 32,
         choices=sorted(constants.WAGTAIL_CODE_BLOCK_THEME_CHOICES),
         help_text='Select a Code Theme for code blocks',
-        default= 'coy'
+        default= constants.INITIAL_WAGTAIL_CODE_BLOCK_THEME,
     )
 
     brand_logo = models.ForeignKey(
@@ -118,7 +118,7 @@ class SiteSettings(BaseSetting):
     
     navbar_background_colour = models.CharField(
         max_length = 32,
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         help_text='Select the background colour of the navigation bar',
         default='bg-primary',
     )

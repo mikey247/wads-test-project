@@ -25,7 +25,7 @@ from taggit.models import Tag
 
 from .sitepage import SitePage, SitePageTags
 
-class SiteTagIndexPage(RoutablePageMixin, Page):
+class SiteTagIndexPage(RoutablePageMixin, SitePage):
     """
     This defines a tag index page for searching content with specific tags and/or displaying the 
     entire shared tag cloud. The ?tag= field in the page request is used to search for specific
@@ -178,7 +178,6 @@ class SiteTagIndexPage(RoutablePageMixin, Page):
     
     @route(r'^(?P<slug>[\w-]+)/?$')
     def tag_index_by_slug(self, request, slug=None, name='tag-index-by-slug'):
-        print("tag_index_by_slug", slug)
         return TemplateResponse(
             request,
             self.get_template(request),

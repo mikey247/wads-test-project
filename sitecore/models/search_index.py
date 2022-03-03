@@ -24,7 +24,7 @@ from sitecore.parsers import ValidateCoreBlocks
 from .sitepage import SitePage, SitePageTags
 
 
-class SiteSearchIndexPage(Page):
+class SiteSearchIndexPage(SitePage):
     """
     This defines a search index page for searching content with given search terms
     The ?query= field in the page request is used to search for specific
