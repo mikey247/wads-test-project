@@ -8,12 +8,12 @@ import sitecore.parsers as parsers
 ### create shortcodes
 
 @shortcodes.register("code", "/code")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     content_html = html.escape(content)
     return '<code>%s</code>' % (content_html)
 
 @shortcodes.register("samp", "/samp")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     try:
         mode = html.escape(pargs[0])
         if mode == 'block':
@@ -29,27 +29,27 @@ def handler(context, content, pargs, kwargs):
         return samp_html
 
 @shortcodes.register("var", "/var")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     content_html = html.escape(content)
     return '<var>%s</var>' % (content_html)
 
 @shortcodes.register("del", "/del")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     content_html = html.escape(content)
     return '<del>%s</del>' % (content_html)
 
 @shortcodes.register("ins", "/ins")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     content_html = html.escape(content)
     return '<ins>%s</ins>' % (content_html)
 
 @shortcodes.register("strike", "/strike")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     content_html = html.escape(content)
     return '<s>%s</s>' % (content_html)
 
 @shortcodes.register("kbd")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context):
     result = []
     for arg in pargs:
         try:
@@ -60,17 +60,17 @@ def handler(context, content, pargs, kwargs):
     return u' '.join(result)
 
 @shortcodes.register("abbr")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context):
     try:
         title = html.escape(pargs[0])
         abbr = html.escape(pargs[1])
     except:
-        raise RenderingError
+        raise shortcodes.ShortcodeRenderingError
         
     return '<abbr title="%s">%s</abbr>' % (title,abbr)
 
 @shortcodes.register("span", "/span")
-def handler(context, content, pargs, kwargs):
+def handler(pargs, kwargs, context, content):
     try:
         classes = html.escape(u' '.join(pargs))
     except:
