@@ -7,6 +7,19 @@
 
 {% block body-class %}home-splash{% endblock %}
 
+{% block page-content-main-header %}
+  <header>
+  {% if page.display_title %}
+    <h1 class="mb-4">{{ page.seo_title|default:page.title }}</h1>
+  {% endif %}
+  {% if page.display_intro and page.intro %}
+    <div class="lead mb-4">
+      {% include_block page.intro with pid='home-intro' filterspec='width-1200' %}
+    </div>
+  {% endif %}
+  </header>
+{% endblock page-content-main-header %}
+
 {% if self.splash_image %}
   {% block head-css-extension %}
     {% rendition self.splash_image 'width-1920' as photo %}
@@ -62,17 +75,6 @@
     </div>
   {% endif %}
 {% endblock page-head %}
-
-
-{% block page-content-main-header %}
-  <header>
-    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
-    <div class="lead mb-4">
-      {% include_block self.intro with pid='page-intro' filterspec='width-1200' %}
-    </div>
-    <hr>
-  </header>
-{% endblock %}
 
 {% block page-content-main-article %}
   <article>

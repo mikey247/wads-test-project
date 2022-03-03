@@ -13,9 +13,11 @@ from wagtail.search import index
 
 from sitecore import constants
 from sitecore import blocks as sitecore_blocks
+from sitecore.models import SitePage
 from sitecore.parsers import ValidateCoreBlocks
 
-class HomePage(Page):
+
+class HomePage(SitePage):
 
     # content fields
     #   title - inherited
@@ -62,19 +64,19 @@ class HomePage(Page):
     )
 
     splash_text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     splash_text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-white',
         max_length=128
     )
     
     splash_bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         max_length=128
     )
@@ -99,19 +101,19 @@ class HomePage(Page):
     )
 
     inset_text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     inset_text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-primary',
         max_length=128
     )
 
     inset_bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         verbose_name='Inset background colour',
         max_length=128
@@ -134,11 +136,16 @@ class HomePage(Page):
         default=True,
         help_text=_('Toggle the display of the default title field.'),
     )
+    display_intro = models.BooleanField(
+        default=True,
+        help_text=_('Toggle the display of the page intro section.'),
+    )
 
     # search and api
     
     search_fields = Page.search_fields + [
         index.SearchField('splash_content'),
+        index.SearchField('inset_content'),	
         index.SearchField('intro'),
         index.SearchField('body'),
     ]
@@ -225,6 +232,7 @@ class HomePage(Page):
         MultiFieldPanel([
             FieldPanel('show_in_menus'),
             FieldPanel('display_title'),
+            FieldPanel('display_intro'),
         ], heading=_('Options')),
     ]
 
