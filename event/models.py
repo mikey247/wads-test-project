@@ -25,7 +25,7 @@ from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
 
-class EventIndexPage(Page):
+class EventIndexPage(SitePage):
     
     intro = StreamField(
         sitecore_blocks.CoreBlock,
@@ -277,14 +277,12 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
     opening_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
-        default=datetime.date.today,
         help_text=_('Enter the date registration opens.')
     )
 
     closing_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
-        default=datetime.date.today,
         help_text=_('Enter the date registration closes.')
     )
 
@@ -330,7 +328,8 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
         return context
 
     class Meta:
-        icon = 'date'
+        icon = 'clipboard-list'
+        label = 'Registration'
 
     
 class EventTypeOpenMeetingBlock(blocks.StructBlock):
@@ -356,6 +355,9 @@ class EventTypeOpenMeetingBlock(blocks.StructBlock):
         help_text=_('Enter email address to request further details.')
     )
 
+    class Meta:
+        icon = 'group'
+        label = 'Open Meeting'
 
 
 class EventTypeBlock(blocks.StreamBlock):
@@ -382,6 +384,10 @@ class EventPageForm(WagtailAdminPageForm):
         # Determine duration
         page.duration = (page.end_date - page.start_date).days + 1
 
+        # Determine simple event type name for ModelAdmin filtering
+        block = page.event_type[0].block
+        page.event_type_name = block.name
+        
         if commit:
             page.save()
         return page
@@ -478,6 +484,10 @@ class EventPage(SitePage):
     start_date = models.DateField()
     end_date = models.DateField()
     duration = models.IntegerField()
+    event_type_name = models.CharField(
+        max_length=255,
+        blank=False,
+    )
 
     # Model view methods - callable in template views for EventPage and EventIndexPage - preferred over context['name']
     
