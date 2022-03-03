@@ -1,0 +1,53 @@
+// Research IT 5.1.3
+// Derived from Cosmo 5.1.3
+// Bootswatch
+
+// Fonts are now loaded locally
+
+// Typography
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+// Custom typography
+.brand-name h1 {
+    font-size: 22px;
+    color: $primary;
+    font-weight: 600;
+    line-height: 22px;
+}
+
+h1 {
+    color: $primary;
+}
+
+#splash h1 {
+    color: inherit;
+}
+
+footer a {
+    text-decoration: none;
+    &:hover {
+	text-decoration: underline;
+    }
+}
+
+// Indicators
+
+.badge {
+  &.bg-light {
+    color: $dark;
+  }
+}
+
+// Progress bars
+
+.progress {
+  @include box-shadow(none);
+
+  .progress-bar {
+    font-size: 8px;
+    line-height: 8px;
+  }
+}
