@@ -4,24 +4,24 @@
     {% if show_count %}
       {% if tag.num_tags %}
 	{% if tag.slug|stringformat:'s' == selected %}
-	  <a class="btn btn-outline-primary mr-2 mb-2 disabled" href="#">
+	  <a class="btn btn-outline-primary me-2 mb-2 disabled" href="#">
 	    <span class="text-lowercase"><i class="fa fa-tag"></i> {{ tag }}</span>
-	    <span class="badge badge-pill badge-light">{{ tag.num_tags }}</span>
+	    <span class="badge badge-pill bg-light">{{ tag.num_tags }}</span>
 	  </a>
 	{% else %}
-	  <a class="btn btn-primary mr-2 mb-2" href="{% slugurl 'tag' %}{{ tag.slug }}/">
+	  <a class="btn btn-primary me-2 mb-2" href="{% slugurl 'tag' %}{{ tag.slug }}/">
 	    <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
-	    <span class="badge badge-pill badge-light"><strong>{{ tag.num_tags }}</strong></span>
+	    <span class="badge badge-pill bg-light"><strong>{{ tag.num_tags }}</strong></span>
 	  </a>
 	{% endif %}
       {% endif %}
     {% else %}
       {% if tag.slug|stringformat:'s' == selected %}
-	<a class="btn btn-outline-primary mr-2 mb-2 disabled" href="#">
+	<a class="btn btn-outline-primary me-2 mb-2 disabled" href="#">
 	  <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
 	</a>
       {% else %}
-	<a class="btn btn-primary mr-2 mb-2" href="{% slugurl 'tag' %}{{ tag.slug }}/">
+	<a class="btn btn-primary me-2 mb-2" href="{% slugurl 'tag' %}{{ tag.slug }}/">
 	  <span><i class="fa fa-tag"></i> {{ tag.name }}</span>
 	</a>
       {% endif %}
