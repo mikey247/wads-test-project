@@ -5,7 +5,6 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 """
 
 from django import forms
-from wagtail.core.fields import RichTextField # StreamField, 
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
 from django.utils.functional import cached_property
@@ -14,6 +13,7 @@ from django.forms import Media
 
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core import blocks
+from wagtail.core.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 from django_select2.forms import Select2Widget
@@ -129,6 +129,8 @@ class BSBlockquoteBlock(blocks.StructBlock):
     class Meta:
         icon = 'openquote'
         template = 'sitecore/blocks/blockquote.html'
+
+
 
 class Select2ChoiceBlock(blocks.FieldBlock):
     """
@@ -246,6 +248,8 @@ class Select2ChoiceBlock(blocks.FieldBlock):
         # block is being used for. Feel encouraged to specify an icon in your
         # descendant block type
         icon = "placeholder"
+
+
     
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
     """

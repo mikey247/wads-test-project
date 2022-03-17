@@ -10,33 +10,15 @@
 # team members it can be split into groups in tabs e.g. RI Team, RSE
 # Team etc
 
-# from django import forms
-# from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
-# from django.db import models
-# from django.utils.encoding import force_text
-# from django.utils.functional import cached_property
-# from django.utils.safestring import mark_safe
-# from django.utils.translation import ugettext_lazy as _
-
-# from django_select2.forms import Select2Widget
-
-# from wagtail.contrib.table_block.blocks import TableBlock
-# from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core import blocks
-# from wagtail.core.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
-#from wagtail.snippets.models import register_snippet
 
 from sitecore import constants
-# from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
-# from taggit.managers import TaggableManager
-# from taggit.models import TaggedItemBase
+from .text import CodeBlock, MarkdownAndShortcodeTextBlock, TextSnippet
 
-from .text import MarkdownAndShortcodeTextBlock, CodeBlock
-from .text import TextSnippet
 
 
 class SubSectionBlock(blocks.StructBlock):
