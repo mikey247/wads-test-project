@@ -32,7 +32,7 @@ def top_menu(context, parent, search_query='', transparent=False, calling_page=N
     a dropdown class to be applied to a parent.
     """
     
-    menuitems = parent.get_children().live().in_menu()
+    menuitems = parent.get_children().live().in_menu().specific()
     for menuitem in menuitems:
         menuitem.show_dropdown = has_menu_children(menuitem)
         # We don't directly check if calling_page is None since the template
