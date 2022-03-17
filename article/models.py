@@ -179,12 +179,15 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
     # Rebuild promote tab panel
     
     promote_tab_panel = [
-        FieldPanel('slug'),
-        FieldPanel('seo_title'),
-        FieldPanel('search_description'),
+       MultiFieldPanel([
+            FieldPanel('slug'),
+            FieldPanel('seo_title'),
+            FieldPanel('search_description'),
+        ], _('Search Engine Options')),
         MultiFieldPanel([
             FieldPanel('show_in_menus'),
-        ], heading=_('Options')),
+            FieldPanel('menu_label')
+        ], _('menu Options')),
     ]
 
     settings_tab_panel = [
