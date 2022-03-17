@@ -35,9 +35,6 @@
   <nav class="navbar {% if navcfg.transparent is True %}nav-fill navbar-dark {{ navcfg.bg }} navbar-transparent {% else %}{{ navcfg.textmode }} {{ navcfg.bg }} {% endif %}{% if navcfg.navbar_expand %}{{ navcfg.navbar_expand }} {% else %}navbar-expand-md {% endif %}">
 
     <div class="{{ navcfg.outerclass }} p-0">
-      <a style="width: auto" class="navbar-brand ps-3 ps-lg-0" href="{% pageurl parent %}" title="{{ parent.title }}">
-        {% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% endif %}
-      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
 	<span class="sr-only">Toggle navigation</span>
 	<span class="navbar-toggler-icon"></span>
@@ -46,15 +43,15 @@
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link{% if path == '/' %} active{% endif %}" href="{% pageurl parent %}" title="{{ parent.title }}">Home{% if path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
+            <a class="px-0 nav-link{% if path == '/' %} active{% endif %}" href="{% pageurl parent %}" title="{{ parent.title }} - Home Page">{% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% else %}Home{% endif %}{% if path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
           </li>
           {% for menuitem in menuitems %}
             <li class="nav-item{% if menuitem.show_dropdown %} dropdown{% endif %}{% if menuitem.active %} active{% endif %}">
               {% if menuitem.show_dropdown %}
-		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ forloop.counter0 }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menuitem.title }}</a>
+		<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{ forloop.counter0 }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ menuitem.menu_label|default:menuitem.title }}</a>
 		{% top_menu_children parent=menuitem menu_id=forloop.counter0 %}
               {% else %}
-		<a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}{% if menuitem.active %} <span class="sr-only">(current)</span>{% endif %}</a>
+		<a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.menu_label|default:menuitem.title }}{% if menuitem.active %} <span class="sr-only">(current)</span>{% endif %}</a>
               {% endif %}
 	    </li>       
 	  {% endfor %}
