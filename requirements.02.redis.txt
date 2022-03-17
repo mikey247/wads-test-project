@@ -1,4 +1,4 @@
 # Optional redis cache packages for Django 3.2.12 and wagtail 2.15.3 as of 20220201
 
 django-redis==5.2.0
-redis==4.1.2
+redis==4.1.4
