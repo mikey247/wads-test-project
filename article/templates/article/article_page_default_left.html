@@ -8,7 +8,7 @@
     {% if self.article_image %}
       {% rendition self.article_image self.article_image_filterspec as photo %}
       <div class="mb-4">
-	<img src="{{ photo.url }}" alt="{{ self.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
+	<img src="{{ photo.url }}" filter-spec="{{ self.article_image_filterspec }}" alt="{{ self.article_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
       </div>
     {% endif %}
     <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
