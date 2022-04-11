@@ -60,7 +60,7 @@
 	{% if event.search_description %}
 	  {% include_block event.search_description with pid='event-search-description' filterspec='width-1200' %}
 	{% elif event.intro != "<p></p>" %}
-	  {% include_block event.intro with pid='event-intro' filterspec='width-1200' %}
+   	  {{ event.intro | richtext }}
 	{% else %}
 	  <p class="text-warning">Page has no introductory text or search description.</p>
 	{% endif %}

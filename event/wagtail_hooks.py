@@ -12,9 +12,10 @@ def event_type_name(obj):
     """
     Custom modeladmin display option to retrieve event type as name
     As event type is defined within a streamblock, we get its block name
-    Note: event_type streamfield is limited to ONE instance and is a 
+    Note: event_type streamfield is limited to ONE instance and is a
     required field.
     """
+    
     return f'{obj.event_type[0].block.label}'
 
 
@@ -22,6 +23,7 @@ class EventTypeListFilter(admin.SimpleListFilter):
     """
     
     """
+
     title = 'Event Type'
     parameter_name = 'event_type'
 
@@ -40,7 +42,6 @@ class EventTypeListFilter(admin.SimpleListFilter):
             else:
                 return queryset.filter(event_type_name=event_type_name)
 
-                
 
 class EventPageWagtailAdmin(ModelAdmin):
     """
@@ -53,12 +54,13 @@ class EventPageWagtailAdmin(ModelAdmin):
     The filters includes the EventTypeList filter defined above
     The list includes a column for the event_type_name as defined above
     """
+
     model = EventPage
-    menu_label = 'Events'  # ditch this to use verbose_name_plural from model
-    menu_icon = 'date'  # change as required
-    menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
-    add_to_settings_menu = False  # or True to add your model to the Settings sub-menu
-    exclude_from_explorer = True # or True to exclude pages of this type from Wagtail's explorer view
+    menu_label = 'Events'
+    menu_icon = 'date'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = True
     list_display = ('title', event_type_name, 'author', 'start_date', 'first_published_at')
     list_export = ('title', 'author', 'first_published_at')
     list_filter = (EventTypeListFilter, 'start_date', 'author', 'first_published_at')
@@ -68,4 +70,3 @@ class EventPageWagtailAdmin(ModelAdmin):
     
 # Now you just need to register your customised ModelAdmin class with Wagtail
 modeladmin_register(EventPageWagtailAdmin)
-
