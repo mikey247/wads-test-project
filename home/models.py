@@ -5,9 +5,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
-from wagtail.core import blocks
 from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.fields import StreamField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
@@ -145,7 +144,7 @@ class HomePage(SitePage):
     
     search_fields = Page.search_fields + [
         index.SearchField('splash_content'),
-        index.SearchField('inset_content'),	
+        index.SearchField('inset_content'),
         index.SearchField('intro'),
         index.SearchField('body'),
     ]
@@ -212,7 +211,7 @@ class HomePage(SitePage):
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('inset_style')
-                ]),
+            ]),
             FieldRowPanel([
                 FieldPanel('inset_text_align'),
                 FieldPanel('inset_text_colour'),
@@ -242,7 +241,6 @@ class HomePage(SitePage):
         PublishingPanel(),
         PrivacyModalPanel(),
     ]
-    
     
     # Rebuild edit_handler so we have all tabs
     
