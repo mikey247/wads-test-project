@@ -135,7 +135,7 @@ class NestedCoreBlock(blocks.StreamBlock):
     # Override methods
 
     def get_form_context(self, value, prefix='', errors=None):
-        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context = super().get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'nested-core-block'
         return context
 

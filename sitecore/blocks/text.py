@@ -27,7 +27,6 @@ from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 from .code_block_settings import get_language_choices, get_theme, get_prism_version
 
 
-
 class BSHeadingBlock(blocks.StructBlock):
     """
     Heading block with selection of h2-6 and optional sub-heading in <small>
@@ -58,7 +57,7 @@ class BSHeadingBlock(blocks.StructBlock):
     )
 
     def get_form_context(self, value, prefix='', errors=None):
-        context = super(BSHeadingBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context = super().get_form_context(value, prefix=prefix, errors=errors)
         #context['block_type'] = 'bs-heading-block'
         return context
 
