@@ -1,8 +1,10 @@
-{% load social_share %}
+{% load social_share wagtailcore_tags %}
+{% wagtail_site as current_site %}
+
 <div class="my-3">
   {% post_to_facebook page.url_path %}
-  {% post_to_twitter 'Article from : {{ page.title }}.' page.url_path %}
+  {% post_to_twitter 'Article from {{ current_site.site_name }}: {{ page.title }}.' page.url_path %}
   {% post_to_linkedin page.url_path %}
-  {% post_to_reddit 'Article from : {{ page.title }}.' page.url_path %}
-  {% send_email 'Article from ' page.title page.url_path %}
+  {% post_to_reddit 'Article from {{ current_site.site_name }}: {{ page.title }}.' page.url_path %}
+  {% send_email 'Article from {{ current_site.site_name }}' page.title page.url_path %}
 </div>

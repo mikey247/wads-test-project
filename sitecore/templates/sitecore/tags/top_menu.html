@@ -43,7 +43,7 @@
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="px-0 nav-link{% if path == '/' %} active{% endif %}" href="{% pageurl parent %}" title="{{ parent.title }} - Home Page">{% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% else %}Home{% endif %}{% if path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
+            <a class="px-0 me-2 nav-link{% if path == '/' %} active{% endif %}" href="{% pageurl parent %}" title="{{ parent.title }} - Home Page">{% if navcfg.brand_icon %}<i class="{{ navcfg.brand_icon }}"></i>{% else %}Home{% endif %}{% if path == '/' %} <span class="sr-only">(current)</span>{% endif %}</a>
           </li>
           {% for menuitem in menuitems %}
             <li class="nav-item{% if menuitem.show_dropdown %} dropdown{% endif %}{% if menuitem.active %} active{% endif %}">
