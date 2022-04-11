@@ -4,7 +4,7 @@ the handling of markdown and shortcodes combined for markdown text fields and bl
 :Authors: Louise Lever <louise.lever@manchester.ac.uk>
 :Copyright: Research IT, IT Services, The University of Manchester
 """
-import markdown # TODO replace with custom version for Bootstrap3 formatted output
+import markdown  # TODO replace with custom version for Bootstrap3 formatted output
 import shortcodes
 import sitecore.config as sitecore_config
 
@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from wagtail.core.blocks.stream_block import StreamBlockValidationError
+
 
 def ParseShortcodes(value):
     """
@@ -28,12 +29,12 @@ def ParseShortcodes(value):
     except shortcodes.ShortcodeSyntaxError as e:
         raise ValidationError(
             _('ShortcodeSyntaxError: %s' % str(e)),
-            params={'value':value},
+            params={'value': value},
         )
     except shortcodes.ShortcodeRenderingError as e:
         raise ValidationError(
-            _('ShortcodeRenderingError: %s (%s)' % (str(e),str(e.__cause__))),
-            params={'value':value},
+            _('ShortcodeRenderingError: %s (%s)' % (str(e), str(e.__cause__))),
+            params={'value': value},
         )
     
 
@@ -53,7 +54,7 @@ def ParseMarkdownAndShortcodes(value):
     used as delimiters.
     Note: There is no exception mechanism for the Markdown parse stage.
     """
-    md_parser = markdown.Markdown(extensions=['markdown.extensions.tables','markdown.extensions.footnotes'])
+    md_parser = markdown.Markdown(extensions=['markdown.extensions.tables', 'markdown.extensions.footnotes'])
     sc_parser = shortcodes.Parser(start=sitecore_config.START, end=sitecore_config.END, esc=sitecore_config.ESC)
 
     md_text = md_parser.reset().convert(mark_safe(value))
@@ -63,12 +64,12 @@ def ParseMarkdownAndShortcodes(value):
     except shortcodes.ShortcodeSyntaxError as e:
         raise ValidationError(
             _('ShortcodeSyntaxError: %s' % str(e)),
-            params={'value':md_text},
+            params={'value': md_text},
         )
     except shortcodes.ShortcodeRenderingError as e:
         raise ValidationError(
-            _('ShortcodeRenderingError: %s (%s)' % (str(e),str(e.__cause__))),
-            params={'value':md_text},
+            _('ShortcodeRenderingError: %s (%s)' % (str(e), str(e.__cause__))),
+            params={'value': md_text},
         )
 
 
@@ -145,7 +146,7 @@ def ValidateCoreBlocks(value):
 
     """
 
-    items = [ data['value'] if isinstance(data,dict) else data[1] for data in value.raw_data if 'markdown' in (data['type'] if isinstance(data,dict) else data[0]) ]
+    items = [data['value'] if isinstance(data, dict) else data[1] for data in value.raw_data if 'markdown' in (data['type'] if isinstance(data, dict) else data[0])]
 
     for item in items:
         try:

@@ -9,7 +9,7 @@ Sitecore constants module to define several Bootstrap 4, Django and Wagtail cons
 BOOTSTRAP5_THEME_CHOICES = [
     ('default', 'Default Bootstrap 5'),
 ] + [
-    (bsw_theme,'Bootswatch: '+bsw_theme) for bsw_theme in
+    (bsw_theme, 'Bootswatch: ' + bsw_theme) for bsw_theme in
     ["cosmo",
      "darkly",
      "journal",
@@ -46,10 +46,10 @@ INITIAL_BOOTSTRAP5_THEME = 'pulse'
 # Navbar settings
 
 NAVBAR_RESPONSIVE_SIZE_CHOICES = [
-    ('sm','Small'),
-    ('md','Medium'),
-    ('lg','Large'),
-    ('xl','Extra Large'),
+    ('sm', 'Small'),
+    ('md', 'Medium'),
+    ('lg', 'Large'),
+    ('xl', 'Extra Large'),
 ]
 
 NAVBAR_TEXT_COLOUR_MODE = [
@@ -160,7 +160,7 @@ INSET_STYLE_CLASS_CHOICES = (
     ('container-fluid inset inset-raised', 'Wide Raised Inset'),
 )
 
-# these are sorted alphabetically in the settings model 
+# these are sorted alphabetically in the settings model
 WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
 
     ('default', 'Default'),
@@ -182,5 +182,3 @@ WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
 ]
 
 INITIAL_WAGTAIL_CODE_BLOCK_THEME = 'coy'
-
-
