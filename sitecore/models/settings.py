@@ -8,6 +8,7 @@ from django.db import models
 
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.core.models import Site
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 from sitecore import constants
@@ -16,7 +17,7 @@ from sitecore import constants
 class EmailSettings(BaseSetting):
 
         def get_context(self, request):
-            context = super(EmailSettings, self).get_context(request)
+            context = super().get_context(request)
             context['site'] = Site.find_for_request(request)
             return context
 
@@ -52,7 +53,7 @@ class SiteSettings(BaseSetting):
     Settings can be grouped and provided with tabbed panels for display.
     """
     def get_context(self, request):
-        context = super(SiteSettings, self).get_context(request)
+        context = super().get_context(request)
         context['site'] = Site.find_for_request(request)
         return context
 

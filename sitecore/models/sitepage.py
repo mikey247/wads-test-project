@@ -60,6 +60,7 @@ class SitePage(Page):
     menu_label = models.CharField(
         max_length=32,
         default='',
+        blank=True,
         help_text=_("Provide text to override the default title used to generate the menu label")
     )
     

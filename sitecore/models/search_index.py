@@ -106,7 +106,7 @@ class SiteSearchIndexPage(SitePage):
 
 
     def get_context(self, request, slug=None):
-        context = super(SiteSearchIndexPage, self).get_context(request)
+        context = super().get_context(request)
 
         # (1) Retrieve all pages that match search terms
         search_terms = request.GET.get('query', None)

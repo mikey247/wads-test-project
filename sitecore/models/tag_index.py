@@ -108,7 +108,7 @@ class SiteTagIndexPage(RoutablePageMixin, SitePage):
 
 
     def get_context(self, request, slug=None):
-        context = super(SiteTagIndexPage, self).get_context(request)
+        context = super().get_context(request)
 
         # (1) Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
