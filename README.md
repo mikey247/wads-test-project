@@ -295,7 +295,7 @@ Now you have a development copy of wagtail ready to start building your project.
 
 Developing for Wagtail follows a general development pipeline - 
 
-1. develop your app or feature on a separate branch to `main`
+1. develop your app or feature on a separate branch to `main` - (you create an app with - `./manage.py startapp appname` (Linux/WSL) or `python manage.py startapp appname`(Windows))
 2. if there are changes to the database run the `makemigrations` and `migrate` commands
 3. test your work in the browser
 4. repeat the first 3 steps until complete
