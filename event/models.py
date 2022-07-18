@@ -365,6 +365,9 @@ class EventTypeOpenMeetingBlock(blocks.StructBlock):
         help_text=_('Enter email address to request further details.')
     )
 
+    class Meta:
+        icon = 'date'
+
 
 
 class EventTypeBlock(blocks.StreamBlock):
