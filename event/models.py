@@ -323,9 +323,21 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
 
-        value['is_not_yet_open'] = value['opening_date'] > datetime.date.today()
-        value['closed'] = value['closing_date'] < datetime.date.today()
-        value['closing_soon'] = value['closing_date'] < (datetime.date.today() + datetime.timedelta(weeks=1))
+        if value['opening_date']:
+            value['is_not_yet_open'] = value['opening_date'] > datetime.date.today()
+        else:
+            if not value['closing_date']:
+                value['is_not_yet_open'] = True
+            else:
+                value['is_not_open_yet'] = False
+        
+        if value['closing_date']:
+            value['closed'] = value['closing_date'] < datetime.date.today()
+            value['closing_soon'] = value['closing_date'] < (datetime.date.today() + datetime.timedelta(weeks=1))
+        else:
+            value['closed'] = False
+            value['closing_soon'] = False
+        
 
         return context
 
@@ -355,6 +367,9 @@ class EventTypeOpenMeetingBlock(blocks.StructBlock):
         group='Open Meeting Info and Links',
         help_text=_('Enter email address to request further details.')
     )
+
+    class Meta:
+        icon = 'date'
 
 
 
