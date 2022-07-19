@@ -326,7 +326,10 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
         if value['opening_date']:
             value['is_not_yet_open'] = value['opening_date'] > datetime.date.today()
         else:
-            value['is_not_yet_open'] = True
+            if not value['closing_date']:
+                value['is_not_yet_open'] = True
+            else:
+                value['is_not_open_yet'] = False
         
         if value['closing_date']:
             value['closed'] = value['closing_date'] < datetime.date.today()
