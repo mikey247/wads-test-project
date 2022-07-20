@@ -8,6 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -247,6 +248,23 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
+
+    def serve(self, request, *args, **kwargs):
+        from article.forms import FilterForm
+
+        if request.method == "POST":
+            form = FilterForm(request.POST)
+
+            if form.is_valid():
+                if request.POST.get('filter_button'):
+                    filtered_date = form.cleaned_data['selected_date']
+                    return render(request, self.get_template(request), self.get_context(request, year=None, month=None, day=None))
+        
+        form = FilterForm()
+
+        filtered_date = ""
+        
+        return render(request, self.get_template(request), self.get_context(request, year=None, month=None, day=None))
 
     @route(r'^(?P<year>[0-9]{4})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/?$')
