@@ -5,6 +5,8 @@ import datetime
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.forms import ValidationError
+from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
  
 from wagtail.core.models import Orderable, Page
@@ -319,6 +321,17 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
         default=u'Registration is NOW CLOSED',
         help_text=_('Text displayed after registration closing date has passed.')
     )
+    
+    def clean(self, value):
+        errors = {}
+        # Check opening date is before closing date, if provided
+        if value.get('opening_date') and value.get('closing_date') and value.get('opening_date') > value.get('closing_date'):
+            errors['closing_date'] = ErrorList(['The closing date cannot be before the opening date.'])
+            errors['opening_date'] = ErrorList(['The closing date cannot be before the opening date.'])
+        if errors:
+            raise ValidationError("Bad closing date", params=errors)
+        return super().clean(value)
+
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
