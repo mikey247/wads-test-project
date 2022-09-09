@@ -200,41 +200,6 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         context = super(ArticleIndexByDatePage, self).get_context(request)
         articles_all = self.get_children().live().order_by('-first_published_at')
 
-        form = FilterForm()
-
-        # if request.method == 'GET':
-        #     query_dict = request.GET.copy()
-
-        # if request.method == 'POST':
-        #     form = FilterForm(request.POST)
-        #     if request.POST.get('filter_button'):
-        #         query_dict = request.POST.copy()
-        #         year = None
-        #         month = None
-        #         day = None
-
-        #         if query_dict.get('selected_date_year') != '':
-        #             year = query_dict.get('selected_date_year')
-        #             date_url = self.full_url + str(year) + '/'
-        #             print("self.url--------------")
-        #             print(self.url)
-        #             print(self.full_url)
-
-        #             if query_dict.get('selected_date_month') != '' and year is not None:
-        #                 month = query_dict.get('selected_date_month')
-        #                 date_url = date_url + str(month) + '/'
-
-        #                 if query_dict.get('selected_date_day') != '' and month is not None:
-        #                     day = query_dict.get('selected_date_day')
-        #                     date_url = date_url + str(day) + '/'
-        #             print(date_url)
-                    
-
-        # print(year)
-        # print(month)
-        # print(day)
-        # print("end--------------")
-
         if year:
             articles_all = articles_all.filter(first_published_at__year=year)
         if month:
@@ -273,7 +238,7 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         if page_index_end < page_index_max:
             context['paginator_range'].append(page_index_max)
 
-        context['form'] = form
+        context['form'] = FilterForm()
 
         context['year'] = year
         context['month'] = month
@@ -284,35 +249,6 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         
         return context
 
-    # def serve(self, request, *args, **kwargs):
-    #     if request.method == 'POST':
-    #         print("redirect------------------")
-    #         form = FilterForm(request.POST)
-    #         if request.POST.get('filter_button'):
-    #             query_dict = request.POST.copy()
-    #             year = None
-    #             month = None
-    #             day = None
-    #             date_url = self.url
-
-    #             if query_dict.get('selected_date_year') != '':
-    #                 year = query_dict.get('selected_date_year')
-    #                 date_url = date_url + str(year) + '/'
-    #                 print("self.url--------------")
-    #                 print(self.url)
-    #                 print(date_url)
-
-    #                 if query_dict.get('selected_date_month') != '' and year is not None:
-    #                     month = query_dict.get('selected_date_month')
-    #                     date_url = date_url + str(month) + '/'
-
-    #                     if query_dict.get('selected_date_day') != '' and month is not None:
-    #                         day = query_dict.get('selected_date_day')
-    #                         date_url = date_url + str(day) + '/'
-
-    #             # self.article_index_by_date(request, year, month, day)
-    #             return redirect(date_url)
-    #     return super().serve(request)
 
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
@@ -323,24 +259,22 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/?$')
     def article_index_by_date(self, request, year=None, month=None, day=None, name='article-index-by-date'):
         print("article_index_by_date()")
+
         if request.method == 'POST':
             if request.POST.get('filter_button'):
                 query_dict = request.POST.copy()
 
                 if query_dict.get('selected_date_year') != '':
                     year = query_dict.get('selected_date_year')
-                    date_url = self.url + str(year) + '/'
-                    print("self.url--------------")
-                    print(self.url)
-                    print(self.full_url)
+                    date_url = self.url + year + '/'
 
                     if query_dict.get('selected_date_month') != '' and year is not None:
                         month = query_dict.get('selected_date_month')
-                        date_url = date_url + str(month) + '/'
+                        date_url = date_url + f'{int(month):02d}' + '/'
 
                         if query_dict.get('selected_date_day') != '' and month is not None:
                             day = query_dict.get('selected_date_day')
-                            date_url = date_url + str(day) + '/'
+                            date_url = date_url + f'{int(day):02d}' + '/'
                     
                     return redirect(date_url)
 
