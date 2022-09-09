@@ -27,21 +27,29 @@
     <ul class="list-group">
       <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapse_filter" role="button" aria-expanded="false" aria-controls="collapse_filter">
 	      <strong>Articles Filtered by:</strong>
+        <style>
+          [aria-expanded="false"] > .expanded,
+          [aria-expanded="true"] > .collapsed {
+            display: none;
+          }
+        </style>
+        <span class="collapsed"><i class="fas fa-chevron-down"></i></span>
+        <span class="expanded"><i class="fas fa-chevron-up"></i></span>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-	      <div class="collapse" id="collapse_filter">
-          <div class="card card-body bg-dark">
+      <div class="collapse" id="collapse_filter">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
             <form action="{% pageurl page %}" id='filter-form' method="POST">
               {% csrf_token %}
-              <span>Day:</span>
+              <span>Filter by date:</span>
+              <br>
               {{ form.selected_date }}
-              <span>Month:</span>
-              <span>Year:</span>
+              <br><br>
               <input id='filter_button' name='filter_button' type="submit" class="btn btn-primary btn-block" value="Filter" />
             </form>
-          </div>
-        </div>
-      </li>
+          </li>
+        </ul>
+      </div>
       <li class="list-group-item d-flex justify-content-between align-items-center">
 	{% if day %}
 	  <span>{{ year }} / {{ month }} / {{ day }}</span>
