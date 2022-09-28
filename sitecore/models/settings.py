@@ -12,6 +12,9 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 
 from sitecore import constants
 
+# from siteconfig.settings.local import DEFAULT_FROM_EMAIL
+
+
 @register_setting(icon = 'mail')
 class EmailSettings(BaseSetting):
 
@@ -24,6 +27,7 @@ class EmailSettings(BaseSetting):
             verbose_name = 'Email Settings'
 
         from_email = models.CharField(
+            # default=DEFAULT_FROM_EMAIL,
             help_text='The email you want to use to send the emails. Leave as default if you haven\'t set-up a shared mailbox',
             max_length=512
         )
@@ -138,6 +142,11 @@ class SiteSettings(BaseSetting):
         help_text='Twitter Account'
     )
 
+    social_share = models.BooleanField(
+        default=True,
+        help_text='Select if you want social share button at the bottom of articles and events'
+    )
+
     # Analytics settings
     ga_tracking_id = models.CharField(
         max_length = 32,
@@ -193,6 +202,9 @@ class SiteSettings(BaseSetting):
 
     social_tab_panel = [
         FieldPanel('twitter'),
+        MultiFieldPanel([
+            FieldPanel('social_share')
+        ], heading=('Social Share')),
     ]
 
     # Combine into tabbed panel interface
