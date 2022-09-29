@@ -18,5 +18,5 @@ class FilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
-        YEAR = reversed(range(2000, (datetime.now().year+1)))
-        self.fields['selected_date'].widget.years = YEAR
+        # YEAR = reversed(range(2000, (datetime.now().year+1)))
+        # self.fields['selected_date'].widget.years = YEAR

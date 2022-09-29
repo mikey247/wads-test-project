@@ -239,11 +239,13 @@ class ArticleIndexByDatePage(ArticleIndexPage):
             context['paginator_range'].append(page_index_max)
 
         form = FilterForm()
+        year_choices = list(self.get_children().live().order_by('-first_published_at__year').values_list('first_published_at__year', flat=True).distinct('first_published_at__year'))
+        form.fields['selected_date'].widget.years = year_choices
 
         context['form'] = form
 
         context['year'] = year
-        context['month'] = form.fields['selected_date'].widget.months[int(month)]
+        context['month'] = form.fields['selected_date'].widget.months[int(month)] if month else month
         context['day'] = day
 
         context['articles_paginated'] = articles_paginated
