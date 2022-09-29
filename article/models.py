@@ -238,10 +238,12 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         if page_index_end < page_index_max:
             context['paginator_range'].append(page_index_max)
 
-        context['form'] = FilterForm()
+        form = FilterForm()
+
+        context['form'] = form
 
         context['year'] = year
-        context['month'] = month
+        context['month'] = form.fields['selected_date'].widget.months[int(month)]
         context['day'] = day
 
         context['articles_paginated'] = articles_paginated
