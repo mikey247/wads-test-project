@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import datetime
 
 from django import forms
+from django.contrib.humanize.templatetags.humanize import ordinal
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -257,7 +258,7 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
         context['year'] = year
         context['month'] = form.fields['selected_date'].widget.months[int(month)] if month else month
-        context['day'] = day
+        context['day'] = ordinal(day) if day else day
 
         context['articles_paginated'] = articles_paginated
         context['articles_count'] = articles_count

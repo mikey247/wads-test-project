@@ -50,15 +50,25 @@
         </ul>
       </div>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	{% if day %}
-	  <span>{{ day }} / {{ month }} / {{ year }}</span>
-	{% elif month %}
-	  <span>{{ month }} / {{ year }}</span>
-	{% elif year %}
-	  <span>{{ year }}</span>
-	{% else %}
-	  <span>Showing All</span>
-	{% endif %}
+	      {% if day or month or year %}
+	        {% if day and month and year %}
+            <span>{{ day }} {{ month }} {{ year }}</span>
+	        {% elif day and month %}
+            <span>{{ day }} {{ month }}</span>
+	        {% elif month and year %}
+            <span>{{ month }} {{ year }}</span>
+	        {% elif day and year %}
+            <span>{{ day }} of every month in {{ year }}</span>
+	        {% elif day %}
+            <span>{{ day }}</span>
+          {% elif month %}
+            <span>{{ month }}</span>
+          {% elif year %}
+            <span>{{ year }}</span>
+          {% endif %}
+        {% else %}
+	        <span>Showing All</span>
+	      {% endif %}
       </li>
     </ul>
   </section>
