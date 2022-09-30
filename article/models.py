@@ -200,6 +200,16 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         context = super(ArticleIndexByDatePage, self).get_context(request)
         articles_all = self.get_children().live().order_by('-first_published_at')
 
+        if request.method == 'GET':
+            query_dict = request.GET.copy()
+            if 'page' in query_dict:
+                del query_dict['page']
+            url_params = query_dict.urlencode()
+            if request.GET.get('filter_button'):
+                year = query_dict.get('selected_date_year') 
+                month = query_dict.get('selected_date_month')
+                day = query_dict.get('selected_date_day')
+
         if year:
             articles_all = articles_all.filter(first_published_at__year=year)
         if month:
@@ -243,6 +253,7 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         form.fields['selected_date'].widget.years = year_choices
 
         context['form'] = form
+        context['url_params'] = url_params
 
         context['year'] = year
         context['month'] = form.fields['selected_date'].widget.months[int(month)] if month else month
@@ -257,31 +268,11 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
 
-    @route(r'^$')
     @route(r'^(?P<year>[0-9]{4})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/?$')
     def article_index_by_date(self, request, year=None, month=None, day=None, name='article-index-by-date'):
         print("article_index_by_date()")
-
-        if request.method == 'POST':
-            if request.POST.get('filter_button'):
-                query_dict = request.POST.copy()
-
-                if query_dict.get('selected_date_year') != '':
-                    year = query_dict.get('selected_date_year')
-                    date_url = self.url + year + '/'
-
-                    if query_dict.get('selected_date_month') != '' and year is not None:
-                        month = query_dict.get('selected_date_month')
-                        date_url = date_url + f'{int(month):02d}' + '/'
-
-                        if query_dict.get('selected_date_day') != '' and month is not None:
-                            day = query_dict.get('selected_date_day')
-                            date_url = date_url + f'{int(day):02d}' + '/'
-                    
-                    return redirect(date_url)
-
         return TemplateResponse(
             request,
             self.get_template(request),

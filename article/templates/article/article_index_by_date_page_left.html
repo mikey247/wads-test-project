@@ -39,8 +39,7 @@
       <div class="collapse" id="collapse_filter">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <form action="{% pageurl page %}" id='filter-form' method="POST">
-              {% csrf_token %}
+            <form action="{% pageurl page %}" id='filter-form' method="GET">
               <span>Filter by:</span>
               <br>
               {{ form.selected_date }}
@@ -68,7 +67,7 @@
 {% block page-content-main-footer-nav %}
   {% if paginator_count > 1 %}
     <footer class="my-4" role="pagination">
-      {% index_pagination articles_paginated paginator_range page.url %}  
+      {% index_pagination articles_paginated paginator_range page.url url_params %}  
     </footer>
   {% endif %}
 {% endblock page-content-main-footer-nav %}
