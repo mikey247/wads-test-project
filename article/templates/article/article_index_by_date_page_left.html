@@ -41,7 +41,13 @@
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <form action="{% pageurl page %}" id='filter-form' method="GET">
               <span>Filter by:</span>
-              <br>
+              {% if not page.filter_by_day %}
+                <style>
+                  #id_selected_date_day {
+                    display: none;
+                  }
+                </style>
+              {% endif %}
               {{ form.selected_date }}
               <br><br>
               <input id='filter_button' name='filter_button' type="submit" class="btn btn-primary btn-block" value="Filter" />

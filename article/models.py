@@ -9,7 +9,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -196,6 +195,8 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     
     """
 
+    filter_by_day = models.BooleanField(default=False)
+
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexByDatePage, self).get_context(request)
@@ -265,14 +266,13 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         
         return context
 
-
     # route for sub-pages with a date specific URL for posts
     # this will NOT make a list of pages at blog/2018 just specific blogs only
 
     @route(r'^(?P<year>[0-9]{4})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/?$')
     @route(r'^(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/?$')
-    def article_index_by_date(self, request, year=None, month=None, day=None, name='article-index-by-date'):
+    def article_index_by_date(self, request, year, month=None, day=None, name='article-index-by-date'):
         print("article_index_by_date()")
         return TemplateResponse(
             request,
@@ -323,6 +323,24 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
     def get_template(self, request):
         return f'article/article_index_by_date_page_{self.sidebar_placement}.html'
+
+    # Rebuild settings tab panel
+
+    settings_tab_panel = ArticleIndexPage.settings_tab_panel + [
+        MultiFieldPanel([
+            FieldPanel('filter_by_day'),
+            # FieldPanel('filter_by_month'),
+        ], heading='Filter Options'),
+    ]
+
+    # Rebuild edit_handler so we have all tabs
+    
+    edit_handler = TabbedInterface([
+        ObjectList(ArticleIndexPage.content_tab_panel, heading='Content'),
+        ObjectList(ArticleIndexPage.promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(ArticleIndexPage.publish_tab_panel, heading='Publish'),
+    ])
 
     # Control what child pages can be created under this index page
     # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
