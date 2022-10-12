@@ -25,19 +25,56 @@
 {% block page-content-aside-slot-1 %}
   <section>
     <ul class="list-group">
-      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center">
-	<strong>Articles Filtered by:</strong>
+      <li class="list-group-item list-group-item-primary d-flex justify-content-between align-items-center" data-toggle="collapse" href="#collapse_filter" role="button" aria-expanded="false" aria-controls="collapse_filter">
+	      <strong>Articles Filtered by:</strong>
+        <style>
+          [aria-expanded="false"] > .expanded,
+          [aria-expanded="true"] > .collapsed {
+            display: none;
+          }
+        </style>
+        <span class="collapsed"><i class="fas fa-chevron-down"></i></span>
+        <span class="expanded"><i class="fas fa-chevron-up"></i></span>
       </li>
+      <div class="collapse" id="collapse_filter">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <form action="{% pageurl page %}" id='filter-form' method="GET">
+              <span>Filter by:</span>
+              {% if not page.filter_by_day %}
+                <style>
+                  #id_selected_date_day {
+                    display: none;
+                  }
+                </style>
+              {% endif %}
+              {{ form.selected_date }}
+              <br><br>
+              <input id='filter_button' name='filter_button' type="submit" class="btn btn-primary btn-block" value="Filter" />
+            </form>
+          </li>
+        </ul>
+      </div>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-	{% if day %}
-	  <span>{{ year }} / {{ month }} / {{ day }}</span>
-	{% elif month %}
-	  <span>{{ year }} / {{ month }}</span>
-	{% elif year %}
-	  <span>{{ year }}</span>
-	{% else %}
-	  <span>Showing All</span>
-	{% endif %}
+	      {% if day or month or year %}
+	        {% if day and month and year %}
+            <span>{{ day }} {{ month }} {{ year }}</span>
+	        {% elif day and month %}
+            <span>{{ day }} {{ month }}</span>
+	        {% elif month and year %}
+            <span>{{ month }} {{ year }}</span>
+	        {% elif day and year %}
+            <span>{{ day }} of every month in {{ year }}</span>
+	        {% elif day %}
+            <span>{{ day }}</span>
+          {% elif month %}
+            <span>{{ month }}</span>
+          {% elif year %}
+            <span>{{ year }}</span>
+          {% endif %}
+        {% else %}
+	        <span>Showing All</span>
+	      {% endif %}
       </li>
     </ul>
   </section>
@@ -46,7 +83,7 @@
 {% block page-content-main-footer-nav %}
   {% if paginator_count > 1 %}
     <footer class="my-4" role="pagination">
-      {% index_pagination articles_paginated paginator_range page.url %}  
+      {% index_pagination articles_paginated paginator_range page.url url_params %}  
     </footer>
   {% endif %}
 {% endblock page-content-main-footer-nav %}
