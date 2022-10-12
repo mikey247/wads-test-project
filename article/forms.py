@@ -13,7 +13,7 @@ class FilterForm(forms.Form):
             empty_label=("Year", "Month", "Day"),
             years=[]
         )
-        # Order of the select boxes (month, day, year by default) depend on DATE_FORMAT in settings/local.py
+        # Order of the select boxes depend on DATE_FORMAT in siteconfig/settings/local.py
     )
 
     def __init__(self, *args, **kwargs):
