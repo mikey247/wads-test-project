@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import datetime
 
 from django import forms
+from django.contrib.humanize.templatetags.humanize import ordinal
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -31,6 +32,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
+from article.forms import FilterForm
 
 import logging
 logger = logging.getLogger(__name__)
@@ -193,10 +195,22 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     
     """
 
+    filter_by_day = models.BooleanField(default=False)
+
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
         context = super(ArticleIndexByDatePage, self).get_context(request)
         articles_all = self.get_children().live().order_by('-first_published_at')
+
+        if request.method == 'GET':
+            query_dict = request.GET.copy()
+            if 'page' in query_dict:
+                del query_dict['page']
+            url_params = query_dict.urlencode()
+            if request.GET.get('filter_button'):
+                year = query_dict.get('selected_date_year') 
+                month = query_dict.get('selected_date_month')
+                day = query_dict.get('selected_date_day')
 
         if year:
             articles_all = articles_all.filter(first_published_at__year=year)
@@ -236,9 +250,16 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         if page_index_end < page_index_max:
             context['paginator_range'].append(page_index_max)
 
+        form = FilterForm()
+        year_choices = list(self.get_children().live().order_by('-first_published_at__year').values_list('first_published_at__year', flat=True).distinct('first_published_at__year'))
+        form.fields['selected_date'].widget.years = year_choices
+
+        context['form'] = form
+        context['url_params'] = url_params
+
         context['year'] = year
-        context['month'] = month
-        context['day'] = day
+        context['month'] = form.fields['selected_date'].widget.months[int(month)] if month else month
+        context['day'] = ordinal(day) if day else day
 
         context['articles_paginated'] = articles_paginated
         context['articles_count'] = articles_count
@@ -302,6 +323,24 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
     def get_template(self, request):
         return f'article/article_index_by_date_page_{self.sidebar_placement}.html'
+
+    # Rebuild settings tab panel
+
+    settings_tab_panel = ArticleIndexPage.settings_tab_panel + [
+        MultiFieldPanel([
+            FieldPanel('filter_by_day'),
+            # FieldPanel('filter_by_month'),
+        ], heading='Filter Options'),
+    ]
+
+    # Rebuild edit_handler so we have all tabs
+    
+    edit_handler = TabbedInterface([
+        ObjectList(ArticleIndexPage.content_tab_panel, heading='Content'),
+        ObjectList(ArticleIndexPage.promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(ArticleIndexPage.publish_tab_panel, heading='Publish'),
+    ])
 
     # Control what child pages can be created under this index page
     # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
