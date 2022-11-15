@@ -19,7 +19,11 @@
     {% endif %}
     {% if not events_count %}
       <div class="alert alert-info" role="alert">
-	{{ page.no_listing_text|richtext }}
+        {% if not page.no_listing_text %}
+            Sorry, there are no events.
+        {% else %}
+	        {{ page.no_listing_text|richtext }}
+        {% endif %}
       </div>
     {% endif %}  
   </header>
