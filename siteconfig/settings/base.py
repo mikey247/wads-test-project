@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
+    'wagtailmedia',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -189,3 +190,5 @@ WAGTAILIMAGES_IMAGE_MODEL = 'sitecore.SiteImage'
 WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'receive_submission_notify_email']
 
 LOGIN_REDIRECT_URL = '/'
+
+WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'

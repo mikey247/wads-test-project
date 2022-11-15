@@ -15,6 +15,7 @@ from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
+from. media import SiteMediaBlock
 
 
 
@@ -90,6 +91,11 @@ class CoreBlock(blocks.StreamBlock):
     page = blocks.PageChooserBlock(
         required=False,
         group='2. Linked Content',
+    )
+    media = SiteMediaBlock(
+        required=False,
+        group='2. Linked Content',
+        icon='media'
     )
 
     code = CodeBlock(
