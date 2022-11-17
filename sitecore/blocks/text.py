@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.forms import Media
+from django.utils.encoding import force_str
 
 from wagtail.admin.edit_handlers import FieldPanel # , FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
 from wagtail.core import blocks
@@ -305,7 +306,7 @@ class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
         return forms.CharField(**field_kwargs)
 
     def get_searchable_content(self, value):
-        return [force_text(value)]
+        return [force_str(value)]
 
     class Meta:
         icon = "pilcrow"
