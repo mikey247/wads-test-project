@@ -104,7 +104,7 @@ LANGUAGE_CODE = 'en-gb'
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'BACKEND': 'wagtail.contrib.postgres_search',
         'INDEX': '<insert index name here>',
     },
 }
