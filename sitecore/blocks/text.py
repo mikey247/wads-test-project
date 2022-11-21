@@ -9,7 +9,7 @@ from wagtail.core.fields import RichTextField # StreamField,
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.forms import Media
 from django.utils.encoding import force_str
 

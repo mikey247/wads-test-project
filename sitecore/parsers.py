@@ -9,7 +9,7 @@ import shortcodes
 import sitecore.config as sitecore_config
 
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from wagtail.core.blocks.stream_block import StreamBlockValidationError
