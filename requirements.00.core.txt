@@ -14,3 +14,4 @@ psycopg2==2.8.6
 shortcodes==5.1.1
 wagtail-autocomplete==0.6.3
 wagtailmenus==3.0.2
+wagtailmedia==0.9.0
