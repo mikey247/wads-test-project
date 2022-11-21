@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
@@ -191,3 +191,5 @@ WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'r
 LOGIN_REDIRECT_URL = '/'
 
 WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

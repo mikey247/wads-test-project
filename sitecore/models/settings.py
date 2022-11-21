@@ -6,7 +6,7 @@ Sitecore models package for implementing site settings
 
 from django.db import models
 
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.images.edit_handlers import ImageChooserPanel
 
@@ -175,7 +175,7 @@ class SiteSettings(BaseSetting):
     # create the panels
 
     branding_tab_panel = [
-        ImageChooserPanel('brand_logo'),
+        FieldPanel('brand_logo'),
         FieldPanel('brand_icon'),
         FieldPanel('brand_name'),
         FieldPanel('brand_link'),

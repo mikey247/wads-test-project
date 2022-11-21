@@ -1,6 +1,6 @@
 from datetime import date
 from django import template
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 register = template.Library()
 

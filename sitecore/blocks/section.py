@@ -21,9 +21,9 @@
 # from django_select2.forms import Select2Widget
 
 # from wagtail.contrib.table_block.blocks import TableBlock
-# from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core import blocks
-# from wagtail.core.fields import StreamField, RichTextField
+# from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, TabbedInterface
+from wagtail import blocks
+# from wagtail.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock

@@ -4,10 +4,10 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
-from wagtail.core import blocks
-from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail import blocks
+from wagtail.models import Page
+from wagtail.fields import RichTextField, StreamField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
@@ -25,6 +25,7 @@ class HomePage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here.'),
+        use_json_field=True,
     )
 
     body = StreamField(
@@ -32,6 +33,7 @@ class HomePage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide main body of content here.'),
+        use_json_field=True,
     )
 
     # meta fields
@@ -59,6 +61,7 @@ class HomePage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here.'),
+        use_json_field=True
     )
 
     splash_text_align = models.CharField(
@@ -96,6 +99,7 @@ class HomePage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the inset area here.'),
+        use_json_field=True
     )
 
     inset_text_align = models.CharField(
@@ -170,8 +174,8 @@ class HomePage(Page):
 
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro'),
-        StreamFieldPanel('body'),
+        FieldPanel('intro'),
+        FieldPanel('body'),
     ]
 
     # Build new meta tab panel
@@ -183,8 +187,8 @@ class HomePage(Page):
     # Build new splash and inset tab panel
     
     splash_tab_panel = [
-        ImageChooserPanel('splash_image'),
-        StreamFieldPanel('splash_content'),
+        FieldPanel('splash_image'),
+        FieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('splash_text_align'),
@@ -201,7 +205,7 @@ class HomePage(Page):
     ]
 
     inset_tab_panel = [
-        StreamFieldPanel('inset_content'),
+        FieldPanel('inset_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('inset_style')

@@ -13,11 +13,11 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.models import Orderable, Page
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
+from wagtail.models import Orderable, Page
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -66,7 +66,8 @@ class ArticleIndexPage(RoutablePageMixin, Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
-        verbose_name='Intro'
+        verbose_name='Intro',
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -133,7 +134,7 @@ class ArticleIndexPage(RoutablePageMixin, Page):
     
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
@@ -402,6 +403,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+        use_json_field=True
     )
 
     body = StreamField(
@@ -409,6 +411,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
+        use_json_field=True
     )
 
     # meta fields
@@ -466,6 +469,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here. This will be used in the blog list pages and search result summaries.'),
+        use_json_field=True
     )
 
     splash_text_align = models.CharField(
@@ -503,6 +507,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the inset area here.'),
+        use_json_field=True
     )
 
     inset_text_align = models.CharField(
@@ -598,8 +603,8 @@ class ArticlePage(SitePage):
 
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro'),
-        StreamFieldPanel('body'),
+        FieldPanel('intro'),
+        FieldPanel('body'),
     ]
 
     # Build new meta tab panel
@@ -613,8 +618,8 @@ class ArticlePage(SitePage):
     # Build new splash tab panel
     
     splash_tab_panel = [
-        ImageChooserPanel('splash_image'),
-        StreamFieldPanel('splash_content'),
+        FieldPanel('splash_image'),
+        FieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('splash_text_align'),
@@ -631,7 +636,7 @@ class ArticlePage(SitePage):
     ]
 
     inset_tab_panel = [
-        StreamFieldPanel('inset_content'),
+        FieldPanel('inset_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('inset_text_align'),
@@ -648,9 +653,9 @@ class ArticlePage(SitePage):
     # Rebuild settings tab panel - add display/override fields
     
     settings_tab_panel = [
-        ImageChooserPanel('article_image'),
+        FieldPanel('article_image'),
         FieldPanel('article_image_filterspec'),
-        ImageChooserPanel('thumbnail_image'),
+        FieldPanel('thumbnail_image'),
         FieldPanel('render_template'),
         FieldPanel('sidebar_placement'),
     ]

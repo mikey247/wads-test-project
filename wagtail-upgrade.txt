@@ -12,7 +12,7 @@ django-cogwheels==0.3
 django-debug-toolbar==3.2
 django-extensions==3.1.1
 django-filter==2.4.0
-django-modelcluster==5.3
+django-modelcluster==6.0
 django-permissionedforms==0.1
 django-redis==4.12.1
 django-sekizai==2.0.0
@@ -45,7 +45,7 @@ sqlparse==0.4.2
 tablib==3.1.0
 telepath==0.3
 urllib3==1.26.7
-wagtail==2.16
+wagtail==3.0
 wagtail-autocomplete==0.7.0
 wagtailmedia==0.9.0
 wagtailmenus==3.1.3

@@ -4,7 +4,7 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock

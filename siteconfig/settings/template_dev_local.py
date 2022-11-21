@@ -18,7 +18,7 @@ ENABLE_DEBUG_TOOLBAR = False # True|False
 # Don't include '/admin' or a trailing slash
 
 WAGTAIL_SITE_NAME = '<INSERT WAGTAIL_SITE_NAME_HERE>'
-BASE_URL = '<INSERT BASE_URL HERE>' # usually localhost for dev
+WAGTAILADMIN_BASE_URL = '<INSERT BASE_URL HERE>' # usually localhost for dev
 
 # Security
 # ------------------------------------------------------------------------

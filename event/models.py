@@ -9,10 +9,10 @@ from django.forms import ValidationError
 from django.forms.utils import ErrorList
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.core.models import Orderable, Page
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.models import Orderable, Page
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -34,7 +34,8 @@ class EventIndexPage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
-        verbose_name='Intro'
+        verbose_name='Intro',
+        use_json_field=True
     )
     
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -183,8 +184,8 @@ class EventIndexPage(Page):
     
     content_tab_panel = [
         FieldPanel('title'),
-        ImageChooserPanel('listing_image'),
-        StreamFieldPanel('intro'),
+        FieldPanel('listing_image'),
+        FieldPanel('intro'),
     ]
 
     promote_tab_panel = [
@@ -490,15 +491,17 @@ class EventPage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks]
+        validators=[ValidateCoreBlocks],
+        use_json_field=True
     )
 
-    dates = StreamField([
-        ('date_block', EventDateTimeBlock(),),
-    ])
+    dates = StreamField(
+        [('date_block', EventDateTimeBlock(),)],
+        use_json_field=True)
 
     event_type = StreamField(
-        EventTypeBlock(max_num=1, min_num=1, required=True)
+        EventTypeBlock(max_num=1, min_num=1, required=True),
+        use_json_field=True
     )
     
     # Model Only fields - generated and saved in EventPageForm.save()
@@ -579,14 +582,14 @@ class EventPage(SitePage):
     content_tab_panel = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
-            ImageChooserPanel('event_image'),
+            FieldPanel('event_image'),
             FieldPanel('intro'),
             FieldPanel('location'),
             FieldPanel('location_link'),
-            StreamFieldPanel('dates'),
-            StreamFieldPanel('event_type'),
+            FieldPanel('dates'),
+            FieldPanel('event_type'),
         ], heading="Event Details"),
-            StreamFieldPanel('body')
+            FieldPanel('body')
     ]
 
     promote_tab_panel = SitePage.promote_panels

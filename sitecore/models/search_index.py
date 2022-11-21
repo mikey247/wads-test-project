@@ -12,10 +12,10 @@ from django.http import Http404
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.fields import StreamField
+from wagtail.models import Page, Orderable, Site
 from wagtail.search.models import Query
 
 from sitecore import blocks as sitecore_blocks
@@ -44,6 +44,7 @@ class SiteSearchIndexPage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the search index.'),
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -67,7 +68,7 @@ class SiteSearchIndexPage(Page):
     
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
