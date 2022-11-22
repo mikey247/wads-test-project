@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.models import Orderable, Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -213,7 +213,6 @@ class EventIndexPage(Page):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     edit_handler = TabbedInterface([
@@ -596,7 +595,6 @@ class EventPage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     edit_handler = TabbedInterface([

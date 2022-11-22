@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
 from wagtail import blocks
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
@@ -236,7 +236,6 @@ class HomePage(Page):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
     
     
