@@ -110,7 +110,7 @@ def ValidateCoreBlocks(value):
     See: https://github.com/wagtail/wagtail/issues/4122
     """
     
-    items = [ data['value'] if isinstance(data,dict) else data[1] for data in value.stream_data if 'markdown' in (data['type'] if isinstance(data,dict) else data[0]) ]
+    items = [ data['value'] if isinstance(data,dict) else data[1] for data in value.raw_data if 'markdown' in (data['type'] if isinstance(data,dict) else data[0]) ]
 
     for item in items:
         try:
