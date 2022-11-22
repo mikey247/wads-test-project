@@ -1,7 +1,7 @@
 # Required core packages for Django 4.0.8 and wagtail 3.0 as of 20221121
 
 Django==4.0.8
-wagtail==4.0
+wagtail==4.1.1
 
 anyascii==0.3.0
 asgiref==3.5.2
