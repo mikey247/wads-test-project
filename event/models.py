@@ -5,11 +5,14 @@ import datetime
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from django.forms import ValidationError
+from django.forms.utils import ErrorList
+from django.utils.translation import gettext_lazy as _
+ 
+from wagtail.models import Orderable, Page
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -26,7 +29,8 @@ class EventIndexPage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
-        verbose_name='Intro'
+        verbose_name='Intro',
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -173,8 +177,8 @@ class EventIndexPage(SitePage):
 
     content_tab_panel = [
         FieldPanel('title'),
-        ImageChooserPanel('listing_image'),
-        StreamFieldPanel('intro'),
+        FieldPanel('listing_image'),
+        FieldPanel('intro'),
     ]
 
     promote_tab_panel = [
@@ -308,13 +312,36 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
         default=u'Registration is NOW CLOSED',
         help_text=_('Text displayed after registration closing date has passed.')
     )
+    
+    def clean(self, value):
+        errors = {}
+        # Check opening date is before closing date, if provided
+        if value.get('opening_date') and value.get('closing_date') and value.get('opening_date') > value.get('closing_date'):
+            errors['closing_date'] = ErrorList(['The closing date cannot be before the opening date.'])
+            errors['opening_date'] = ErrorList(['The closing date cannot be before the opening date.'])
+        if errors:
+            raise ValidationError("Bad closing date", params=errors)
+        return super().clean(value)
+
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
 
-        value['is_not_yet_open'] = value['opening_date'] > datetime.date.today()
-        value['closed'] = value['closing_date'] < datetime.date.today()
-        value['closing_soon'] = value['closing_date'] < (datetime.date.today() + datetime.timedelta(weeks=1))
+        if value['opening_date']:
+            value['is_not_yet_open'] = value['opening_date'] > datetime.date.today()
+        else:
+            if not value['closing_date']:
+                value['is_not_yet_open'] = True
+            else:
+                value['is_not_open_yet'] = False
+        
+        if value['closing_date']:
+            value['closed'] = value['closing_date'] < datetime.date.today()
+            value['closing_soon'] = value['closing_date'] < (datetime.date.today() + datetime.timedelta(weeks=1))
+        else:
+            value['closed'] = False
+            value['closing_soon'] = False
+        
 
         return context
 
@@ -459,15 +486,17 @@ class EventPage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks]
+        validators=[ValidateCoreBlocks],
+        use_json_field=True
     )
 
-    dates = StreamField([
-        ('date_block', EventDateTimeBlock(),),
-    ])
+    dates = StreamField(
+        [('date_block', EventDateTimeBlock(),)],
+        use_json_field=True)
 
     event_type = StreamField(
-        EventTypeBlock(max_num=1, min_num=1, required=True)
+        EventTypeBlock(max_num=1, min_num=1, required=True),
+        use_json_field=True
     )
     
     # Model Only fields - generated and saved in EventPageForm.save()
@@ -551,14 +580,14 @@ class EventPage(SitePage):
     content_tab_panel = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
-            ImageChooserPanel('event_image'),
+            FieldPanel('event_image'),
             FieldPanel('intro'),
             FieldPanel('location'),
             FieldPanel('location_link'),
-            StreamFieldPanel('dates'),
-            StreamFieldPanel('event_type'),
+            FieldPanel('dates'),
+            FieldPanel('event_type'),
         ], heading="Event Details"),
-        StreamFieldPanel('body')
+            FieldPanel('body')
     ]
 
     promote_tab_panel = SitePage.promote_panels

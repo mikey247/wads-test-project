@@ -11,7 +11,7 @@
 	<img src="{{ photo.url }}" alt="{{ page.event_image.alt_text }}" class="img-full-width-md img-fluid rounded d-block" >
       </div>
     {% endif %}
-    <h1 class="mb-4">{{ self.seo_title|default:self.title }}</h1>
+    <h1 class="mb-4">{{ self.title|default:self.seo_title }}</h1>
     <div class="lead mb-4">
       {{ page.intro | richtext }}
     </div>

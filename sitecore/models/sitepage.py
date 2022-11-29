@@ -8,8 +8,8 @@ across all derived Page based models.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
+from wagtail.models import Page, Orderable, Site
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager

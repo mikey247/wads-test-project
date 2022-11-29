@@ -11,12 +11,12 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.http import Http404
 from django.template.response import TemplateResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.fields import StreamField
+from wagtail.models import Page, Orderable, Site
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.parsers import ValidateCoreBlocks
@@ -46,6 +46,7 @@ class SiteTagIndexPage(RoutablePageMixin, SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the tag index.'),
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -69,7 +70,7 @@ class SiteTagIndexPage(RoutablePageMixin, SitePage):
     
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel

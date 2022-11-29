@@ -1,7 +1,7 @@
-# Required core packages for Django 3.2.12 and wagtail 2.15.3 as of 20220402
+# Required core packages for Django 4.0.8 and wagtail 3.0 as of 20221121
 
-Django==3.2.12
-wagtail==2.15.3
+Django==4.0.8
+wagtail==3.0
 
 Markdown==3.3.6
 PyYAML==6.0
@@ -13,9 +13,10 @@ django-recaptcha==3.0.0
 django-sekizai==3.0.1
 django-select2==7.10.0
 django-social-share==2.2.1
-django-taggit==1.5.1
+django-taggit==2.1.0
 psycopg2==2.9.3
 shortcodes==5.4.0
 wagtail-autocomplete==0.7.0
 wagtail-django-recaptcha==1.0
-wagtailmenus==3.0.2
+wagtailmedia==0.9.0
+wagtailmenus==3.1.3

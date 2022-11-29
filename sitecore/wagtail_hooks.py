@@ -11,49 +11,7 @@ from django.utils.html import format_html, format_html_join
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler, InlineStyleElementHandler
-from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
-from wagtail.core import hooks
-
-
-@hooks.register('construct_whitelister_element_rules')
-def whitelister_element_rules():
-    """
-    On Save Draft/Publish, Wagtail will sanitize the HTML content of various fields/blocks.
-    The modified Hallo.js plugin used in the Rich Text Editor, adds additional HTML markup that
-    must be permitted in the whitelist.
-    """
-
-    return {
-        'code': allow_without_attributes,
-        'kbd': allow_without_attributes,
-        'var': allow_without_attributes,
-        'samp': allow_without_attributes,
-        'blockquote': attribute_rule({'class': True}),
-    }
-
-
-@hooks.register('insert_editor_js')
-def editor_js():
-    """
-    This hook inserts additional JavaScript into each admin/editor page, using the hallo-custom.js
-    file and the additional inline js to register each new plugin.
-    """
-
-    js_files = [
-    ]
-    js_includes = format_html_join(
-        '\n', '<script src="{0}{1}"></script>',
-        ((settings.STATIC_URL, filename) for filename in js_files)
-    )
-    return js_includes + format_html(
-        """
-        <script>
-            registerHalloPlugin('superscriptbutton');
-            registerHalloPlugin('subscriptbutton');
-            registerHalloPlugin('htmlbutton');
-        </script>
-        """
-    )
+from wagtail import hooks
 
 
 @hooks.register('insert_global_admin_css')

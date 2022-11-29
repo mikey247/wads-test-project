@@ -21,7 +21,7 @@
 	 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
       {% else %}
 	 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
-      {% endif  %}
+      {% endif %}
             <strong><i class="fas fa-clipboard"></i> Registration</strong>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -45,15 +45,9 @@
 	  </li>
 	{% endif %}
       {% endif  %}
-      {% if self.is_not_yet_open %}
-	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
-	  <strong><i class="fas fa-user-clock"></i> Opens</strong>
-	</li>
-	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <h3><i class="fas fa-calendar"></i> {{ self.opening_date }}</h3>
-	</li>
-      {% endif %}
-      {% if self.is_not_yet_open %}
+	
+	{% if not self.closed or not self.closing_date or self.opening_date %}
+	{% if self.is_not_yet_open %}
 	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
       {% elif self.closed %}
 	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
@@ -61,11 +55,39 @@
 	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
       {% else %}
 	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
-      {% endif  %}
+    {% endif  %}
+	  <strong><i class="fas fa-user-clock"></i> Opens</strong>
+	</li>
+	<li class="list-group-item d-flex justify-content-between align-items-center">
+		{% if self.opening_date %}
+			<h3><i class="fas fa-calendar"></i> {{ self.opening_date }}</h3>
+		{% elif self.closing_date %}
+			<h3><i class="fas fa-calendar"></i> Now</h3>
+		{% else %}
+			<h3><i class="fas fa-calendar"></i> TBA</h3>
+		{% endif %}
+	</li>
+	{% endif %}
+
+    {% if self.is_not_yet_open %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info">
+      {% elif self.closed %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
+      {% elif self.closing_soon %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
+      {% else %}
+	<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
+    {% endif  %}
       <strong><i class="fas fa-user-clock"></i> Closing Date</strong>
 	</li>
 	<li class="list-group-item d-flex justify-content-between align-items-center">
-	  <h4><i class="fas fa-calendar"></i> {{ self.closing_date }}</h4>
+		{% if self.closing_date %}
+			<h4><i class="fas fa-calendar"></i> {{ self.closing_date }}</h4>
+		{% elif self.opening_date %}
+			<h4><i class="fas fa-calendar"></i> Ongoing</h4>
+		{% else %}
+		<h4><i class="fas fa-calendar"></i> TBA</h4>
+		{% endif %}
 	</li>
 	{% if self.is_not_yet_open %}
 	  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-info"><strong>{{ self.not_yet_open_text }}</strong></li>

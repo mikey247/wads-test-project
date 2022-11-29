@@ -32,7 +32,7 @@ ENABLE_DEBUG_TOOLBAR = False # True|False
 # Don't include '/admin' or a trailing slash
 
 WAGTAIL_SITE_NAME = "<INSERT SITE NAME HERE>"
-BASE_URL = '<INSERT BASE URL HERE>'
+WAGTAILADMIN_BASE_URL = '<INSERT BASE URL HERE>'
 
 # Security
 # ------------------------------------------------------------------------
@@ -104,7 +104,7 @@ LANGUAGE_CODE = 'en-gb'
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'BACKEND': 'wagtail.contrib.postgres_search',
         'INDEX': '<insert index name here>',
     },
 }
@@ -115,7 +115,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

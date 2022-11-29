@@ -4,7 +4,7 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -17,7 +17,8 @@ from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
-from .cards import DeckBlock
+# from .cards import DeckBlock
+from .media import SiteMediaBlock
 
 
 class SplashBlock(blocks.StreamBlock):
@@ -92,6 +93,11 @@ class CoreBlock(blocks.StreamBlock):
     page = blocks.PageChooserBlock(
         required=False,
         group='2. Linked Content',
+    )
+    media = SiteMediaBlock(
+        required=False,
+        group='2. Linked Content',
+        icon='media'
     )
 
     code = CodeBlock(

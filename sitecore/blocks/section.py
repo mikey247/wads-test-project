@@ -10,7 +10,7 @@
 # team members it can be split into groups in tabs e.g. RI Team, RSE
 # Team etc
 
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock

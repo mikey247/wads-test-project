@@ -24,7 +24,7 @@ ENABLE_DEBUG_TOOLBAR = False # True|False
 # Don't include '/admin' or a trailing slash
 
 WAGTAIL_SITE_NAME = '<INSERT WAGTAIL_SITE_NAME_HERE>'
-BASE_URL = '<INSERT BASE_URL HERE>' # usually localhost for dev
+WAGTAILADMIN_BASE_URL = '<INSERT BASE_URL HERE>' # usually localhost for dev
 
 # Security
 # ------------------------------------------------------------------------
@@ -104,3 +104,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
+
+DATE_FORMAT = 'dS F Y'
+TIME_FORMAT = 'H:i:s'
+DATETIME_FORMAT = 'dS F Y H:i:s'
+SHORT_DATE_FORMAT = 'd/m/y'
+SHORT_TIME_FORMAT = 'H:i'
+SHORT_DATETIME_FORMAT = 'd/m/y H:i'

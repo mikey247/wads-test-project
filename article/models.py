@@ -1,16 +1,20 @@
 from __future__ import absolute_import, unicode_literals
 
+from django.contrib.humanize.templatetags.humanize import ordinal
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.shortcuts import get_object_or_404
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
+from django.utils.translation import gettext_lazy as _
+ 
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.fields import StreamField
+from wagtail.models import Orderable, Page
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
@@ -20,6 +24,7 @@ from sitecore.models import SitePage
 from sitecore.parsers import ValidateCoreBlocks
 
 from wagtailstreamforms.wagtail_hooks import process_form
+from article.forms import FilterForm
 
 import logging
 logger = logging.getLogger(__name__)
@@ -70,7 +75,8 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
-        verbose_name='Intro'
+        verbose_name='Intro',
+        use_json_field=True
     )
 
     # presentation/settings fields
@@ -160,7 +166,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
@@ -226,11 +232,23 @@ class ArticleIndexByDatePage(ArticleIndexPage):
     class by forcing all child page urls to conform to a yyyy/mm/dd/slug format.
     """
 
+    filter_by_day = models.BooleanField(default=False)
+
     def get_context(self, request, year=None, month=None, day=None):
         # Update content to include only published posts; ordered by reverse-chronological
 
         context = super().get_context(request)
         articles_all = self.get_children().live().order_by(self.listing_order)
+
+        if request.method == 'GET':
+            query_dict = request.GET.copy()
+            if 'page' in query_dict:
+                del query_dict['page']
+            url_params = query_dict.urlencode()
+            if request.GET.get('filter_button'):
+                year = query_dict.get('selected_date_year') 
+                month = query_dict.get('selected_date_month')
+                day = query_dict.get('selected_date_day')
 
         if year:
             articles_all = articles_all.filter(first_published_at__year=year)
@@ -282,9 +300,16 @@ class ArticleIndexByDatePage(ArticleIndexPage):
         if page_index_end < page_index_max:
             context['paginator_range'].append(page_index_max)
 
+        form = FilterForm()
+        year_choices = list(self.get_children().live().order_by('-first_published_at__year').values_list('first_published_at__year', flat=True).distinct('first_published_at__year'))
+        form.fields['selected_date'].widget.years = year_choices
+
+        context['form'] = form
+        context['url_params'] = url_params
+
         context['year'] = year
-        context['month'] = month
-        context['day'] = day
+        context['month'] = form.fields['selected_date'].widget.months[int(month)] if month else month
+        context['day'] = ordinal(day) if day else day
 
         context['articles_paginated'] = articles_paginated
         context['articles_count'] = articles_count
@@ -335,6 +360,24 @@ class ArticleIndexByDatePage(ArticleIndexPage):
 
     def get_template(self, request, *args, **kwargs):
         return f'article/article_index_by_date_page_{self.sidebar_placement}.html'
+
+    # Rebuild settings tab panel
+
+    settings_tab_panel = ArticleIndexPage.settings_tab_panel + [
+        MultiFieldPanel([
+            FieldPanel('filter_by_day'),
+            # FieldPanel('filter_by_month'),
+        ], heading='Filter Options'),
+    ]
+
+    # Rebuild edit_handler so we have all tabs
+    
+    edit_handler = TabbedInterface([
+        ObjectList(ArticleIndexPage.content_tab_panel, heading='Content'),
+        ObjectList(ArticleIndexPage.promote_tab_panel, heading='Promote'),
+        ObjectList(settings_tab_panel, heading='Settings'),
+        ObjectList(ArticleIndexPage.publish_tab_panel, heading='Publish'),
+    ])
 
     # Control what child pages can be created under this index page
     # To prevent multiple date/slug urls, do not allow any additional ArticleIndexByDatePage instances as children
@@ -396,6 +439,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
+        use_json_field=True
     )
 
     body = StreamField(
@@ -403,6 +447,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
+        use_json_field=True
     )
 
     # meta fields
@@ -460,6 +505,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here. This will be used in the blog list pages and search result summaries.'),
+        use_json_field=True
     )
 
     splash_text_align = models.CharField(
@@ -497,6 +543,7 @@ class ArticlePage(SitePage):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the inset area here.'),
+        use_json_field=True
     )
 
     inset_text_align = models.CharField(
@@ -592,8 +639,8 @@ class ArticlePage(SitePage):
 
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro'),
-        StreamFieldPanel('body'),
+        FieldPanel('intro'),
+        FieldPanel('body'),
     ]
 
     # Build new meta tab panel
@@ -606,8 +653,8 @@ class ArticlePage(SitePage):
     # Build new splash tab panel
 
     splash_tab_panel = [
-        ImageChooserPanel('splash_image'),
-        StreamFieldPanel('splash_content'),
+        FieldPanel('splash_image'),
+        FieldPanel('splash_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('splash_text_align'),
@@ -624,7 +671,7 @@ class ArticlePage(SitePage):
     ]
 
     inset_tab_panel = [
-        StreamFieldPanel('inset_content'),
+        FieldPanel('inset_content'),
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('inset_text_align'),
@@ -641,9 +688,9 @@ class ArticlePage(SitePage):
     # Rebuild settings tab panel - add display/override fields
 
     settings_tab_panel = [
-        ImageChooserPanel('article_image'),
+        FieldPanel('article_image'),
         FieldPanel('article_image_filterspec'),
-        ImageChooserPanel('thumbnail_image'),
+        FieldPanel('thumbnail_image'),
         FieldPanel('render_template'),
         FieldPanel('sidebar_placement'),
         FieldPanel('display_title'),

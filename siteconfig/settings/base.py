@@ -40,12 +40,11 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
     'wagtail.contrib.table_block',
-    'wagtail.contrib.postgres_search',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.styleguide',
     'wagtail.api.v2',
@@ -60,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'shortcodes',
     'sekizai',
+    'wagtailmedia',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -201,3 +201,5 @@ CRISPY_TEMPLATE_PACK = "crispy_forms/bootstrap5"
 
 WAGTAILSTREAMFORMS_ADVANCED_SETTINGS_MODEL = 'sitecore.AdvancedFormSetting'
 # WAGTAILSTREAMFORMS_ENABLE_BUILTIN_HOOKS=False
+
+WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'

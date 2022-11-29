@@ -1,10 +1,10 @@
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core import blocks
-from wagtail.core.fields import StreamField, RichTextField
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, TabbedInterface
+from wagtail import blocks
+from wagtail.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
@@ -173,13 +173,14 @@ class CarouselSnippet(models.Model):
         ],
         null=True,
         blank=True,
+        use_json_field=True
     )
 
     # Wagtail Admin Panels (two pages)
     
     panels = [
         FieldPanel('title'),
-        StreamFieldPanel('slides'),
+        FieldPanel('slides'),
     ]
 
     style_panels = [
@@ -423,13 +424,14 @@ class IconCardDeckSnippet(models.Model):
     
     cards = StreamField(
         [('icon_card_block', IconCardBlock()),],
+        use_json_field=True
     )
     
     # GUI for snippet admin
     
     panels = [
         FieldPanel('title'),
-        StreamFieldPanel('cards'),
+        FieldPanel('cards'),
     ]
 
     style_panels = [

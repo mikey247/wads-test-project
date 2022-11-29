@@ -7,13 +7,14 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 from django import forms
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
-from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
 from django.forms import Media
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
+from django.utils.encoding import force_str
 
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.core import blocks
-from wagtail.core.fields import RichTextField
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel
+from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 from django_select2.forms import Select2Widget
@@ -311,7 +312,7 @@ class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
         return forms.CharField(**field_kwargs)
 
     def get_searchable_content(self, value):
-        return [force_text(value)]
+        return [force_str(value)]
 
     class Meta:
         icon = "pilcrow"
@@ -345,8 +346,6 @@ class TextSnippet(models.Model):
 
     def __str__(self):
         return self.title
-
-
 
 
 
