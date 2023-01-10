@@ -9,7 +9,6 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.models import Site
-from wagtail.images.edit_handlers import ImageChooserPanel
 
 from sitecore import constants
 

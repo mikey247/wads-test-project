@@ -13,10 +13,9 @@ from django.http import Http404
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.fields import StreamField
-from wagtail.models import Page, Orderable, Site
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.parsers import ValidateCoreBlocks

@@ -1,5 +1,4 @@
 from django import forms
-from datetime import datetime
 
 class FilterForm(forms.Form):
     selected_date = forms.DateField(

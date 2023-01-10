@@ -9,12 +9,9 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.models import Orderable, Page
-from wagtail.fields import RichTextField, StreamField
-from wagtail import blocks
-from wagtail.images.blocks import ImageChooserBlock
+from wagtail.fields import StreamField
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks

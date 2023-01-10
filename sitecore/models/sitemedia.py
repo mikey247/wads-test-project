@@ -1,5 +1,4 @@
-from wagtailmedia.models import AbstractMedia, Media
-from wagtailmedia.blocks import AbstractMediaChooserBlock
+from wagtailmedia.models import AbstractMedia
 
 class SiteMedia(AbstractMedia):
      admin_form_fields =  (

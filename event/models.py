@@ -9,10 +9,9 @@ from django.forms import ValidationError
 from django.forms.utils import ErrorList
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.models import Orderable, Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.search import index
 
