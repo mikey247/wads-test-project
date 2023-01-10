@@ -15,7 +15,6 @@ from wagtail.models import Orderable, Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
@@ -189,7 +188,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
             FieldPanel('sidebar_placement'),
             FieldPanel('per_page'),
             FieldPanel('listing_order'),
-            ImageChooserPanel('default_thumbnail'),
+            FieldPanel('default_thumbnail'),
         ], heading='Layout and Listing Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
