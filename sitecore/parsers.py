@@ -146,8 +146,11 @@ def ValidateCoreBlocks(value):
 
     """
 
-    items = [data['value'] if isinstance(data, dict) else data[1] for data in value.raw_data if 'markdown' in (data['type'] if isinstance(data, dict) else data[0])]
-
+    try:
+        items = [ data['value'] if isinstance(data,dict) else data[1] for data in value.stream_data if 'markdown' in (data['type'] if isinstance(data,dict) else data[0]) ]
+    except AttributeError:
+        items = value
+    
     for item in items:
         try:
             ParseMarkdownAndShortcodes(item)
