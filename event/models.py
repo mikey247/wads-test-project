@@ -19,14 +19,12 @@ from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.models import SitePage
-from sitecore.parsers import ValidateCoreBlocks
 
 
 class EventIndexPage(SitePage):
 
     intro = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
         verbose_name='Intro',
@@ -486,7 +484,6 @@ class EventPage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         use_json_field=True
     )
 

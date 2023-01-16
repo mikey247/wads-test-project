@@ -19,7 +19,6 @@ from wagtail.fields import StreamField
 from wagtail.models import Page, Orderable, Site
 
 from sitecore import blocks as sitecore_blocks
-from sitecore.parsers import ValidateCoreBlocks
 
 from taggit.models import Tag
 
@@ -43,7 +42,6 @@ class SiteTagIndexPage(RoutablePageMixin, SitePage):
     
     intro = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the tag index.'),
         use_json_field=True

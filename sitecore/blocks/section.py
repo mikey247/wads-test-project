@@ -17,7 +17,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from sitecore import constants
 
-from .text import CodeBlock, MarkdownAndShortcodeTextBlock, TextSnippet
+from .text import CodeBlock, TextSnippet
 
 
 
@@ -99,11 +99,6 @@ class NestedCoreBlock(blocks.StreamBlock):
 
     nested_paragraph = blocks.RichTextBlock(
         label='Rich Text Paragraph',
-        group='1. Structured Content',
-    )
-    
-    nested_markdown = MarkdownAndShortcodeTextBlock(
-        label='Markdown Paragraph',
         group='1. Structured Content',
     )
 

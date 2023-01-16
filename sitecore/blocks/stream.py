@@ -11,7 +11,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 
 from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
-from .text import MarkdownAndShortcodeTextBlock, TextSnippet
+from .text import TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
@@ -68,10 +68,6 @@ class CoreBlock(blocks.StreamBlock):
 
     paragraph = blocks.RichTextBlock(
         label='Rich Text Paragraph',
-        group='1. Structured Content',
-    )
-    markdown = MarkdownAndShortcodeTextBlock(
-        label='Markdown Paragraph',
         group='1. Structured Content',
     )
 

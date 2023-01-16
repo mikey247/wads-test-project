@@ -5,7 +5,7 @@ Sitecore fields module to implement custom Django/Wagtail fields
 """
 from django.forms import CharField
 from wagtail.fields import RichTextField
-from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
+from sitecore.parsers import ParseShortcodes
 
 
 class ShortcodeRichTextField(RichTextField):
