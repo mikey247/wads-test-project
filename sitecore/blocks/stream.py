@@ -9,8 +9,6 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from wagtailstreamforms.blocks import WagtailFormBlock
-
 from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
 from .text import MarkdownAndShortcodeTextBlock, TextSnippet
@@ -125,9 +123,9 @@ class CoreBlock(blocks.StreamBlock):
         template='sitecore/tags/text_snippet.html'
     )
 
-    stream_form = WagtailFormBlock(
-        group = '3. Embedded Content',
-    )
+    # stream_form = WagtailFormBlock(
+    #     group = '3. Embedded Content',
+    # )
     
     tab = TabBlock(group='4. Section Blocks')
 

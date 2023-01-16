@@ -23,7 +23,6 @@ from sitecore import constants
 from sitecore.models import SitePage
 from sitecore.parsers import ValidateCoreBlocks
 
-from wagtailstreamforms.wagtail_hooks import process_form
 from article.forms import FilterForm
 
 import logging
@@ -749,12 +748,3 @@ class ArticlePage(SitePage):
                     self.slug, '{:%Y/%m/%d/}'.format(timezone.now()) + self.slug
                 )
 
-    def serve(self, request, *args, **kwargs):
-        '''
-        Handle POST requests by passing to wagtailstreamforms process_form (disabled as hook)
-        '''
-
-        if request.method == "POST":
-            return process_form(self, request, *args, **kwargs)
-
-        return super().serve(request)
