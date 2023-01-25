@@ -6,25 +6,50 @@ Sitecore constants module to define several Bootstrap 4, Django and Wagtail cons
 
 # Theme and code syntax colour choices
 
-BOOTSTRAP4_THEME_CHOICES = [
-    ('default', 'Default Bootstrap 4'),
+BOOTSTRAP5_THEME_CHOICES = [
+    ('default', 'Default Bootstrap 5'),
 ] + [
-    (bsw_theme,'Bootswatch: '+bsw_theme) for bsw_theme in
-    ["cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal", "litera", "lumen",
-     "lux", "materia", "minty", "pulse", "sandstone", "simplex", "sketchy", "slate",
-     "solar", "spacelab", "superhero", "uomhum", "united", "yeti",]
+    (bsw_theme, 'Bootswatch: ' + bsw_theme) for bsw_theme in
+    ["cosmo",
+     "darkly",
+     "journal",
+     "lumen",
+     "materia",
+     "morph",
+     "quartz",
+     "sandstone",
+     "sketchy",
+     "solar",
+     "superhero",
+     "vapor",
+     "zephyr",
+     "cerulean",
+     "cyborg",
+     "flatly",
+     "litera",
+     "lux",
+     "minty",
+     "pulse",
+     "researchit",
+     "simplex",
+     "slate",
+     "spacelab",
+     "united",
+     "uomhum",
+     "yeti",
+     ]
+
 ]
 
-
-INITIAL_BOOTSTRAP4_THEME = 'pulse'
+INITIAL_BOOTSTRAP5_THEME = 'pulse'
 
 # Navbar settings
 
 NAVBAR_RESPONSIVE_SIZE_CHOICES = [
-    ('sm','Small'),
-    ('md','Medium'),
-    ('lg','Large'),
-    ('xl','Extra Large'),
+    ('sm', 'Small'),
+    ('md', 'Medium'),
+    ('lg', 'Large'),
+    ('xl', 'Extra Large'),
 ]
 
 NAVBAR_TEXT_COLOUR_MODE = [
@@ -41,14 +66,14 @@ NAVBAR_OUTER_CLASS = [
 
 # Text and colour choices
 
-BOOTSTRAP4_TEXT_ALIGN_CHOICES = (
+BOOTSTRAP5_TEXT_ALIGN_CHOICES = (
     ('text-justify', 'Justify'),
     ('text-left', 'Left'),
     ('text-center', 'Centre'),
     ('text-right', 'Right'),
 )
 
-BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES = (
+BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES = (
     ('bg-primary', 'Primary'),
     ('bg-secondary', 'Secondary'),
     ('bg-transparent', 'Transparent'),
@@ -61,7 +86,7 @@ BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES = (
     ('bg-info', 'Info'),
 )
 
-BOOTSTRAP4_TEXT_COLOUR_CHOICES = (
+BOOTSTRAP5_TEXT_COLOUR_CHOICES = (
     ('text-primary', 'Primary'),
     ('text-secondary', 'Secondary'),
     ('text-light', 'Light'),
@@ -77,7 +102,7 @@ BOOTSTRAP4_TEXT_COLOUR_CHOICES = (
     ('text-info', 'Info'),
 )
 
-BOOTSTRAP4_BORDER_COLOUR_CHOICES = (
+BOOTSTRAP5_BORDER_COLOUR_CHOICES = (
     ('', 'No Border'),
     ('border border-primary', 'Primary'),
     ('border border-secondary', 'Secondary'),
@@ -90,13 +115,13 @@ BOOTSTRAP4_BORDER_COLOUR_CHOICES = (
     ('border border-info', 'Info'),
 )
 
-BOOTSTRAP4_UNIT_CHOICES = (
+BOOTSTRAP5_UNIT_CHOICES = (
     ('rem', 'REM'),
     ('em', 'EM'),
     ('px', 'PX'),
 )
 
-BOOTSTRAP4_BUTTON_COLOUR_CHOICES = (
+BOOTSTRAP5_BUTTON_COLOUR_CHOICES = (
     ('btn btn-primary', 'Primary'),
     ('btn btn-secondary', 'Secondary'),
     ('btn btn-light', 'Light'),
@@ -116,13 +141,13 @@ BOOTSTRAP4_BUTTON_COLOUR_CHOICES = (
     ('btn btn-outline-info', 'Outline Info'),
 )
 
-BOOTSTRAP4_BUTTON_SIZE_CHOICES = (
+BOOTSTRAP5_BUTTON_SIZE_CHOICES = (
     ('', 'Normal'),
     ('btn-sm', 'Small'),
     ('btn-lg', 'Large'),
 )
 
-BOOTSTRAP4_TWOCOL_RATIO_CHOICES = (
+BOOTSTRAP5_TWOCOL_RATIO_CHOICES = (
     ('1:1', '1:1'),
     ('2:1', '2:1'),
     ('1:2', '1:2'),
@@ -135,7 +160,7 @@ INSET_STYLE_CLASS_CHOICES = (
     ('container-fluid inset inset-raised', 'Wide Raised Inset'),
 )
 
-# these are sorted alphabetically in the settings model 
+# these are sorted alphabetically in the settings model
 WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
 
     ('default', 'Default'),
@@ -156,6 +181,4 @@ WAGTAIL_CODE_BLOCK_THEME_CHOICES = [
 
 ]
 
-
-
-
+INITIAL_WAGTAIL_CODE_BLOCK_THEME = 'coy'

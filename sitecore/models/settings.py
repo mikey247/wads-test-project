@@ -6,9 +6,9 @@ Sitecore models package for implementing site settings
 
 from django.db import models
 
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.models import Site
 
 from sitecore import constants
 
@@ -19,7 +19,7 @@ from sitecore import constants
 class EmailSettings(BaseSetting):
 
         def get_context(self, request):
-            context = super(EmailSettings, self).get_context(request)
+            context = super().get_context(request)
             context['site'] = Site.find_for_request(request)
             return context
 
@@ -56,7 +56,7 @@ class SiteSettings(BaseSetting):
     Settings can be grouped and provided with tabbed panels for display.
     """
     def get_context(self, request):
-        context = super(SiteSettings, self).get_context(request)
+        context = super().get_context(request)
         context['site'] = Site.find_for_request(request)
         return context
 
@@ -67,16 +67,16 @@ class SiteSettings(BaseSetting):
 
     bootstrap_theme = models.CharField(
         max_length = 32,
-        choices=constants.BOOTSTRAP4_THEME_CHOICES,
-        help_text='Select a Bootstrap 4 Theme for the site',
-        default=constants.INITIAL_BOOTSTRAP4_THEME
+        choices=sorted(constants.BOOTSTRAP5_THEME_CHOICES),
+        help_text='Select a Bootstrap Theme for the site',
+        default=constants.INITIAL_BOOTSTRAP5_THEME
     )
 
     code_theme = models.CharField(
         max_length = 32,
         choices=sorted(constants.WAGTAIL_CODE_BLOCK_THEME_CHOICES),
         help_text='Select a Code Theme for code blocks',
-        default= 'coy'
+        default= constants.INITIAL_WAGTAIL_CODE_BLOCK_THEME,
     )
 
     brand_logo = models.ForeignKey(
@@ -122,7 +122,7 @@ class SiteSettings(BaseSetting):
     
     navbar_background_colour = models.CharField(
         max_length = 32,
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         help_text='Select the background colour of the navigation bar',
         default='bg-primary',
     )
@@ -175,7 +175,7 @@ class SiteSettings(BaseSetting):
     # create the panels
 
     branding_tab_panel = [
-        ImageChooserPanel('brand_logo'),
+        FieldPanel('brand_logo'),
         FieldPanel('brand_icon'),
         FieldPanel('brand_name'),
         FieldPanel('brand_link'),

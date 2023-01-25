@@ -1,8 +1,8 @@
 {% load site_tags wagtailcore_tags %}
-<div class="dropdown-menu" aria-labelledby="{{ menu_id }}">
-  <a class="dropdown-item" href="{% pageurl parent %}">{{ parent.title }}</a>
-  <div class="dropdown-divider"></div>
+<ul class="dropdown-menu" aria-labelledby="navbarDropdown{{ menu_id }}">
+  <li><a class="dropdown-item" href="{% pageurl parent %}">{{ parent.title }}</a></li>
+  <li><hr class="dropdown-divider"></li>
   {% for child in menuitems_children %}
-    <a class="dropdown-item" href="{% pageurl child %}">{{ child.title }}</a>
+    <li><a class="dropdown-item" href="{% pageurl child %}">{{ child.title }}</a></li>
   {% endfor %}
-</div>
+</ul>

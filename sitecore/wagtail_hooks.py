@@ -11,45 +11,8 @@ from django.utils.html import format_html, format_html_join
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 
 from wagtail.admin.rich_text.converters.html_to_contentstate import BlockElementHandler, InlineStyleElementHandler
-from wagtail.core.whitelist import attribute_rule, check_url, allow_without_attributes
-from wagtail.core import hooks
+from wagtail import hooks
 
-@hooks.register('construct_whitelister_element_rules')
-def whitelister_element_rules():
-    """
-    On Save Draft/Publish, Wagtail will sanitize the HTML content of various fields/blocks.
-    The modified Hallo.js plugin used in the Rich Text Editor, adds additional HTML markup that
-    must be permitted in the whitelist.
-    """
-    return {
-        'code': allow_without_attributes,
-        'kbd': allow_without_attributes,
-        'var': allow_without_attributes,
-        'samp': allow_without_attributes,
-        'blockquote': attribute_rule({'class': True}),
-    }
-
-
-@hooks.register('insert_editor_js')
-def editor_js():
-    """
-    This hook inserts additional JavaScript into each admin/editor page, using the hallo-custom.js
-    file and the additional inline js to register each new plugin.
-    """
-    js_files = [
-    ]
-    js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
-        ((settings.STATIC_URL, filename) for filename in js_files)
-    )
-    return js_includes + format_html(
-        """
-        <script>
-            registerHalloPlugin('superscriptbutton');
-            registerHalloPlugin('subscriptbutton');
-            registerHalloPlugin('htmlbutton');
-        </script>
-        """
-    )
 
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
@@ -66,12 +29,14 @@ def global_admin_css():
 
     return css_includes
 
+
 @hooks.register('register_rich_text_features')
 def register_display_1_feature(features):
     """
     Registering the `display-1` feature, which uses the `h1 class="display-1"` Draft.js block type,
     and is stored as HTML with a `<h1 class="display-1">` tag.
     """
+
     feature_name = 'display-1'
     type_ = 'display-1'
 
@@ -92,7 +57,7 @@ def register_display_1_feature(features):
         'to_database_format': {'block_map': {type_: {'element': 'h1', 'props': {'class': 'display-1'}}}},
     })
     
-    #features.default_features.append('display-1')
+    # features.default_features.append('display-1')
 
 
 @hooks.register('register_rich_text_features')
@@ -101,6 +66,7 @@ def register_display_2_feature(features):
     Registering the `display-1` feature, which uses the `h1 class="display-1"` Draft.js block type,
     and is stored as HTML with a `<h1 class="display-1">` tag.
     """
+
     feature_name = 'display-2'
     type_ = 'display-2'
 
@@ -121,7 +87,8 @@ def register_display_2_feature(features):
         'to_database_format': {'block_map': {type_: {'element': 'h1', 'props': {'class': 'display-2'}}}},
     })
     
-    #features.default_features.append('display-2')
+    # features.default_features.append('display-2')
+
 
 @hooks.register('register_rich_text_features')
 def register_display_3_feature(features):
@@ -149,7 +116,7 @@ def register_display_3_feature(features):
         'to_database_format': {'block_map': {type_: {'element': 'h1', 'props': {'class': 'display-3'}}}},
     })
     
-    #features.default_features.append('display-3')
+    # features.default_features.append('display-3')
 
 
 @hooks.register('register_rich_text_features')
@@ -178,4 +145,4 @@ def register_display_4_feature(features):
         'to_database_format': {'block_map': {type_: {'element': 'h1', 'props': {'class': 'display-4'}}}},
     })
     
-    #features.default_features.append('display-4')
+    # features.default_features.append('display-4')

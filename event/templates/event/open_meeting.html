@@ -1,7 +1,7 @@
 {% load wagtailcore_tags %}
 {% if view == "summary" %}
-  <span class="badge badge-secondary"><i class="fas fa-users"></i> Open Meeting</span>
-  {% if today_state %}<span class="badge badge-info">{{ today_state.message }}</span>{% endif %}
+  <span class="badge bg-secondary"><i class="fas fa-users"></i> Open Meeting</span>
+  {% if today_state %}<span class="badge bg-info">{{ today_state.message }}</span>{% endif %}
 {% elif view == "readmore" %}View all the details <i class="fa fa-arrow-circle-right"></i>
 {% else %}
   <section>

@@ -5,16 +5,16 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 """
 
 from django import forms
-from wagtail.core.fields import RichTextField # StreamField, 
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
-from django.utils.functional import cached_property
-from django.utils.translation import ugettext_lazy as _
 from django.forms import Media
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import force_str
 
-from wagtail.admin.edit_handlers import FieldPanel # , FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-from wagtail.core import blocks
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel
+from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 from django_select2.forms import Select2Widget
@@ -24,6 +24,8 @@ from taggit.models import TaggedItemBase
 
 from sitecore import constants
 from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
+
+from .code_block_settings import get_language_choices, get_theme, get_prism_version
 
 
 class BSHeadingBlock(blocks.StructBlock):
@@ -56,7 +58,7 @@ class BSHeadingBlock(blocks.StructBlock):
     )
 
     def get_form_context(self, value, prefix='', errors=None):
-        context = super(BSHeadingBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context = super().get_form_context(value, prefix=prefix, errors=errors)
         #context['block_type'] = 'bs-heading-block'
         return context
 
@@ -90,30 +92,30 @@ class BSBlockquoteBlock(blocks.StructBlock):
     # Blockquote display options
     
     quote_align = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
     )
 
     quote_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-dark',
     )
     
     footer_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-secondary',
     )
     
     bg_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         required=False,
         default='bg-light',
     )
 
     border_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         default='',
         required=False,
     )
@@ -127,6 +129,8 @@ class BSBlockquoteBlock(blocks.StructBlock):
     class Meta:
         icon = 'openquote'
         template = 'sitecore/blocks/blockquote.html'
+
+
 
 class Select2ChoiceBlock(blocks.FieldBlock):
     """
@@ -244,6 +248,8 @@ class Select2ChoiceBlock(blocks.FieldBlock):
         # block is being used for. Feel encouraged to specify an icon in your
         # descendant block type
         icon = "placeholder"
+
+
     
 class ShortcodeRichTextBlock(blocks.RichTextBlock):
     """
@@ -343,19 +349,7 @@ class TextSnippet(models.Model):
 
 
 
-from wagtail.core.blocks import (
-    StructBlock,
-    TextBlock,
-    ChoiceBlock,
-)
-
-from .code_block_settings import (
-    get_language_choices,
-    get_theme,
-    get_prism_version
-)
-
-class CodeBlock(StructBlock):
+class CodeBlock(blocks.StructBlock):
     """
     A Wagtail StreamField block for code syntax highlighting using PrismJS.
     """
@@ -378,14 +372,14 @@ class CodeBlock(StructBlock):
         language_choices, language_default = self.get_language_choice_list(**kwargs)
 
         local_blocks.extend([
-            ('language', ChoiceBlock(
+            ('language', blocks.ChoiceBlock(
                 choices=language_choices,
                 help_text=_('Coding language'),
                 label=_('Language'),
                 default=language_default,
                 identifier='language',
             )),
-            ('code', TextBlock(label=_('Code'), identifier='code')),
+            ('code', blocks.TextBlock(label=_('Code'), identifier='code')),
         ])
 
         super().__init__(local_blocks, **kwargs)

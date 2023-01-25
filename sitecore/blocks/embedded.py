@@ -1,34 +1,20 @@
-# from django import forms
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db import models
-# from django.utils.encoding import force_text
-# from django.utils.functional import cached_property
-# from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-# from django_select2.forms import Select2Widget
-
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, StreamFieldPanel, TabbedInterface
-# from wagtail.contrib.table_block.blocks import TableBlock
-from wagtail.core import blocks
-from wagtail.core.fields import StreamField, RichTextField
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, TabbedInterface
+from wagtail import blocks
+from wagtail.fields import StreamField, RichTextField
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.snippets.models import register_snippet
 
-
 from sitecore import constants
-# from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
-
-# from taggit.managers import TaggableManager
-# from taggit.models import TaggedItemBase
 
 from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
-# from .text import MarkdownAndShortcodeTextBlock, TextSnippet
-# from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
-# from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
+
 
 
 class CarouselSimpleSlideBlock(blocks.StructBlock):
@@ -72,31 +58,31 @@ class CarouselSimpleSlideBlock(blocks.StructBlock):
     # Slide text and button styles
 
     title_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-white',
     )
     
     body_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-light',
     )
     
     link_text_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         required=False,
         default='text-light',
     )
     
     link_bg_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         required=False,
         default='bg-primary',
     )
 
     link_border_colour = blocks.ChoiceBlock(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         required=False,
         default='',
     )
@@ -126,13 +112,13 @@ class CarouselSnippet(models.Model):
     )
 
     title_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-dark',
         max_length=128
     )
     
     title_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
@@ -187,13 +173,14 @@ class CarouselSnippet(models.Model):
         ],
         null=True,
         blank=True,
+        use_json_field=True
     )
 
     # Wagtail Admin Panels (two pages)
     
     panels = [
         FieldPanel('title'),
-        StreamFieldPanel('slides'),
+        FieldPanel('slides'),
     ]
 
     style_panels = [
@@ -380,25 +367,25 @@ class IconCardDeckSnippet(models.Model):
     # Card Deck and per-card styling options (for all cards in deck)
     
     text_align = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_ALIGN_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_ALIGN_CHOICES,
         default='text-center',
         max_length=128
     )
 
     text_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_TEXT_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_TEXT_COLOUR_CHOICES,
         default='text-light',
         max_length=128
     )
     
     bg_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BACKGROUND_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BACKGROUND_COLOUR_CHOICES,
         default='bg-transparent',
         max_length=128
     )
 
     border_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BORDER_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BORDER_COLOUR_CHOICES,
         default='',
         blank=True,
         max_length=128
@@ -411,19 +398,19 @@ class IconCardDeckSnippet(models.Model):
     )
 
     icon_size_unit = models.CharField(
-        choices=constants.BOOTSTRAP4_UNIT_CHOICES,
+        choices=constants.BOOTSTRAP5_UNIT_CHOICES,
         default='rem',
         max_length=128
     )
     
     button_colour = models.CharField(
-        choices=constants.BOOTSTRAP4_BUTTON_COLOUR_CHOICES,
+        choices=constants.BOOTSTRAP5_BUTTON_COLOUR_CHOICES,
         default='btn btn-primary',
         max_length=128
     )
 
     button_size = models.CharField(
-        choices=constants.BOOTSTRAP4_BUTTON_SIZE_CHOICES,
+        choices=constants.BOOTSTRAP5_BUTTON_SIZE_CHOICES,
         default='',
         blank=True,
         max_length=128
@@ -437,13 +424,14 @@ class IconCardDeckSnippet(models.Model):
     
     cards = StreamField(
         [('icon_card_block', IconCardBlock()),],
+        use_json_field=True
     )
     
     # GUI for snippet admin
     
     panels = [
         FieldPanel('title'),
-        StreamFieldPanel('cards'),
+        FieldPanel('cards'),
     ]
 
     style_panels = [

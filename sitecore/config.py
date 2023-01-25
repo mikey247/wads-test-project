@@ -7,6 +7,6 @@ and hence it's not possible to retrieve settings for an unknown site.
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-START='['
-END=']'
-ESC='\\'
+START = '['
+END = ']'
+ESC = '\\'

@@ -13,7 +13,7 @@
     {% endif %}
     <h1 class="mb-4">{{ self.title|default:self.seo_title }}</h1>
     <div class="lead mb-4">
-      {% include_block page.intro with pid='event-intro' filterspec='width-1200' %}
+      {{ page.intro | richtext }}
     </div>
     <hr>
     {% for block in page.dates %}

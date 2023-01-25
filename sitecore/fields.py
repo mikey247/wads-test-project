@@ -4,7 +4,7 @@ Sitecore fields module to implement custom Django/Wagtail fields
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 from django.forms import CharField
-from wagtail.core.fields import RichTextField
+from wagtail.fields import RichTextField
 from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
 
@@ -28,8 +28,7 @@ class ShortcodeRichTextField(RichTextField):
             validators = [ParseShortcodes]
             kwargs['validators'] = validators
 
-        super(ShortcodeRichTextField, self).__init__(*args, **kwargs)
-
+        super().__init__(*args, **kwargs)
 
     class Meta:
         template = 'sitecore/blocks/richtext_shortcode.html'
@@ -46,6 +45,7 @@ class MarkdownShortcodeCharField(CharField):
     Note: Must check if the validator is already in the list, otherwise EVERY migration adds another entry to the
     list of validators.
     """
+
     def __init__(self, *args, **kwargs):
         if 'validators' in kwargs:
             validators = kwargs.pop('validators')
@@ -57,6 +57,4 @@ class MarkdownShortcodeCharField(CharField):
             validators = [ParseMarkdownAndShortcodes]
             kwargs['validators'] = validators
 
-        super(MarkdownShortcodeCharField, self).__init__(*args, **kwargs)
-
-
+        super().__init__(*args, **kwargs)

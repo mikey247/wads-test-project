@@ -3,28 +3,19 @@ Sitecore models module for implementing the search index page
 :Authors: Louise Lever <louise.lever@manchester.ac.uk>
 :Copyright: Research IT, IT Services, The University of Manchester
 """
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.http import Http404
-from django.template.response import TemplateResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
-from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.fields import StreamField
 from wagtail.search.models import Query
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.parsers import ValidateCoreBlocks
 
-from .sitepage import SitePage, SitePageTags
-
-
-class SiteSearchIndexPage(Page):
+class SiteSearchIndexPage(SitePage):
     """
     This defines a search index page for searching content with given search terms
     The ?query= field in the page request is used to search for specific
@@ -44,6 +35,7 @@ class SiteSearchIndexPage(Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the search index.'),
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -67,7 +59,7 @@ class SiteSearchIndexPage(Page):
     
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
@@ -106,7 +98,7 @@ class SiteSearchIndexPage(Page):
 
 
     def get_context(self, request, slug=None):
-        context = super(SiteSearchIndexPage, self).get_context(request)
+        context = super().get_context(request)
 
         # (1) Retrieve all pages that match search terms
         search_terms = request.GET.get('query', None)

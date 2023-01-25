@@ -1,9 +1,8 @@
 from django.db import models
 
 from wagtail.images.models import Image, AbstractImage, AbstractRendition
-# Create your models here.
+from wagtail.search import index
 
-# previously captioned_images app
 class SiteImage(AbstractImage):
     # Add any extra fields to image here
 
@@ -27,6 +26,12 @@ class SiteImage(AbstractImage):
         'caption',
     )
 
+    search_fields = AbstractImage.search_fields + [
+        index.SearchField('title'),
+        index.SearchField('caption'),
+        index.SearchField('alt_text'),
+    ]
+    
 
 class SiteRendition(AbstractRendition):
     image = models.ForeignKey(SiteImage, on_delete=models.CASCADE, related_name='renditions')
@@ -35,3 +40,4 @@ class SiteRendition(AbstractRendition):
         unique_together = (
             ('image', 'filter_spec', 'focal_point_key'),
         )
+

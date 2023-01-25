@@ -1,12 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from wagtail.admin import urls as wagtailadmin_urls
-from wagtail.core import urls as wagtail_urls
+from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
@@ -14,17 +14,17 @@ from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_url
 from .api import api_router
 
 urlpatterns = [
-    url(r'^django-admin/', admin.site.urls),
-    url(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
-    url(r'^admin/', include(wagtailadmin_urls)),
-    url(r'^api/v2/', api_router.urls),
+    re_path(r'^django-admin/', admin.site.urls),
+    re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
+    re_path(r'^admin/', include(wagtailadmin_urls)),
+    re_path(r'^api/v2/', api_router.urls),
 
-    url(r'^login/$', auth_views.LoginView.as_view(template_name = 'sitecore/registration/login.html'), name='login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(template_name = 'sitecore/registration/logout.html'), name='logout'),
+    re_path(r'^login/$', auth_views.LoginView.as_view(template_name = 'sitecore/registration/login.html'), name='login'),
+    re_path(r'^logout/$', auth_views.LogoutView.as_view(template_name = 'sitecore/registration/logout.html'), name='logout'),
 
-    url(r'^documents/', include(wagtaildocs_urls)),
+    re_path(r'^documents/', include(wagtaildocs_urls)),
 
-    url(r'', include(wagtail_urls)),
+    re_path(r'', include(wagtail_urls)),
 ]
 
 
@@ -39,5 +39,5 @@ if settings.DEBUG:
     if settings.ENABLE_DEBUG_TOOLBAR:
         import debug_toolbar
         urlpatterns = [
-            url(r'^__debug__/', include(debug_toolbar.urls)),
+            re_path(r'^__debug__/', include(debug_toolbar.urls)),
         ] + urlpatterns

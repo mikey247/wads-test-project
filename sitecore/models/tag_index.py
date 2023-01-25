@@ -11,12 +11,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.http import Http404
 from django.template.response import TemplateResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, StreamFieldPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.core.fields import StreamField
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.fields import StreamField
 
 from sitecore import blocks as sitecore_blocks
 from sitecore.parsers import ValidateCoreBlocks
@@ -25,7 +24,7 @@ from taggit.models import Tag
 
 from .sitepage import SitePage, SitePageTags
 
-class SiteTagIndexPage(RoutablePageMixin, Page):
+class SiteTagIndexPage(RoutablePageMixin, SitePage):
     """
     This defines a tag index page for searching content with specific tags and/or displaying the 
     entire shared tag cloud. The ?tag= field in the page request is used to search for specific
@@ -46,6 +45,7 @@ class SiteTagIndexPage(RoutablePageMixin, Page):
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the tag index.'),
+        use_json_field=True
     )
 
     per_page = models.PositiveSmallIntegerField(default=10,
@@ -69,7 +69,7 @@ class SiteTagIndexPage(RoutablePageMixin, Page):
     
     content_tab_panel = [
         FieldPanel('title'),
-        StreamFieldPanel('intro')
+        FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
@@ -108,7 +108,7 @@ class SiteTagIndexPage(RoutablePageMixin, Page):
 
 
     def get_context(self, request, slug=None):
-        context = super(SiteTagIndexPage, self).get_context(request)
+        context = super().get_context(request)
 
         # (1) Produce tag cloud based only managed by SitePageTags (and ignore tags in other models)
         # Get tag_id of all SitePageTags; use that as filter against pk in (all) Tag.objects()
@@ -178,7 +178,6 @@ class SiteTagIndexPage(RoutablePageMixin, Page):
     
     @route(r'^(?P<slug>[\w-]+)/?$')
     def tag_index_by_slug(self, request, slug=None, name='tag-index-by-slug'):
-        print("tag_index_by_slug", slug)
         return TemplateResponse(
             request,
             self.get_template(request),

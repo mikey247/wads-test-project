@@ -36,7 +36,7 @@
 	</div>
       {% endif %}
     </div>
-    <div class="col-12 col-md-9 order-2 order-md-1 pl-0 py-0 m-0">
+    <div class="col-12 col-md-9 order-2 order-md-1 ps-0 py-0 m-0">
       <h4 class="mt-2"><span>
 	<i class="fas fa-calendar"></i> {{ event.start_date }}{% if event.duration > 1 %} &mdash; {{ event.end_date }}
 	{% else %}
@@ -60,7 +60,7 @@
 	{% if event.search_description %}
 	  {% include_block event.search_description with pid='event-search-description' filterspec='width-1200' %}
 	{% elif event.intro != "<p></p>" %}
-	  {% include_block event.intro with pid='event-intro' filterspec='width-1200' %}
+   	  {{ event.intro | richtext }}
 	{% else %}
 	  <p class="text-warning">Page has no introductory text or search description.</p>
 	{% endif %}

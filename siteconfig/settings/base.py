@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
+    'wagtailstreamforms',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -39,18 +40,20 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.settings',
     'wagtail.contrib.table_block',
-    'wagtail.contrib.postgres_search',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.styleguide',
     'wagtail.api.v2',
 
+    'captcha',
+    'crispy_forms',
     'wagtailautocomplete',
     'wagtailmenus',
+    'wagtailcaptcha',
     'modelcluster',
     'taggit',
     'rest_framework',
@@ -117,6 +120,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -167,9 +172,9 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 # LML: Including this breaks ./manage.py collectstatic as the static files are found 'here' and via siteconfig as an INSTALLED_APPS leading to duplicates
 # LML: Option is use separate app for project level templates, tags, static or leave like this.
-#STATICFILES_DIRS = [
-#    os.path.join(PROJECT_DIR, 'static'),
-#]
+# STATICFILES_DIRS = [
+#     os.path.join(PROJECT_DIR, 'static'),
+# ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -183,12 +188,18 @@ WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
 PASSWORD_REQUIRED_TEMPLATE = 'sitecore/registration/password_required.html'
 
 AUTH_USER_MODEL = 'siteuser.User'
-
 WAGTAIL_USER_EDIT_FORM = 'siteuser.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'siteuser.forms.CustomUserCreationForm'
+
 WAGTAILIMAGES_IMAGE_MODEL = 'sitecore.SiteImage'
-WAGTAIL_USER_CUSTOM_FIELDS = ['bio','team', 'job_title','country', 'twitter', 'receive_submission_notify_email']
+WAGTAIL_USER_CUSTOM_FIELDS = ['bio', 'team', 'job_title', 'country', 'twitter', 'receive_submission_notify_email']
 
 LOGIN_REDIRECT_URL = '/'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "crispy_forms/bootstrap5"
+CRISPY_TEMPLATE_PACK = "crispy_forms/bootstrap5"
+
+# WAGTAILSTREAMFORMS_ADVANCED_SETTINGS_MODEL = 'sitecore.AdvancedFormSetting'
+# WAGTAILSTREAMFORMS_ENABLE_BUILTIN_HOOKS=False
 
 WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'

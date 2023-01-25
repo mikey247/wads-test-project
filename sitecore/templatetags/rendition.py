@@ -16,6 +16,33 @@ allowed_filter_pattern = re.compile(r"^[A-Za-z0-9_\-\.]+$")
 
 @register.tag(name="rendition")
 def rendition(parser, token):
+    '''
+    Provide custom Django templatetag to handle image renditions that pass a
+    template variable holding the filterspec, rather than as an inline piece
+    of text.
+
+    This replaces the "image" templatetag with hardcoded filterspecs e.g.,
+    "{% image self.article_image fill-1200x300 as photo %}"
+
+    with "rendition" e.g., 
+    {% rendition self.article_image self.article_image_filterspec as photo %}
+
+    Wagtail is trying to be clever and improve performance as they want
+    it to focus on content. The assumption is that hard-coded filterspecs are
+    acceptable. However, there has to be some options for editors when
+    controlling styling and layout.
+
+    ----
+
+    Code is taken from core wagtail.image templatetags.
+
+    Basically, parse the templatetag, get the various bits, match to a stored
+    image, obtain (or pass) the filterspec and optionally return as a named
+    variable for further use in the template (the "as photo" part).
+
+    Once done and all okay, return a RenditionNode using bits.
+
+    '''
     bits = token.split_contents()[1:]
     image_expr = parser.compile_filter(bits[0])
     filter_specs_expr = parser.compile_filter(bits[1])
@@ -80,15 +107,26 @@ def rendition(parser, token):
 
 
 class RenditionNode(template.Node):
+    '''
+    Get the image and filter based on filter_spec_expr (variable containing filter_spec
+    Then return a rendition based on that combination of (image,filter)
+    '''
     def __init__(self, image_expr, filter_specs_expr, output_var_name=None, attrs={}):
-    #def __init__(self, image_expr, filter_spec, output_var_name=None, attrs={}):
         self.image_expr = image_expr
         self.output_var_name = output_var_name
         self.attrs = attrs
         self.filter_specs_expr = filter_specs_expr
         self.filter_spec = None
 
-    @cached_property
+    # LML: Can't used @cached_property as when filter_spec passed as a Variable rather than
+    # a string, it's not cached correctly. The last saved filter_spec gets "baked in"
+    # when a deployment server instance is restarted, so changes to a specific page'saved
+    # article_image_filterspec just doesn't work on Preview OR Publish.
+
+    # LML: Possible that "self.filter_spec = self.filter_specs_expr.resolve(context)" is not
+    # resolving to the string, but a step short. Need to investigate further.
+    
+    @property
     def filter(self):
         return Filter(spec=self.filter_spec)
 

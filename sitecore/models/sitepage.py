@@ -5,20 +5,11 @@ across all derived Page based models.
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-# LML: left here while dependencies are refined per models/*.py
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-#from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-#from django.db import models
-#from django.template.response import TemplateResponse
-#from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-#from wagtail.contrib.settings.models import BaseSetting, register_setting
-#from wagtail.images.edit_handlers import ImageChooserPanel
-#from wagtail.search.models import Query
-#from sitecore import constants
-
-
-from wagtail.admin.edit_handlers import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
-from wagtail.core.models import Page, Orderable, Site
+from wagtail.admin.panels import FieldPanel
+from wagtail.models import Page
 
 from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
@@ -42,19 +33,51 @@ class SitePage(Page):
     the shared tag cluster to be established across all derived page models.
     Note: while this is not an abstract class (as that breaks the tag functionality) this page
     model would not normally be instanced as itself.
+
+    New fields:
+    - 'tags' for site-wide tagging system
+    - 'menu_label' for overriding text displayed in navigation menus (if title is too long)
+       e.g., title="Research IT Services"; menu_label="Services"
+
+    Inherited Page.content_panels:
+    - title
+
+    Inherited Page.promote_panels:
+    - slug, seo_title, search_description, show_in_menus
+
+    Inherited Page.settings_panels:
+    - PublishingPanel(), PrivacyModalPanel()
+
     """
 
+    # prevent direct creation of an "abstract" SitePage
     is_creatable = False
-    
+
+    # add site-wide tags to all SitePages
     tags = ClusterTaggableManager(through=SitePageTags, blank=True)
 
-    search_fields = Page.search_fields
+    # add menu_label override
+    menu_label = models.CharField(
+        max_length=32,
+        default='',
+        blank=True,
+        help_text=_("Provide text to override the default title used to generate the menu label")
+    )
     
+    # pass through existing Page.search_fields
+    search_fields = Page.search_fields
+
+    # add site-wide tags to API
     api_fields = [
         'tags',
+        'menu_label',
     ]
 
+    # add site-wide tags field to content_panels
     content_panels = Page.content_panels + [
         FieldPanel('tags'),
     ]
 
+    promote_panels = Page.promote_panels + [
+        FieldPanel('menu_label'),
+    ]

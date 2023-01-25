@@ -1,5 +1,5 @@
-from .settings import SiteSettings
-from .sitepage import SitePageTags, SitePage
 from .search_index import SiteSearchIndexPage
-from .tag_index import SiteTagIndexPage
+from .settings import SiteSettings
 from .siteimage import SiteImage, SiteRendition
+from .sitepage import SitePageTags, SitePage
+from .tag_index import SiteTagIndexPage

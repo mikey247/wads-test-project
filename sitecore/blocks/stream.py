@@ -4,10 +4,12 @@ Sitecore blocks module to implement several Wagtail Streamfield blocks for page 
 :Copyright: Research IT, IT Services, The University of Manchester
 """
 
-from wagtail.core import blocks
+from wagtail import blocks
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+
+from wagtailstreamforms.blocks import WagtailFormBlock
 
 from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
@@ -15,8 +17,8 @@ from .text import MarkdownAndShortcodeTextBlock, TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
-from. media import SiteMediaBlock
-
+# from .cards import DeckBlock
+from .media import SiteMediaBlock
 
 
 class SplashBlock(blocks.StreamBlock):
@@ -51,6 +53,7 @@ class SplashBlock(blocks.StreamBlock):
     # Override methods
 
     def get_form_context(self, value, prefix='', errors=None):
+        # LML: TODO: Why is this CoreBlock?
         context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'splash-block'
         return context
@@ -60,7 +63,6 @@ class SplashBlock(blocks.StreamBlock):
         template = 'sitecore/blocks/splash_streamblock.html'
 
 
-        
 class CoreBlock(blocks.StreamBlock):
     """
     Re-usable core Block for collecting standard and custom streamfield support into one place
@@ -121,8 +123,12 @@ class CoreBlock(blocks.StreamBlock):
         TextSnippet,
         group = '3. Embedded Content',
         template='sitecore/tags/text_snippet.html'
-        )
+    )
 
+    stream_form = WagtailFormBlock(
+        group = '3. Embedded Content',
+    )
+    
     tab = TabBlock(group='4. Section Blocks')
 
     pill = PillBlock(group='4. Section Blocks')
@@ -134,7 +140,7 @@ class CoreBlock(blocks.StreamBlock):
     # Override methods
 
     def get_form_context(self, value, prefix='', errors=None):
-        context = super(CoreBlock, self).get_form_context(value, prefix=prefix, errors=errors)
+        context = super().get_form_context(value, prefix=prefix, errors=errors)
         context['block_type'] = 'core-block'
         return context
 

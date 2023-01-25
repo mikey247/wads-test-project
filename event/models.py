@@ -7,36 +7,30 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.forms import ValidationError
 from django.forms.utils import ErrorList
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
  
-from wagtail.core.models import Orderable, Page
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.fields import RichTextField, StreamField
+from wagtail import blocks
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
-from sitecore.fields import MarkdownShortcodeCharField, ShortcodeRichTextField
 from sitecore.models import SitePage
-from sitecore.parsers import ParseMarkdownAndShortcodes, ValidateCoreBlocks
-
-from modelcluster.fields import ParentalKey
-from modelcluster.tags import ClusterTaggableManager
-from taggit.models import TaggedItemBase
+from sitecore.parsers import ValidateCoreBlocks
 
 
-class EventIndexPage(Page):
-    
+class EventIndexPage(SitePage):
+
     intro = StreamField(
         sitecore_blocks.CoreBlock,
         validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the Event list pages and search result summaries.'),
-        verbose_name='Intro'
+        verbose_name='Intro',
+        use_json_field=True
     )
-    
+
     per_page = models.PositiveSmallIntegerField(default=10,
                                                 verbose_name='Events per Page',
                                                 validators=[
@@ -45,7 +39,7 @@ class EventIndexPage(Page):
                                                 ])
 
     # Events Date Filter Options
-    
+
     EVENTS_FILTER_PAST = 'past'
     EVENTS_FILTER_PAST_AND_CURRENT = 'past_current'
     EVENTS_FILTER_FUTURE = 'future'
@@ -75,7 +69,7 @@ class EventIndexPage(Page):
     EVENTS_ORDER_END = 'end_date'
 
     EVENTS_ORDER_DEFAULT = EVENTS_ORDER_START_REV
-    
+
     EVENTS_ORDER_CHOICES = (
         (EVENTS_ORDER_START_REV, 'Event Start Date (Reverse)'),
         (EVENTS_ORDER_START, 'Event Start Date'),
@@ -107,25 +101,24 @@ class EventIndexPage(Page):
     )
 
     display_title = models.BooleanField(
-        default=True, 
+        default=True,
         verbose_name='Display Title'
     )
-    
+
     display_intro = models.BooleanField(
-        default=False, 
+        default=False,
         verbose_name='Display Intro'
     )
 
     no_listing_text = RichTextField(
         blank=True,
-        verbose_name='No Listing Text',      
+        verbose_name='No Listing Text',
         help_text='Warning text to display when there are no events that can be listed.',
     )
 
-    
     def get_context(self, request):
         # Update content to include only published events; ordered by reverse-date
-        context = super(EventIndexPage, self).get_context(request)
+        context = super().get_context(request)
 
         event_order = self.events_date_order
         today = datetime.date.today()
@@ -133,26 +126,26 @@ class EventIndexPage(Page):
             index_root = self.index_root_page
         else:
             index_root = self
-            
+
         if self.events_date_filter == self.EVENTS_FILTER_CURRENT_AND_FUTURE:
             events_all = EventPage.objects.live().child_of(index_root).filter(end_date__gte=today).order_by(event_order)
 
         elif self.events_date_filter == self.EVENTS_FILTER_FUTURE:
             events_all = EventPage.objects.live().child_of(index_root).filter(start_date__gt=today).order_by(event_order)
-            
+
         elif self.events_date_filter == self.EVENTS_FILTER_PAST_AND_CURRENT:
             events_all = EventPage.objects.live().child_of(index_root).filter(start_date__lte=today).order_by(event_order)
 
-        else: # self.EVENTS_FILTER_PAST
+        else:  # self.EVENTS_FILTER_PAST
             events_all = EventPage.objects.live().child_of(index_root).filter(end_date__lt=today).order_by(event_order)
 
         events_count = len(events_all)
 
         # get the paginator obj and the current page number
-        paginator = Paginator(events_all, self.per_page) 
+        paginator = Paginator(events_all, self.per_page)
         page_num = request.GET.get('page')
-        page_index = int(page_num)-1 if page_num is not None else 0
-        
+        page_index = int(page_num) - 1 if page_num is not None else 0
+
         # get list of events for the desired page
         try:
             events_paginated = paginator.page(page_num)
@@ -165,7 +158,7 @@ class EventIndexPage(Page):
         page_index_max = len(paginator.page_range)
         page_index_start = max(0, page_index - 3)
         page_index_end = min(page_index_max, page_index_start + 7)
-        
+
         # build new paginator ange from calculated range but also include first/last pages if not in range
         context['paginator_range'] = []
         if page_index_start > 0:
@@ -173,18 +166,17 @@ class EventIndexPage(Page):
         context['paginator_range'] = context['paginator_range'] + list(paginator.page_range)[page_index_start:page_index_end]
         if page_index_end < page_index_max:
             context['paginator_range'].append(page_index_max)
-            
+
         context['paginator_count'] = paginator.num_pages
         context['events_count'] = events_count
         context['events_paginated'] = events_paginated
 
         return context
 
-    
     content_tab_panel = [
         FieldPanel('title'),
-        ImageChooserPanel('listing_image'),
-        StreamFieldPanel('intro'),
+        FieldPanel('listing_image'),
+        FieldPanel('intro'),
     ]
 
     promote_tab_panel = [
@@ -202,7 +194,7 @@ class EventIndexPage(Page):
             FieldPanel('per_page'),
             FieldPanel('events_date_filter'),
             FieldPanel('events_date_order'),
-            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+            FieldPanel('index_root_page', 'event.EventIndexPage'),
         ], heading='Listing Display Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
@@ -225,33 +217,32 @@ class EventIndexPage(Page):
     # restrict page types that can lie under an EventIndexPage
     subpage_types = ['event.EventPage', 'event.EventIndexPage']
 
-    
 
 class EventDateTimeBlock(blocks.StructBlock):
-    """Documentation for EventDateTimeBlock
+    """
+    Documentation for EventDateTimeBlock
+    """
 
-        """
     date = blocks.DateBlock(
         required=True,
         help_text=_('')
     )
-    
+
     start_time = blocks.TimeBlock(
         required=True,
         help_text=_('')
     )
-    
+
     end_time = blocks.TimeBlock(
         required=True,
         help_text=_('')
     )
-    
 
     class Meta:
         icon = 'date'
         template = 'datetime.html'
 
-            
+
 class EventTypeRegistrationBlock(blocks.StructBlock):
     """
     This structured block holds details for an event requiring registration.
@@ -279,14 +270,12 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
     opening_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
-        default=datetime.date.today,
         help_text=_('Enter the date registration opens.')
     )
 
     closing_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
-        default=datetime.date.today,
         help_text=_('Enter the date registration closes.')
     )
 
@@ -355,7 +344,8 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
         return context
 
     class Meta:
-        icon = 'date'
+        icon = 'clipboard-list'
+        label = 'Registration'
 
     
 class EventTypeOpenMeetingBlock(blocks.StructBlock):
@@ -382,8 +372,8 @@ class EventTypeOpenMeetingBlock(blocks.StructBlock):
     )
 
     class Meta:
-        icon = 'date'
-
+        icon = 'group'
+        label = 'Open Meeting'
 
 
 class EventTypeBlock(blocks.StreamBlock):
@@ -391,7 +381,7 @@ class EventTypeBlock(blocks.StreamBlock):
     open_meeting = EventTypeOpenMeetingBlock(template='event/open_meeting.html')
     
     class Meta:
-        icon='cogs'
+        icon = 'cogs'
 
 
 class EventPageForm(WagtailAdminPageForm):
@@ -403,12 +393,16 @@ class EventPageForm(WagtailAdminPageForm):
         for block in page.dates:
             if block.block_type == 'date_block':
                 extracted_dates.append(block.value['date'])
-        
+
         page.start_date = min(extracted_dates)
         page.end_date = max(extracted_dates)
 
         # Determine duration
         page.duration = (page.end_date - page.start_date).days + 1
+
+        # Determine simple event type name for ModelAdmin filtering
+        block = page.event_type[0].block
+        page.event_type_name = block.name
 
         if commit:
             page.save()
@@ -490,15 +484,17 @@ class EventPage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks]
+        validators=[ValidateCoreBlocks],
+        use_json_field=True
     )
 
-    dates = StreamField([
-        ('date_block', EventDateTimeBlock(),),
-    ])
+    dates = StreamField(
+        [('date_block', EventDateTimeBlock(),)],
+        use_json_field=True)
 
     event_type = StreamField(
-        EventTypeBlock(max_num=1, min_num=1, required=True)
+        EventTypeBlock(max_num=1, min_num=1, required=True),
+        use_json_field=True
     )
     
     # Model Only fields - generated and saved in EventPageForm.save()
@@ -506,6 +502,10 @@ class EventPage(SitePage):
     start_date = models.DateField()
     end_date = models.DateField()
     duration = models.IntegerField()
+    event_type_name = models.CharField(
+        max_length=255,
+        blank=False,
+    )
 
     # Model view methods - callable in template views for EventPage and EventIndexPage - preferred over context['name']
     
@@ -543,16 +543,15 @@ class EventPage(SitePage):
                     return state
         # no matching date blocks found
         return None
-
-            
+ 
     def passed(self):
         return (self.end_date < datetime.date.today())
 
     def in_same_month(self):
         return (self.start_date.month == self.end_date.month) & (self.start_date.year == self.end_date.year)
-    
+
     # Search and API
-    
+
     search_fields = SitePage.search_fields + [
         index.SearchField('author'),
         index.SearchField('intro'),
@@ -575,18 +574,18 @@ class EventPage(SitePage):
     ]
 
     # Admin UI panels
-    
+
     content_tab_panel = SitePage.content_panels + [
         MultiFieldPanel([
             FieldPanel('author'),
-            ImageChooserPanel('event_image'),
+            FieldPanel('event_image'),
             FieldPanel('intro'),
             FieldPanel('location'),
             FieldPanel('location_link'),
-            StreamFieldPanel('dates'),
-            StreamFieldPanel('event_type'),
+            FieldPanel('dates'),
+            FieldPanel('event_type'),
         ], heading="Event Details"),
-            StreamFieldPanel('body')
+            FieldPanel('body')
     ]
 
     promote_tab_panel = SitePage.promote_panels
@@ -613,16 +612,15 @@ class EventPage(SitePage):
     # restrict page types that can lie under an EventPage
     subpage_types = ['article.ArticlePage']
     parent_page_types = ['event.EventIndexPage']
-    
+
     # get_context:
     # Include additional values to the EventPage template context upon live rendering.
     #   (start/end dates) in_same_month, (event) running and (event) passed
 
     def get_context(self, request):
-        context = super(EventPage, self).get_context(request)
+        context = super().get_context(request)
 
         # Add some context about the event if running today
         context['today_state'] = self.get_today_state()
 
         return context
-    
