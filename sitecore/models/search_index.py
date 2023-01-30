@@ -3,25 +3,16 @@ Sitecore models module for implementing the search index page
 :Authors: Louise Lever <louise.lever@manchester.ac.uk>
 :Copyright: Research IT, IT Services, The University of Manchester
 """
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.http import Http404
-from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
-from wagtail.contrib.routable_page.models import route, RoutablePageMixin
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.fields import StreamField
-from wagtail.models import Page, Orderable, Site
 from wagtail.search.models import Query
 
 from sitecore import blocks as sitecore_blocks
-
-from .sitepage import SitePage, SitePageTags
-
 
 class SiteSearchIndexPage(SitePage):
     """

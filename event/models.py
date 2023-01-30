@@ -9,12 +9,10 @@ from django.forms import ValidationError
 from django.forms.utils import ErrorList
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.models import Orderable, Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
@@ -194,7 +192,7 @@ class EventIndexPage(SitePage):
             FieldPanel('per_page'),
             FieldPanel('events_date_filter'),
             FieldPanel('events_date_order'),
-            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+            FieldPanel('index_root_page', 'event.EventIndexPage'),
         ], heading='Listing Display Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),

@@ -13,7 +13,7 @@ For documentation on deploying the site onto a Research Virtual Machine, consult
 
     OR
 
-    Python
+    Python 3.7+
     virtualenv
     Git Bash
     Command Line Interface
@@ -24,7 +24,7 @@ For documentation on deploying the site onto a Research Virtual Machine, consult
 
 ### Linux / WSL
 
-    Python
+    Python 3.7+
     virtualenv
     Git
     Command Line Interface
@@ -40,7 +40,7 @@ If you are using a managed laptop you will need access to the BIOS settings to a
 We will be collecting files the necessary files to run our Wagtail. All projects are based on the core `wads-wagtail` repository. This is a version of wagtail that has been developed to suit the needs of the 
 research community. Many features from previous wagtail projects have been back ported. 
 
-Another repository called [`wagtail-apps`](https://github.com/UoMResearchIT/wagtail-apps) contains web applications that have been made generic so they can be re-used on other projects.
+Another repository called [`wads-wagtail-apps`](https://github.com/UoMResearchIT/wads-wagtail-apps) contains web applications that have been made generic so they can be re-used on other projects.
 
 ### 1. Cloning the Repo
 
@@ -163,7 +163,7 @@ Now we have all the files and branches, we need to install the necessary package
 
 #### c. Install packages
 
-We will be creating a virtual environment to contain all the required packages. All commands that utilise python will require the virtual environment to be activated.
+We will be creating a virtual environment to contain all the required packages. All commands that utilise python will require the virtual environment to be activated. You will need to use Python 3.7+ (as of 10/01/2023).
 
 ##### Windows
 
@@ -219,7 +219,11 @@ Ubuntu includes PostgreSQL by default. To install PostgreSQL on Ubuntu, use the 
 
 `apt-get install postgresql-12`
 
-Then to set-up the database. Take a note of the database name and password as you will need the details later - 
+Then to set-up the database. 
+
+###### Manual 
+
+Take a note of the database name and password as you will need the details later - 
 
 - `sudo -i`
 - `su - postgres`
@@ -236,7 +240,29 @@ Then to set-up the database. Take a note of the database name and password as yo
 
 After `exit`ing twice you should now be back to your normal user account.
 
-Then -
+###### Automatic
+
+Edit - `/fixtures/scripts/database.00.init.sql`
+
+Then run the script with - `sudo -EHu postgres bash -c "psql < ./fixtures/scripts/database.00.init.sql"`
+
+##### edit local.py
+
+Once the database has been created you will need to edit the `local.py` file with the database information.
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': '<INSERT DATABASE NAME HERE>',
+            'USER': '<INSERT USER NAME HERE>',
+            'PASSWORD': '<INSERT PASSWORD NAME HERE>',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+
+##### create migration files and migrate them to the database
 
 `cd <path/to/directory/containing manage.py/file>`
 

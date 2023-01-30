@@ -36,5 +36,3 @@ def ParseShortcodes(value):
             _('ShortcodeRenderingError: %s (%s)' % (str(e), str(e.__cause__))),
             params={'value': value},
         )
-    
-

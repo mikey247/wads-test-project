@@ -9,13 +9,9 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
-from wagtail.models import Orderable, Page
-from wagtail.fields import RichTextField, StreamField
-from wagtail import blocks
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.fields import StreamField
 from wagtail.search import index
 
 from sitecore import blocks as sitecore_blocks
@@ -186,7 +182,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
             FieldPanel('sidebar_placement'),
             FieldPanel('per_page'),
             FieldPanel('listing_order'),
-            ImageChooserPanel('default_thumbnail'),
+            FieldPanel('default_thumbnail'),
         ], heading='Layout and Listing Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
