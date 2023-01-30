@@ -9,11 +9,9 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 
-from wagtailstreamforms.blocks import WagtailFormBlock
-
 from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
-from .text import MarkdownAndShortcodeTextBlock, TextSnippet
+from .text import TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
 from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
@@ -72,10 +70,6 @@ class CoreBlock(blocks.StreamBlock):
         label='Rich Text Paragraph',
         group='1. Structured Content',
     )
-    markdown = MarkdownAndShortcodeTextBlock(
-        label='Markdown Paragraph',
-        group='1. Structured Content',
-    )
 
     quote = BSBlockquoteBlock(
         label='Quote',
@@ -125,9 +119,9 @@ class CoreBlock(blocks.StreamBlock):
         template='sitecore/tags/text_snippet.html'
     )
 
-    stream_form = WagtailFormBlock(
-        group = '3. Embedded Content',
-    )
+    # stream_form = WagtailFormBlock(
+    #     group = '3. Embedded Content',
+    # )
     
     tab = TabBlock(group='4. Section Blocks')
 

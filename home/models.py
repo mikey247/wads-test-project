@@ -12,7 +12,6 @@ from wagtail.search import index
 from sitecore import constants
 from sitecore import blocks as sitecore_blocks
 from sitecore.models import SitePage
-from sitecore.parsers import ValidateCoreBlocks
 
 
 class HomePage(SitePage):
@@ -22,7 +21,6 @@ class HomePage(SitePage):
     
     intro = StreamField(
         sitecore_blocks.SplashBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here.'),
         use_json_field=True,
@@ -30,7 +28,6 @@ class HomePage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide main body of content here.'),
         use_json_field=True,
@@ -58,7 +55,6 @@ class HomePage(SitePage):
     
     splash_content = StreamField(
         sitecore_blocks.SplashBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here.'),
         use_json_field=True
@@ -96,7 +92,6 @@ class HomePage(SitePage):
     
     inset_content = StreamField(
         sitecore_blocks.SplashBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the inset area here.'),
         use_json_field=True

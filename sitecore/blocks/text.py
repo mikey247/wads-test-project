@@ -23,7 +23,6 @@ from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
 from sitecore import constants
-from sitecore.parsers import ParseMarkdownAndShortcodes, ParseShortcodes
 
 from .code_block_settings import get_language_choices, get_theme, get_prism_version
 
@@ -272,52 +271,6 @@ class ShortcodeRichTextBlock(blocks.RichTextBlock):
     class Meta:
         icon = 'pilcrow'
         template = 'sitecore/blocks/richtext_shortcode.html'
-
-
-class MarkdownAndShortcodeTextBlock(blocks.FieldBlock):
-    """
-    Modifies the FieldBlock so that the main CharField is also passed through the ParseMarkdownAndShortcodes validator.
-    Any user embedded markdown will be processed first, using the default markdown rules and any enabled extensions.
-    This should remove any markdown notation containing the shortcode delimiters (see config.py but usually [ and ]).
-    Any user embedded shortcodes are checked against the registered codes and exceptions raised as necessary.
-    The Wagtail admin interface will display appropriate exceptions on Save Draft or Publish, forcing the author
-    to update the content.
-    """
-
-    def __init__(
-            self,
-            required=True,
-            help_text=None,
-            rows=1,
-            max_length=None,
-            min_length=None,
-            validators=[ParseMarkdownAndShortcodes],
-            **kwargs):
-
-        self.field_options = {
-            'required': required,
-            'help_text': help_text,
-            'max_length': max_length,
-            'min_length': min_length,
-            'validators': validators,
-        }
-        self.rows = rows
-        super().__init__(**kwargs)
-
-    @cached_property
-    def field(self):
-        from wagtail.admin.widgets import AdminAutoHeightTextInput
-        field_kwargs = {'widget': AdminAutoHeightTextInput(attrs={'rows': self.rows})}
-        field_kwargs.update(self.field_options)
-        return forms.CharField(**field_kwargs)
-
-    def get_searchable_content(self, value):
-        return [force_str(value)]
-
-    class Meta:
-        icon = "pilcrow"
-        template = 'sitecore/blocks/markdown_shortcode.html'
-
 
 class TextSnippetTag(TaggedItemBase):
     content_object = models.ForeignKey(

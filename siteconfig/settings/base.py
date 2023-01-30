@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'home',
     'article',
     'event',
-    'wagtailstreamforms',
     
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -198,8 +197,5 @@ LOGIN_REDIRECT_URL = '/'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "crispy_forms/bootstrap5"
 CRISPY_TEMPLATE_PACK = "crispy_forms/bootstrap5"
-
-# WAGTAILSTREAMFORMS_ADVANCED_SETTINGS_MODEL = 'sitecore.AdvancedFormSetting'
-# WAGTAILSTREAMFORMS_ENABLE_BUILTIN_HOOKS=False
 
 WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'

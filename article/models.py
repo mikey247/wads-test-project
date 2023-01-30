@@ -17,9 +17,7 @@ from wagtail.search import index
 from sitecore import blocks as sitecore_blocks
 from sitecore import constants
 from sitecore.models import SitePage
-from sitecore.parsers import ValidateCoreBlocks
 
-from wagtailstreamforms.wagtail_hooks import process_form
 from article.forms import FilterForm
 
 import logging
@@ -68,7 +66,6 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     intro = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
         verbose_name='Intro',
@@ -432,7 +429,6 @@ class ArticlePage(SitePage):
 
     intro = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide introductory content here. This will be used in the blog list pages and search result summaries.'),
         use_json_field=True
@@ -440,7 +436,6 @@ class ArticlePage(SitePage):
 
     body = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide the main body content here. This is not visible in the blog list and search summaries but is still searchable.'),
         use_json_field=True
@@ -498,7 +493,6 @@ class ArticlePage(SitePage):
 
     splash_content = StreamField(
         sitecore_blocks.SplashBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the splash area here. This will be used in the blog list pages and search result summaries.'),
         use_json_field=True
@@ -536,7 +530,6 @@ class ArticlePage(SitePage):
 
     inset_content = StreamField(
         sitecore_blocks.SplashBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('Provide content for the inset area here.'),
         use_json_field=True
@@ -745,12 +738,3 @@ class ArticlePage(SitePage):
                     self.slug, '{:%Y/%m/%d/}'.format(timezone.now()) + self.slug
                 )
 
-    def serve(self, request, *args, **kwargs):
-        '''
-        Handle POST requests by passing to wagtailstreamforms process_form (disabled as hook)
-        '''
-
-        if request.method == "POST":
-            return process_form(self, request, *args, **kwargs)
-
-        return super().serve(request)

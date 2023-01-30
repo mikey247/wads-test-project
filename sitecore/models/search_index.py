@@ -13,7 +13,6 @@ from wagtail.fields import StreamField
 from wagtail.search.models import Query
 
 from sitecore import blocks as sitecore_blocks
-from sitecore.parsers import ValidateCoreBlocks
 
 class SiteSearchIndexPage(SitePage):
     """
@@ -32,7 +31,6 @@ class SiteSearchIndexPage(SitePage):
     
     intro = StreamField(
         sitecore_blocks.CoreBlock,
-        validators=[ValidateCoreBlocks],
         blank=True,
         help_text=_('(Optional) Provide introductory text here to describe the search index.'),
         use_json_field=True
