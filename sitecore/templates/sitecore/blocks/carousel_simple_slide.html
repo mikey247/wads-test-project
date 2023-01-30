@@ -13,6 +13,7 @@
   <div class="d-none d-md-block">
     {% if self.body %}
       <span class="{{ self.body_colour }}">
+        {{ self.body|safe }}
       </span>
     {% endif %}
   </div>
