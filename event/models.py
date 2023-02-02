@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
  
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PageChooserPanel, PrivacyModalPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.search import index
 
@@ -192,7 +192,9 @@ class EventIndexPage(SitePage):
             FieldPanel('per_page'),
             FieldPanel('events_date_filter'),
             FieldPanel('events_date_order'),
-            FieldPanel('index_root_page', 'event.EventIndexPage'),
+            PageChooserPanel('index_root_page', 'event.EventIndexPage'),
+            # LML can't replace PageChooserPanel if it uses a root page argument
+            # FieldPanel('index_root_page', 'event.EventIndexPage'),
         ], heading='Listing Display Options'),
         MultiFieldPanel([
             FieldPanel('display_title'),
