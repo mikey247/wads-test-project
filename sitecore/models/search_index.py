@@ -14,6 +14,10 @@ from wagtail.search.models import Query
 
 from sitecore import blocks as sitecore_blocks
 
+from .sitepage import SitePage
+
+
+
 class SiteSearchIndexPage(SitePage):
     """
     This defines a search index page for searching content with given search terms
