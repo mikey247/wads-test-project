@@ -43,8 +43,8 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     SIDEBAR_PLACEMENT_DEFAULT = 'left'
     SIDEBAR_PLACEMENT_CHOICES = (
-        ('left', 'Single sidebar (To left of main content'),
-        ('right', 'Single sidebar (To right of main content'),
+        ('left', 'Single sidebar (To left of main content)'),
+        ('right', 'Single sidebar (To right of main content)'),
         ('none', 'No sidebars'),
     )
 
@@ -419,8 +419,8 @@ class ArticlePage(SitePage):
 
     SIDEBAR_PLACEMENT_DEFAULT = 'left'
     SIDEBAR_PLACEMENT_CHOICES = (
-        ('left', 'Single sidebar (To left of main content'),
-        ('right', 'Single sidebar (To right of main content'),
+        ('left', 'Single sidebar (To left of main content)'),
+        ('right', 'Single sidebar (To right of main content)'),
         ('none', 'No sidebars'),
     )
 
