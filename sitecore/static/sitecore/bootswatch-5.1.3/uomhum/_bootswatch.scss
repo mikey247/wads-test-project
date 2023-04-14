@@ -1,4 +1,4 @@
-// UOMHUM 5.2.2
+// Pulse 5.2.2
 // Bootswatch
 
 
@@ -67,23 +67,6 @@
   &.disabled:focus {
     box-shadow: none;
   }
-}
-
-// Typography ==================================================================
-
-.brand-name h1 {
-    font-size: 22px;
-    color: $purple;
-    font-weight: 600;
-    line-height: 22px;
-}
-
-h1 {
-    color: $teal;
-}
-
-#splash h1 {
-    color: inherit;
 }
 
 // Tables
@@ -163,4 +146,21 @@ h1 {
       color: $list-group-disabled-color;
     }
   }
+}
+
+// Typography ==================================================================
+
+.brand-name h1 {
+    font-size: 22px;
+    color: $purple;
+    font-weight: 600;
+    line-height: 22px;
+}
+
+h1 {
+    color: $teal;
+}
+
+#splash h1 {
+    color: inherit;
 }
