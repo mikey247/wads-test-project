@@ -1,7 +1,7 @@
 # Required core packages for Django 4.0.8 and wagtail 3.0 as of 20221121
 
 Django==4.0.8
-wagtail==3.0
+wagtail==4.1.1
 
 Markdown==3.3.6
 PyYAML==6.0
@@ -18,5 +18,5 @@ psycopg2==2.9.3
 shortcodes==5.4.0
 wagtail-autocomplete==0.7.0
 wagtail-django-recaptcha==1.0
-wagtailmedia==0.9.0
+wagtailmedia==0.12.0
 wagtailmenus==3.1.3

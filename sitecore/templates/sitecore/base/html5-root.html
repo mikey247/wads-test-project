@@ -10,6 +10,10 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% endblock %}
 
+    {% if request.in_preview_panel %}
+        <base target="_blank">
+    {% endif %}
+
     {% block head-analytics %}
       {% if settings.sitecore.SiteSettings.ga_tracking_id %}
 	{% include "sitecore/base/analytics_gtag.html" %}

@@ -7,8 +7,8 @@ Sitecore models package for implementing site settings
 from django.db import models
 
 from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
-from wagtail.contrib.settings.models import BaseSetting, register_setting
-from wagtail.models import Site
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
+from wagtail.images.edit_handlers import ImageChooserPanel
 
 from sitecore import constants
 
@@ -16,7 +16,7 @@ from sitecore import constants
 
 
 @register_setting(icon = 'mail')
-class EmailSettings(BaseSetting):
+class EmailSettings(BaseSiteSetting):
 
         def get_context(self, request):
             context = super().get_context(request)
@@ -49,7 +49,7 @@ class EmailSettings(BaseSetting):
         
 
 @register_setting
-class SiteSettings(BaseSetting):
+class SiteSettings(BaseSiteSetting):
     """
     This registers new site settings options (per site) in the Wagtail admin panels.
     Limited functionality is provided here to set the (Bootstrap 4) theme.
