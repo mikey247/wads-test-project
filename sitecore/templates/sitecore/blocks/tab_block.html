@@ -1,32 +1,34 @@
 <!-- Tab Section Navigation -->
 <ul class="nav nav-tabs mb-3" id="{{ppid}}-{{pid}}-nav-tab" role="tablist">
-  {% for tab in self.tab_section  %}
-    {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
-      <li class="nav-item" role="presentation">
-        <a id="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}"
-	   class="nav-item nav-link{% if not tab_id %} active{% endif %}"
-	   href="#{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
-	   data-toggle="tab"
-	   role="tab"
-	   aria-selected="{% if not tab_id %}true{% else %}false{% endif %}"
-	   aria-controls="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}">
-	  {{ tab.title }}
-	</a>
-      </li>
-    {% endwith %}
-  {% endfor %}
-</ul>
-
-<!-- Tab Section Content -->
-<div class="tab-content" id="{{ppid}}-{{pid}}-nav-tab-content">
-  {% for tab in self.tab_section  %}
-    {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
-      <div id="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
-	   class="tab-pane fade{% if not tab_id %} show active{%endif%}"
-	   role="tabpanel"
-	   aria-labelledby="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}">
-	{{ tab.content }}
-      </div>
-    {% endwith %}
-  {% endfor %}
-</div>
+    {% for tab in self.tab_section  %}
+      {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
+        <li class="nav-item" role="presentation">
+          <button id="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}"
+              class="nav-item nav-link{% if not tab_id %} active{% endif %}"
+              data-bs-toggle="tab"
+              data-bs-target="#{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+              role="tab"
+              type="button"
+              aria-selected="{% if not tab_id %}true{% else %}false{% endif %}"
+              aria-controls="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}">
+              {{ tab.title }}
+          </button>
+        </li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+  
+  <!-- Tab Section Content -->
+  <div class="tab-content" id="{{ppid}}-{{pid}}-nav-tab-content">
+    {% for tab in self.tab_section  %}
+      {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
+        <div id="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+         class="tab-pane fade{% if not tab_id %} show active{%endif%}"
+         role="tabpanel"
+         aria-labelledby="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}">
+      {{ tab.content }}
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+  
