@@ -241,6 +241,8 @@ class EventDateTimeBlock(blocks.StructBlock):
         icon = 'date'
         template = 'datetime.html'
 
+def get_datetime_today():
+    return datetime.date.today()
 
 class EventTypeRegistrationBlock(blocks.StructBlock):
     """
@@ -269,12 +271,14 @@ class EventTypeRegistrationBlock(blocks.StructBlock):
     opening_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
-        help_text=_('Enter the date registration opens.')
+        default=get_datetime_today(),
+        help_text=_('Enter the date registration opens.'),
     )
 
     closing_date = blocks.DateBlock(
         required=False,
         group='Registration Important Dates',
+        default=get_datetime_today(),
         help_text=_('Enter the date registration closes.')
     )
 
