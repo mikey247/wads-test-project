@@ -6,16 +6,17 @@ register = template.Library()
 
 @register.inclusion_tag('article/tags/article_meta.html')
 def article_meta(article): 
-   return {
+    return {
       'article': article,
    }
 
 
 # Renders the article page summary as blog listing entry
 @register.inclusion_tag('article/tags/article_blog_summary.html', takes_context=True)
-def article_blog_summary(context, post, show_taggit=False, taggit_slug=''):
-   return {
+def article_blog_summary(context, post, show_taggit=False, taggit_slug='', display_meta=''):
+    return {
       'post': post,
       'show_taggit': show_taggit,
       'taggit_slug': taggit_slug,
+      'display_meta': display_meta,
    }
