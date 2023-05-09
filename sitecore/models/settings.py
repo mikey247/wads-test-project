@@ -151,7 +151,7 @@ class SiteSettings(BaseSetting):
     ga_tracking_id = models.CharField(
         max_length = 32,
         blank=True,
-        help_text='Google Analytics Tracking ID (UA-#########-#)'
+        help_text='Google Analytics Measurement ID (G-##########)'
     )
 
     meta_description = models.CharField(
