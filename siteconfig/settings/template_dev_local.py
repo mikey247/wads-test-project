@@ -111,3 +111,5 @@ DATETIME_FORMAT = 'dS F Y H:i:s'
 SHORT_DATE_FORMAT = 'd/m/y'
 SHORT_TIME_FORMAT = 'H:i'
 SHORT_DATETIME_FORMAT = 'd/m/y H:i'
+
+LOGGING = { "version": 1, "disable_existing_loggers": False, "formatters": {"rich": {"datefmt": "[%X]"}}, "handlers": { "console": { "class": "rich.logging.RichHandler", "formatter": "rich", "level": "DEBUG", "rich_tracebacks": True, } }, "loggers": { "django": {"handlers": ["console"]} }, }
