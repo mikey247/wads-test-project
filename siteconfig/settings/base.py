@@ -199,3 +199,22 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "crispy_forms/bootstrap5"
 CRISPY_TEMPLATE_PACK = "crispy_forms/bootstrap5"
 
 WAGTAILMEDIA_MEDIA_MODEL = 'sitecore.SiteMedia'
+
+
+# Uncomment in production to enable more verbose logging output
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+#         },
+#     },
+# }
