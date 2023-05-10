@@ -9,6 +9,7 @@ from django.db import models
 from wagtail.admin.panels import FieldPanel, ObjectList, MultiFieldPanel, TabbedInterface
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.models import Site
+from wagtail.fields import RichTextField
 
 from sitecore import constants
 
@@ -172,6 +173,22 @@ class SiteSettings(BaseSetting):
         help_text='Page head meta-author field for SEO. Comma separated list of names and organisations. Not visible but machine readable.'
     )
 
+    # Password settings
+
+    password_image = models.ForeignKey(
+        'sitecore.SiteImage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text='Provide an image for the password page.',
+    )
+
+    password_text = RichTextField(
+        blank=True,
+        help_text='Provide some text for the password page.',
+    )
+
     # create the panels
 
     branding_tab_panel = [
@@ -207,6 +224,11 @@ class SiteSettings(BaseSetting):
         ], heading=('Social Share')),
     ]
 
+    password_tab_panel = [
+        FieldPanel('password_image'),
+        FieldPanel('password_text'),
+    ]
+
     # Combine into tabbed panel interface
     edit_handler = TabbedInterface([
         ObjectList(branding_tab_panel, heading='Branding'),
@@ -214,6 +236,7 @@ class SiteSettings(BaseSetting):
         ObjectList(theme_tab_panel, heading='Theme'),
         ObjectList(analytics_tab_panel, heading='Analytics'),
         ObjectList(social_tab_panel, heading='Social Media'),
+        ObjectList(password_tab_panel, heading='Password Page'),
     ])
 
 
