@@ -8,7 +8,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface, TitleFieldPanel
+from wagtail.admin.widgets.slug import SlugInput
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.fields import StreamField
 from wagtail.search.models import Query
@@ -61,14 +62,14 @@ class SiteSearchIndexPage(SitePage):
     # Rebuild main content tab panel
     
     content_tab_panel = [
-        FieldPanel('title'),
+        TitleFieldPanel('title'),
         FieldPanel('intro')
     ]
 
     # Rebuild promote tab panel
     
     promote_tab_panel = [
-        FieldPanel('slug'),
+        FieldPanel('slug', widget=SlugInput),
         FieldPanel('seo_title'),
         FieldPanel('search_description'),
         MultiFieldPanel([

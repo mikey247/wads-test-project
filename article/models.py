@@ -9,7 +9,8 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface, TitleFieldPanel
+from wagtail.admin.widgets.slug import SlugInput
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.fields import StreamField
 from wagtail.search import index
@@ -159,7 +160,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
     # Rebuild main content tab panel
 
     content_tab_panel = [
-        FieldPanel('title'),
+        TitleFieldPanel('title'),
         FieldPanel('intro')
     ]
 
@@ -167,7 +168,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     promote_tab_panel = [
         MultiFieldPanel([
-            FieldPanel('slug'),
+            FieldPanel('slug', widget=SlugInput),
             FieldPanel('seo_title'),
             FieldPanel('search_description'),
         ], heading=_('Search Engine Options')),
@@ -630,7 +631,7 @@ class ArticlePage(SitePage):
     # Rebuild main content tab panel
 
     content_tab_panel = [
-        FieldPanel('title'),
+        TitleFieldPanel('title'),
         FieldPanel('intro'),
         FieldPanel('body'),
     ]
@@ -692,7 +693,7 @@ class ArticlePage(SitePage):
 
     promote_tab_panel = [
         MultiFieldPanel([
-            FieldPanel('slug'),
+            FieldPanel('slug', widget=SlugInput),
             FieldPanel('seo_title'),
             FieldPanel('search_description'),
         ], heading=_('Search Engine Options')),

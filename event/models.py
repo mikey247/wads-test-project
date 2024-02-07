@@ -11,7 +11,8 @@ from django.utils.translation import gettext_lazy as _
  
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, ObjectList, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, PageChooserPanel, ObjectList, PublishingPanel,  TabbedInterface, TitleFieldPanel
+from wagtail.admin.widgets.slug import SlugInput
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.search import index
 
@@ -172,13 +173,13 @@ class EventIndexPage(SitePage):
         return context
 
     content_tab_panel = [
-        FieldPanel('title'),
+        TitleFieldPanel('title'),
         FieldPanel('listing_image'),
         FieldPanel('intro'),
     ]
 
     promote_tab_panel = [
-        FieldPanel('slug'),
+        FieldPanel('slug', widget=SlugInput),
         FieldPanel('seo_title'),
         FieldPanel('search_description'),
         MultiFieldPanel([

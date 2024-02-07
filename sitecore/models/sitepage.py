@@ -46,7 +46,7 @@ class SitePage(Page):
     - slug, seo_title, search_description, show_in_menus
 
     Inherited Page.settings_panels:
-    - PublishingPanel(), PrivacyModalPanel()
+    - PublishingPanel()
 
     """
 
