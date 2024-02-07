@@ -84,6 +84,7 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     display_title = models.BooleanField(default=True)
     display_intro = models.BooleanField(default=False)
+    display_meta = models.BooleanField(default=True)
 
     sidebar_placement = models.CharField(
         max_length=128,
@@ -188,6 +189,9 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
             FieldPanel('display_title'),
             FieldPanel('display_intro'),
         ], heading='Main Content Options'),
+        MultiFieldPanel([
+            FieldPanel('display_meta'),
+    ], heading='Child Content Options')
     ]
 
     publish_tab_panel = [

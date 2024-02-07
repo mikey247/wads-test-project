@@ -35,8 +35,10 @@
     </div>
     <div class="col-12 col-md-9 order-2 order-md-1 ps-0 py-0 m-0">
       <div class="my-2">
-	{% page_meta_summary post %}
-	<hr>
+        {% if display_meta %} 
+            {% page_meta_summary post %}
+        <hr>
+        {% endif %}
 	{% if post.search_description %}
 	  {% include_block post.search_description with pid='post-search-description' filterspec='width-1200' %}
 	{% else %}
