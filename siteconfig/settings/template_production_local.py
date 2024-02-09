@@ -133,3 +133,5 @@ if ENABLE_RECAPTCHA:
             'http': 'http://webproxy.its.manchester.ac.uk:3128/',
             'https': 'http://webproxy.its.manchester.ac.uk:3128/',
         }
+
+WAGTAILIMAGES_EXTENSIONS = ["gif", "jpg", "jpeg", "png", "webp", "svg"]ss
