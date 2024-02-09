@@ -13,7 +13,7 @@ from .links import LinkBlock
 from .text import BSHeadingBlock, BSBlockquoteBlock, CodeBlock
 from .text import TextSnippet
 from .embedded import CarouselSnippet, GalleryBlock, IconCardDeckSnippet
-from .section import SubSectionBlock, TabBlock, PillBlock, AccordionBlock
+from .section import SubSectionBlock, NestedBlock
 from .section import NestedCoreBlock, TwoColStructValue, TwoColBlock
 # from .cards import DeckBlock
 from .media import SiteMediaBlock
@@ -123,11 +123,13 @@ class CoreBlock(blocks.StreamBlock):
     #     group = '3. Embedded Content',
     # )
     
-    tab = TabBlock(group='4. Section Blocks')
+    # tab = TabBlock(group='4. Section Blocks')
 
-    pill = PillBlock(group='4. Section Blocks')
+    # pill = PillBlock(group='4. Section Blocks')
 
-    accordion = AccordionBlock(group='4. Section Blocks')
+    # accordion = AccordionBlock(group='4. Section Blocks')
+
+    nested_content = NestedBlock(group='4. Section Blocks')
 
     two_cols = TwoColBlock(group='4. Section Blocks')
 

@@ -1,0 +1,158 @@
+<!-- Accordion -->
+
+{% if self.type == "ACCORDION" %}
+
+<div class="accordion">
+
+    {% for section in self.content  %}
+            
+        {% with prefix=forloop.counter id=section.title|slugify %}
+
+            {% if prefix == 1 %}
+
+                <div class="accordion-item">
+                <div class="accordion-header" id="heading-acc-{{prefix}}-{{id}}">
+                    <h5 class="mb-0">
+                    <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#collapse-acc-{{prefix}}-{{id}}" aria-expanded="true" aria-controls="collapse-acc-{{prefix}}-{{id}}">
+                        {{ section.title }}
+                    </button>
+                    </h5>
+                </div>
+
+                <div id="collapse-acc-{{prefix}}-{{id}}" class="{% if self.accordion_type == 'ACCORDION-CLOSED' %} collapse {% else %} collapse show {% endif %}" aria-labelledby="heading-acc-{{prefix}}-{{id}}" data-parent="#accordion">
+                    <div class="accordion-body">
+                    {{ section.content }}
+                    </div>
+                </div>
+                </div>
+
+
+            {% else %}
+
+            <div class="accordion-item">
+                <div class="accordion-header" id="heading-acc-{{prefix}}-{{id}}">
+                <h5 class="mb-0">
+                    <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-acc-{{prefix}}-{{id}}" aria-expanded="false" aria-controls="collapse-acc-{{prefix}}-{{id}}">
+                        {{ section.title }}
+                        </button>
+                </h5>
+                </div>
+                <div id="collapse-acc-{{prefix}}-{{id}}" class="accordion-collapse collapse" aria-labelledby="heading-acc-{{prefix}}-{{id}}" data-parent="#accordion">
+                <div class="accordion-body">
+
+                    {{ section.content }}
+
+                </div>
+                </div>
+            </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+    {% endfor %}
+
+{% endif %}
+
+<!-- Pills -->
+
+{% if self.type == "PILL" %}
+
+<div class="pill">
+
+<!-- Pill Section Navigation  -->
+<ul class="nav nav-pills mb-3" id="{{ppid}}-{{pid}}-nav-pills" role="tablist">
+    {% for pill in self.content  %}
+      {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+        <li class="nav-item" role="presentation">
+          <a id="{{ppid}}-{{pid}}-nav-pills-{{pill_id}}-{{pill_name}}"
+	     class="nav-item nav-link{% if not pill_id %} active{% endif %}"
+	     data-bs-target="#{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     data-bs-toggle="pill"
+	     role="tab"
+         type="button"
+	     aria-controls="{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     aria-selected="{% if not pill_id %}true{% else %}false{% endif %}">
+	    {{ pill.title }}
+	  </a>
+        </li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+  
+  <!-- Pill Section Content -->
+  <div class="tab-content" id="{{ppid}}-{{pid}}-nav-pills-content">
+    {% for pill in self.content  %}
+      {% with pill_id=forloop.counter0 pill_name=pill.title|slugify %}
+        <div id="{{ppid}}-{{pid}}-pill-{{pill_id}}-{{pill_name}}"
+	     class="tab-pane fade{% if not pill_id%} show active{% endif %}"
+	     role="tabpanel"
+	     aria-labelledby="{{ppid}}-{{pid}}-nav-pills-{{pill_id}}-{{pill_name}}">
+	  {{ pill.content }}
+	</div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+  
+{% endif %}
+
+<!-- Tabs -->
+
+{% if self.type == "TAB" %}
+
+<div class="tab">
+
+    <!-- Tab Section Navigation -->
+<ul class="nav nav-tabs mb-3" id="{{ppid}}-{{pid}}-nav-tab" role="tablist">
+    {% for tab in self.content  %}
+      {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
+        <li class="nav-item" role="presentation">
+          <button id="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}"
+              class="nav-item nav-link{% if not tab_id %} active{% endif %}"
+              data-bs-toggle="tab"
+              data-bs-target="#{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+              role="tab"
+              type="button"
+              aria-selected="{% if not tab_id %}true{% else %}false{% endif %}"
+              aria-controls="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}">
+              {{ tab.title }}
+          </button>
+        </li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+  
+  <!-- Tab Section Content -->
+  <div class="tab-content" id="{{ppid}}-{{pid}}-nav-tab-content">
+    {% for tab in self.content  %}
+      {% with tab_id=forloop.counter0 tab_name=tab.title|slugify %}
+        <div id="{{ppid}}-{{pid}}-tab-{{tab_id}}-{{tab_name}}"
+         class="tab-pane fade{% if not tab_id %} show active{%endif%}"
+         role="tabpanel"
+         aria-labelledby="{{ppid}}-{{pid}}-nav-tab-{{tab_id}}-{{tab_name}}">
+      {{ tab.content }}
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+
+  {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
