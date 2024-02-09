@@ -9,8 +9,9 @@ See: https://docs.wagtail.io/en/v2.7/getting_started/integrating_into_django.htm
 """
 # wads-wagtail Optional Features
 # ------------------------------------------------------------------------
-ENABLE_LDAP = False # True|False
 ENABLE_DEBUG_TOOLBAR = False # True|False
+ENABLE_RECAPTCHA = False # True|False
+ENABLE_RECAPTCHA_PROXY = False # True|False
 
 # Wagtail Site Settings
 # ------------------------------------------------------------------------
@@ -117,4 +118,18 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 
-GOOGLE_RECAPTCHA_SECRET_KEY = '<INSERT RECAPTCHA SECRET KEY HERE>'
+# Site ReCAPTCHA Settings (if enabled)
+# ------------------------------------------------------------------------
+# use keys obtained from Google account for this domain
+# Disable when in dev mode to avoid using API quota
+# ------------------------------------------------------------------------
+
+if ENABLE_RECAPTCHA:
+    RECAPTCHA_PUBLIC_KEY = ''
+    RECAPTCHA_PRIVATE_KEY = ''
+    RECAPTCHA_REQUIRED_SCORE = 0.85
+    if ENABLE_RECAPTCHA_PROXY:
+        RECAPTCHA_PROXY = {
+            'http': 'http://webproxy.its.manchester.ac.uk:3128/',
+            'https': 'http://webproxy.its.manchester.ac.uk:3128/',
+        }

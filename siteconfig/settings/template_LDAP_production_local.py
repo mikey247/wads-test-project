@@ -24,6 +24,7 @@ logger.setLevel(logging.DEBUG)
 # ------------------------------------------------------------------------
 ENABLE_LDAP = True # True|False
 ENABLE_DEBUG_TOOLBAR = False # True|False
+ENABLE_RECAPTCHA = False # True|False
 
 # Wagtail Site Settings
 # ------------------------------------------------------------------------
@@ -234,5 +235,3 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
-
-GOOGLE_RECAPTCHA_SECRET_KEY = '<INSERT RECAPTCHA SECRET KEY HERE>'
