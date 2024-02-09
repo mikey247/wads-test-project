@@ -9,7 +9,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
  
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.fields import StreamField
 from wagtail.search import index
@@ -196,7 +196,6 @@ class ArticleIndexPage(RoutablePageMixin, SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     # Rebuild edit_handler so we have all tabs
@@ -707,7 +706,6 @@ class ArticlePage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     # Rebuild edit_handler so we have all tabs

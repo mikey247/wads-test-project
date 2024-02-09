@@ -13,7 +13,7 @@ from django.http import Http404
 from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.fields import StreamField
 
@@ -92,7 +92,6 @@ class SiteTagIndexPage(RoutablePageMixin, SitePage):
     
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     # Rebuild edit_handler so we have all tabs

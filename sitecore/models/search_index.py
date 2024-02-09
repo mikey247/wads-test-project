@@ -8,7 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface
 from wagtail.fields import StreamField
 from wagtail.search.models import Query
 
@@ -86,7 +86,6 @@ class SiteSearchIndexPage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     # Rebuild edit_handler so we have all tabs

@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
  
 from wagtail.fields import RichTextField, StreamField
 from wagtail import blocks
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PageChooserPanel, PrivacyModalPanel, PublishingPanel,  TabbedInterface
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, ObjectList, PageChooserPanel, PublishingPanel,  TabbedInterface
 from wagtail.admin.forms import WagtailAdminPageForm
 from wagtail.search import index
 
@@ -204,8 +204,7 @@ class EventIndexPage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
-    ]
+   ]
 
     edit_handler = TabbedInterface([
         ObjectList(content_tab_panel, heading='Content'),
@@ -591,7 +590,6 @@ class EventPage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
 
     edit_handler = TabbedInterface([
