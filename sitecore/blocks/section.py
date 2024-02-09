@@ -20,18 +20,37 @@ from sitecore import constants
 from .text import CodeBlock, TextSnippet
 
 
-
 class SubSectionBlock(blocks.StructBlock):
 
     title = blocks.CharBlock()
 
     content = blocks.RichTextBlock(
-        label='Rich Text',
     )
     
     class Meta:
         icon = 'form'
         template = 'sitecore/blocks/subsection_block.html'
+
+
+class NestedBlock(blocks.StructBlock):
+
+    nested_choices = [
+        ("PILL", 'Pill'),
+        ("TAB",'Tab'),
+        ("ACCORDION",'Accordion'),
+    ]
+
+    type = blocks.ChoiceBlock(
+        choices = nested_choices,
+        help_text = 'Choose nested content type',
+        label = 'Nested Content Type',
+    )
+
+    content = blocks.ListBlock(SubSectionBlock())
+
+    class Meta:
+        template = 'sitecore/blocks/nested_block.html'
+        icon = 'form'
 
 
 class TabBlock(blocks.StructBlock):

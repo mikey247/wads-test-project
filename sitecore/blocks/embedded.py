@@ -179,7 +179,7 @@ class CarouselSnippet(models.Model):
     # Wagtail Admin Panels (two pages)
     
     panels = [
-        FieldPanel('title'),
+        FieldPanel("title"),
         FieldPanel('slides'),
     ]
 
@@ -430,7 +430,7 @@ class IconCardDeckSnippet(models.Model):
     # GUI for snippet admin
     
     panels = [
-        FieldPanel('title'),
+        FieldPanel("title"),
         FieldPanel('cards'),
     ]
 
