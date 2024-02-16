@@ -292,7 +292,7 @@ class TextSnippet(models.Model):
     tags = TaggableManager(through=TextSnippetTag, blank=True,)
 
     panels = [
-        FieldPanel('title'),
+        FieldPanel("title"),
         FieldPanel('tags'),
         FieldPanel('text'),
     ]

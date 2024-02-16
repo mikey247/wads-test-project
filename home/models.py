@@ -4,7 +4,9 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PrivacyModalPanel, PublishingPanel, TabbedInterface
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, MultiFieldPanel, ObjectList, PublishingPanel, TabbedInterface, TitleFieldPanel
+from wagtail.admin.widgets.slug import SlugInput
+from wagtail import blocks
 from wagtail.models import Page
 from wagtail.fields import StreamField
 from wagtail.search import index
@@ -173,7 +175,7 @@ class HomePage(SitePage):
     # Rebuild main content tab panel
 
     content_tab_panel = [
-        FieldPanel('title'),
+        TitleFieldPanel('title'),
         FieldPanel('intro'),
         FieldPanel('body'),
     ]
@@ -224,7 +226,7 @@ class HomePage(SitePage):
     # Rebuild promote tab panel
     
     promote_tab_panel = [
-        FieldPanel('slug'),
+        FieldPanel('slug', widget=SlugInput),
         FieldPanel('seo_title'),
         MultiFieldPanel([
             FieldPanel('show_in_menus'),
@@ -237,7 +239,6 @@ class HomePage(SitePage):
 
     publish_tab_panel = [
         PublishingPanel(),
-        PrivacyModalPanel(),
     ]
     
     # Rebuild edit_handler so we have all tabs

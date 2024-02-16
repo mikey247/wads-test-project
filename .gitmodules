@@ -1,0 +1,3 @@
+[submodule "util_wadsadmin"]
+	path = util_wadsadmin
+	url = git@github.com:UoMResearchIT/wads-utility-admin.git

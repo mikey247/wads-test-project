@@ -9,7 +9,7 @@ class SiteImage(AbstractImage):
     # eg. To add a caption field:
     alt_text = models.CharField(
         max_length=1024,
-        blank=True,
+        blank=False,
         verbose_name = 'Alt Text (for accessibility)' ,
         help_text='Alt text for accessibility purposes. Be as descriptive as possible.',
         )
